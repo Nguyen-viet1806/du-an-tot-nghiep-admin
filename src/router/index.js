@@ -1,21 +1,35 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-
+import PageSize from "@/views/PageSize.vue"
+import PageColor from "@/views/PageColor.vue"
+import PageSale from "@/views/PageSale.vue"
+import PageVoucher from "@/views/PageVoucher.vue"
+import PageCategory from "@/views/PageCategory.vue"
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
+    {
+      path: '/admin/size',
+      name: 'PageSize',
+      component: PageSize
+    },
+    {
+      path: '/admin/color',
+      name: 'PageColor',
+      component: PageColor
+    },
+    {
+      path: '/admin/sale',
+      name: 'PageSale',
+      component: PageSale
+    },
+    {
+      path: '/admin/category',
+      name: 'PageCategory',
+      component: PageCategory
+    },
+    {
+      path: '/admin/voucher',
+      name: 'PageVoucher',
+      component: PageVoucher
+    },
 ];
 
 const router = createRouter({
