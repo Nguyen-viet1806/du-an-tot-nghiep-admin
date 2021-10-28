@@ -21,7 +21,7 @@
                 aria-label="Default select example"
                 v-model="size.idCategory"
               >
-                <option value="-1">Open this select menu</option>
+                <option value="-1">Chọn danh mục</option>
                 <option
                   v-for="CategoryParent in listCategoryParentExists"
                   :key="CategoryParent"
@@ -36,6 +36,7 @@
               <input
                 type="text"
                 class="form-control"
+                :class="{ active: isErr }"
                 id="exampleInputEmail1"
                 v-model="size.nameSize"
               />
@@ -54,7 +55,26 @@
             </div>
           </form>
         </div>
-        <div class="col"></div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Here i am</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  Thank to pop me out of that button, but now i'm done so you
+                  can close this window.
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -77,6 +97,8 @@ export default {
   },
   data() {
     return {
+      isShowNotify: true,
+      isErr: false,
       size: {
         idSize: null,
         nameSize: "",
@@ -89,6 +111,9 @@ export default {
   watch: {},
   mounted() {},
   methods: {
+    closeNotify() {
+      this.isShowNotify = false;
+    },
     resetForm() {
       this.size = {
         idSize: null,
@@ -126,4 +151,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.active {
+  border: 1px solid red !important;
+}
+
+
 </style>

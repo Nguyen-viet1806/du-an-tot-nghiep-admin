@@ -40,15 +40,16 @@ export default {
   left: 0;
   width: 100%;
   height: 70px;
-  background: #fafafa;
+  background: white;
   display: flex;
   float: right;
   // border-bottom: 1px solid rgba(61, 59, 59, 0.2);
+  border-radius: 10px;
   & .logo {
     padding-left: 2%;
     width: 15%;
     height: 69px;
-    background: #fafafa;
+    background: white;
     display: flex;
     //border-bottom: 1px solid rgba(61, 59, 59, 0.2);
     &-name {

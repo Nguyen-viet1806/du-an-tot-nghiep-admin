@@ -95,11 +95,13 @@ export default {
 
 <style lang="scss" scoped>
 .navbar-left {
+  margin-left: 1%;
   width: 16%;
   margin-top: 70px;
   height: 100vh;
   position: fixed;
-  background: #fafafa;
+  background: white;
+  border-radius: 10px;
   & .menu {
     height: 80vh;
     overflow-y: auto;
