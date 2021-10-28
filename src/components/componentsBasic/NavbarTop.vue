@@ -1,8 +1,18 @@
 <template>
   <div class="navbar-top">
     <div class="logo">
-      <img class="icon" src="@/assets/logoTpf.svg" width="75" />
+      <img class="icon" src="@/assets/logoTpf.svg" width="75"/>
       <h2 class="logo-name">TPF</h2>
+    </div>
+    <div class="navbar-top-right">
+      <div class="user">
+        Nguyễn Quốc Việt
+      </div>
+      <div class="sign-in">
+        <fa class="icon" :icon="['fas', 'sign-in-alt']"
+        />
+        Sign In
+      </div>
     </div>
   </div>
 </template>
@@ -12,10 +22,12 @@ export default {
   name: "NavBarTop",
   components: {},
   props: {},
-  data() {},
+  data() {
+  },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() {
+  },
   methods: {},
 };
 </script>
@@ -29,6 +41,7 @@ export default {
   width: 100%;
   height: 70px;
   background: #fafafa;
+  display: flex;
   float: right;
   // border-bottom: 1px solid rgba(61, 59, 59, 0.2);
   & .logo {
@@ -37,6 +50,7 @@ export default {
     height: 69px;
     background: #fafafa;
     display: flex;
+    //border-bottom: 1px solid rgba(61, 59, 59, 0.2);
     &-name {
       color: #000000;
       letter-spacing: 2px;
@@ -44,5 +58,29 @@ export default {
       width: 100%;
     }
   }
+
+  &-right {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    & .sign-in {
+      margin-right: 2%;
+    }
+
+    & .user {
+      margin-right: 2%;
+    }
+
+  }
+}
+
+hr {
+  position: relative;
+  left: 1.5%;
+  bottom: 15px;
+  width: 13%;
 }
 </style>

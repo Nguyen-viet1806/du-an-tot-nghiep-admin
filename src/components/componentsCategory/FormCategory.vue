@@ -95,7 +95,16 @@ import { GIA_TRI_TRANG_THAI } from "@/constants/constants";
 export default {
   name: "FormCategory",
   components: {},
-  props: {},
+  props: {
+    listCategoryParent: {
+      type: Array,
+      default: () => [],
+    },
+    listCategoryChild: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       isShowCategoryChild: false,
