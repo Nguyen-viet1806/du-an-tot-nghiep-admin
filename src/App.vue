@@ -199,7 +199,10 @@ html {
 .button:hover {
   background: #06d85f;
 }
-
+.active {
+  border: 1px solid red !important;
+ box-shadow: rgba(219, 17, 27, 0.25) 0px 1px 1px, rgba(240, 11, 11, 0.24) 0px 0px 1px 1px;
+}
 .overlay {
   position: fixed;
   top: 0;
@@ -213,16 +216,17 @@ html {
 }
 
 .popup {
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
   visibility: visible;
   opacity: 1;
   margin: 10px auto;
-  padding: 20px;
+  padding: 100px;
   background: #fff;
   border-radius: 5px;
   width: 30%;
   position: fixed;
-  top: 300px;
-  left: 620px;
+  top: 200px;
+  left: 38%;
   transition: all 1s ease-in-out;
   z-index: 1002;
 }

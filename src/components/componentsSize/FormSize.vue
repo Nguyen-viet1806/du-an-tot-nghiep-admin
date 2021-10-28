@@ -18,6 +18,7 @@
               <label>Danh mục:</label>
               <select
                 class="form-select"
+                :class="{ active: isErrCategory  }"
                 aria-label="Default select example"
                 v-model="size.idCategory"
               >
@@ -36,7 +37,7 @@
               <input
                 type="text"
                 class="form-control"
-                :class="{ active: isErr }"
+                :class="{ active: isErrNameSize }"
                 id="exampleInputEmail1"
                 v-model="size.nameSize"
               />
@@ -65,11 +66,10 @@
             ></div>
             <transition name="bounce">
               <div id="popup1" v-if="isShowNotify" class="popup">
-                <h2>Here i am</h2>
+                <h2>Thông báo:</h2>
                 <a class="close" href="#" @click="closeNotify">&times;</a>
                 <div class="content">
-                  Thank to pop me out of that button, but now i'm done so you
-                  can close this window.
+                  {{ infoNotify }}
                 </div>
               </div>
             </transition>
@@ -97,8 +97,11 @@ export default {
   },
   data() {
     return {
-      isShowNotify: true,
-      isErr: false,
+      isShowNotify: false,
+      isErrNameSize: false,
+      isErrCategory: false,
+      checkFormValidate: false,
+      infoNotify: "",
       size: {
         idSize: null,
         nameSize: "",
@@ -108,13 +111,28 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    size: {
+      handler() {
+        if (this.size.nameSize !== "" || this.size.nameSize !== null) {
+          this.isErrNameSize = false;
+        }
+        if (this.size.idCategory !== -1 ) {
+          this.isErrCategory = false;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
     closeNotify() {
       this.isShowNotify = false;
     },
     resetForm() {
+      this.isErrNameSize = false;
+      this.isErrCategory = false;
       this.size = {
         idSize: null,
         nameSize: "",
@@ -122,7 +140,35 @@ export default {
         idStatus: null,
       };
     },
+    checkValidate() {
+      if (
+        this.size.nameSize.trim() === "" ||
+        this.size.nameSize.trim() === null
+      ) {
+        this.isErrNameSize = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (this.size.idCategory === -1) {
+        this.isErrCategory = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      } 
+      else {
+        this.isErrNameSize = false;
+        this.isErrCategory = false;
+        this.isShowNotify = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+    },
     saveSize() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
       if (!this.size.idSize) {
         this.size.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }
@@ -151,9 +197,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.active {
-  border: 1px solid red !important;
-}
-
-
 </style>
