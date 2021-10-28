@@ -15,6 +15,23 @@
               />
             </div>
             <div class="form-group">
+              <label>Danh mục:</label>
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                v-model="size.idCategory"
+              >
+                <option value="-1">Open this select menu</option>
+                <option
+                  v-for="CategoryParent in listCategoryParentExists"
+                  :key="CategoryParent"
+                  :value="CategoryParent.idCategory"
+                >
+                  {{ CategoryParent.nameCategory }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group mt-2">
               <label for="exampleInputEmail1">Tên size:</label>
               <input
                 type="text"
@@ -24,14 +41,14 @@
               />
             </div>
             <div class="control">
-              <button
-                type="button"
-                class="btn btn-save"
-                v-on:click="saveSize"
-              >
+              <button type="button" class="btn btn-save" v-on:click="saveSize">
                 Lưu
               </button>
-              <button v-on:click="resetForm" type="button" class="btn btn-reset">
+              <button
+                v-on:click="resetForm"
+                type="button"
+                class="btn btn-reset"
+              >
                 Làm tươi
               </button>
             </div>
@@ -53,12 +70,17 @@ export default {
       type: Array,
       default: () => [],
     },
+    listCategoryParentExists: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       size: {
         idSize: null,
         nameSize: "",
+        idCategory: -1,
         idStatus: null,
       },
     };
@@ -71,26 +93,29 @@ export default {
       this.size = {
         idSize: null,
         nameSize: "",
+        idCategory: -1,
         idStatus: null,
       };
     },
     saveSize() {
+      if (!this.size.idSize) {
+        this.size.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+      }
       this.$store.dispatch("sizeModule/saveSize", this.size).then((res) => {
         if (res) {
           if (!this.size.idSize) {
-            this.size.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
             let listSizeTemp = [...this.listSizes];
             listSizeTemp.push(res.data.data);
-            this.$store.commit('sizeModule/SET_LIST_SIZES', listSizeTemp);
-          }else{
+            this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
+          } else {
             let listSizeTemp = [...this.listSizes];
             let len = listSizeTemp.length;
             for (let i = 0; i < len; i++) {
-              if(listSizeTemp[i].idSize === res.data.data.idSize ){
-                listSizeTemp[i] = res.data.data
+              if (listSizeTemp[i].idSize === res.data.data.idSize) {
+                listSizeTemp[i] = res.data.data;
               }
             }
-            this.$store.commit('sizeModule/SET_LIST_SIZES', listSizeTemp);
+            this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
           }
           this.resetForm();
         }
@@ -101,6 +126,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
 </style>

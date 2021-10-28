@@ -3,10 +3,8 @@ import mutations from "./mutations";
 import getters from "./getters";
 
 const state = {
-  listCategoryParent: [],
-  listCategoryChild: [],
-  categoryParent: null,
-  listCategoryParentExists: [],
+  listProductsParent: [],
+  listProductsChild: [],
 };
 export default {
   namespaced: true,

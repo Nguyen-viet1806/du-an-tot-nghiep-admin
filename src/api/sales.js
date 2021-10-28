@@ -9,6 +9,22 @@ export function callApiGetDanhSachSale(payload) {
     });
 }
 
+export function callApiGetDanhSachSaleSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_SALE_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SEARCH_SALE,
+    method: "GET",
+    params: payload,
+  });
+}
+
 export function callApiSaveSale(payload) {
   return HTTP({
     url: ENDPOINT.SAVE_SALE,

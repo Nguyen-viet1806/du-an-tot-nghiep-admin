@@ -22,14 +22,14 @@
               />
             </div>
             <div class="control">
-              <button
-                type="button"
-                class="btn btn-save"
-                v-on:click="saveColor"
-              >
+              <button type="button" class="btn btn-save" v-on:click="saveColor">
                 Lưu
               </button>
-              <button v-on:click="resetForm" type="button" class="btn btn-reset">
+              <button
+                v-on:click="resetForm"
+                type="button"
+                class="btn btn-reset"
+              >
                 Làm tươi
               </button>
             </div>
@@ -73,11 +73,13 @@ export default {
       };
     },
     saveColor() {
+      if (!this.color.idColor) {
+        this.color.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+      }
       this.$store.dispatch("colorModule/saveColor", this.color).then((res) => {
         if (res) {
           let listColorTemp = [...this.listColors];
           if (!this.color.idColor) {
-             this.color.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
             if (listColorTemp.length === 5) {
               listColorTemp.length = 4;
             }

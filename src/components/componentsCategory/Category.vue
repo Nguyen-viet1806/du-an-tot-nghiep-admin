@@ -1,7 +1,9 @@
 <template>
   <div class="category">
     <h3>Danh mục</h3>
-    <form-category ref="FormCategory" />
+    <form-category ref="FormCategory" 
+     @getListFollowPageParent="getListCategoryParent"
+    />
     {{ categoryParent }}
     <table-category
       ref="TableCategory"
@@ -62,7 +64,6 @@ export default {
       this.getListCategoryChild(categoryTemp.idCategory);
       this.$refs["FormCategory"].resetFormCategoryChild();
       this.$store.commit("categoryModule/SET_CATEGORYS_PARENT", categoryTemp);
-      console.log(this.$store.state.categoryModule.categoryParent);
     },
 
     showFormCategoryChild(categoryChild) {

@@ -22,21 +22,23 @@ export default {
 
 <style lang="scss" scoped>
 .navbar-top {
+  z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 70px;
-  background: #ffffff;
+  background: #fafafa;
   float: right;
-  border-bottom: 1px solid rgba(61, 59, 59, 0.2);
+  // border-bottom: 1px solid rgba(61, 59, 59, 0.2);
   & .logo {
+    padding-left: 2%;
     width: 15%;
-    height: 70px;
-    background: #000000;
+    height: 69px;
+    background: #fafafa;
     display: flex;
     &-name {
-      color: #f9f9f9;
+      color: #000000;
       letter-spacing: 2px;
       line-height: 70px;
       width: 100%;

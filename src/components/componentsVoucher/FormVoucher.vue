@@ -124,6 +124,9 @@ export default {
       };
     },
     saveVoucher() {
+      if (!this.voucher.idVoucher) {
+        this.voucher.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+      }
       this.$store
         .dispatch("voucherModule/saveVoucher", this.voucher)
         .then((res) => {

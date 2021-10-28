@@ -1,17 +1,82 @@
 <template>
   <div class="table-tpf">
-    <table class="table table-hover">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="input-group">
+          <input
+            type="search"
+            class="form-control rounded"
+            placeholder="Tìm kiếm"
+            aria-label="Search"
+            aria-describedby="search-addon"
+            v-model="keyWordSearch"
+          />
+          <button type="button" @click="search" class="btn btn-outline-primary">
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+          v-model="idDanhMuc"
+        >
+          <option value="-1">Chọn theo danh mục</option>
+          <option
+            v-for="CategoryParent in listCategoryParentExists"
+            :key="CategoryParent"
+            :value="CategoryParent.idCategory"
+          >
+            {{ CategoryParent.nameCategory }}
+          </option>
+        </select>
+        <div class="row">
+          <div class="col-md-8 mt-2">
+            <select
+              class="form-select form-select-sm"
+              aria-label="Default select example"
+              v-model="idTrangThai"
+            >
+              <option value="-1">Chọn theo trạng thái</option>
+              <option :value="GIA_TRI_TRANG_THAI.DELETE">Đã xóa</option>
+              <option :value="GIA_TRI_TRANG_THAI.EXISTS">Tồn tại</option>
+            </select>
+          </div>
+          <div class="col-md-4 mt-2">
+            <button
+              type="button"
+              class="btn btn-filter w-100"
+              @click="getListSizeSort(-1)"
+            >
+              Lọc
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-hover mt-3">
       <thead>
         <tr>
           <th scope="col">STT</th>
+          <th scope="col">Tên danh mục</th>
           <th scope="col">Tên Size</th>
           <th scope="col">Xóa/Khôi phục</th>
-          <th scope="col"></th>
+          <th scope="col">
+            <button class="btn-arrow-up" @click="getListSizeSort(0)">
+              <fa class="icon" :icon="['fas', 'arrow-up']" /></button
+            ><button class="btn-arrow-down" @click="getListSizeSort(1)">
+              <fa class="icon" :icon="['fas', 'arrow-down']" />
+            </button>
+          </th>
         </tr>
       </thead>
       <tbody v-for="(Size, index) in listSizes" :key="Size.idSize">
         <tr>
           <th scope="row">{{ getStt(index) }}</th>
+          <td>{{ Size.categoryParent.nameCategory }}</td>
           <td>{{ Size.nameSize }}</td>
           <td>
             <div class="form-switch">
@@ -73,6 +138,10 @@ export default {
   name: "TableSize",
   components: {},
   props: {
+    listCategoryParentExists: {
+      type: Array,
+      default: () => [],
+    },
     listSizes: {
       type: Array,
       default: () => [],
@@ -80,6 +149,9 @@ export default {
   },
   data() {
     return {
+      keyWordSearch: "",
+      idDanhMuc: -1,
+      idTrangThai: -1,
       GIA_TRI_TRANG_THAI,
       pageable: 0,
     };
@@ -92,8 +164,8 @@ export default {
   },
   mounted() {},
   methods: {
-    getStt(index){
-    return this.pageable !== 0 ?  index + (this.pageable * 5) + 1 :  index + 1
+    getStt(index) {
+      return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
     },
     pageNext() {
       this.pageable++;
@@ -102,6 +174,24 @@ export default {
       if (this.pageable > 0) {
         this.pageable--;
       }
+    },
+    getListSizeSort(sort = -1) {
+      let payload = {
+        sort: sort,
+        page: this.pageable,
+        idStatus:
+          this.idTrangThai && this.idTrangThai === -1 ? "" : this.idTrangThai,
+        idCategory:
+          this.idDanhMuc && this.idDanhMuc === -1 ? "" : this.idDanhMuc,
+      };
+      this.$store.dispatch("sizeModule/getDanhSachSizeSort", payload);
+    },
+    search() {
+      let payload = {
+        name: this.keyWordSearch,
+        page: this.pageable,
+      };
+      this.$store.dispatch("sizeModule/search", payload);
     },
     showFormSize(size) {
       this.$emit("clickShowFormSize", size);

@@ -6,3 +6,13 @@ export const GIA_TRI_TRANG_THAI = {
     OWN: 5,     //sở hữu
     
   };
+
+  export const GIA_TRI_TAG = {
+    SALE: 1,
+    HOT: 2,  
+    OUT_OF_STOCK: 3,
+    NOT_ENOUGH: 4,    
+  };
+
+  export const DO_MAIN = "http://192.168.0.104:8080";
+  

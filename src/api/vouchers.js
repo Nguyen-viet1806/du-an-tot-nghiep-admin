@@ -9,6 +9,22 @@ export function callApiGetDanhSachVoucher(payload) {
     });
 }
 
+export function callApiGetDanhSachVoucherSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_VOUCHER_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SEARCH_VOUCHER,
+    method: "GET",
+    params: payload,
+  });
+}
+
 export function callApiSaveVoucher(payload) {
   return HTTP({
     url: ENDPOINT.SAVE_VOUCHER,

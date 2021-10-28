@@ -17,6 +17,30 @@ export function callApiSaveCategoryParent(payload) {
   });
 }
 
+export function callApiGetDanhSachCategoryParentSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_CATEGORY_PARENT_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiGetDanhSachCategoryChildSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_CATEGORY_CHILD_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SAVE_CATEGORY_PARENT,
+    method: "GET",
+    params: payload,
+  });
+}
+
 export function callApiGetDanhSachCategoryChild(payload) {
     return HTTP({
       url: ENDPOINT.GET_ALL_CATEGORY_CHILD,

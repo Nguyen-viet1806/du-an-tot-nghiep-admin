@@ -3,6 +3,7 @@ import colorModule from "@/store/Color";
 import saleModule from "@/store/Sale";
 import voucherModule from "@/store/Voucher";
 import categoryModule from "@/store/Category";
+import productModule from "@/store/Product";
 import {createStore} from "vuex";
 export default new createStore({
   modules: {
@@ -10,7 +11,8 @@ export default new createStore({
     colorModule,
     saleModule,
     voucherModule,
-    categoryModule
+    categoryModule,
+    productModule,
   },
   state: {
    

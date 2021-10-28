@@ -9,6 +9,22 @@ export function callApiGetDanhSachColor(payload) {
     });
 }
 
+export function callApiGetDanhSachColorSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_COLOR_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SAVE_COLOR,
+    method: "GET",
+    params: payload,
+  });
+}
+
 export function callApiSaveColor(payload) {
   return HTTP({
     url: ENDPOINT.SAVE_COLOR,

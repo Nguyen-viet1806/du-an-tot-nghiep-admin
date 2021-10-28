@@ -89,9 +89,11 @@ export default {
       };
     },
     saveSale() {
+      if (!this.sale.idSale) {
+        this.sale.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+      }
       this.$store.dispatch("saleModule/saveSale", this.sale).then((res) => {
         if (res) {
-          this.sale.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
           let listSaleTemp = [...this.listSales];
           if (!this.sale.idSale) {
             if (listSaleTemp.length === 5) {

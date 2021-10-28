@@ -9,6 +9,22 @@ export function callApiGetDanhSachSize(payload) {
     });
 }
 
+export function callApiGetDanhSachSizeSort(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_SIZE_SORT,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SEARCH_SIZE,
+    method: "GET",
+    params: payload,
+  });
+}
+
 export function callApiSaveSize(payload) {
   return HTTP({
     url: ENDPOINT.SAVE_SIZE,

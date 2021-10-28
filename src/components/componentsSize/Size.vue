@@ -1,10 +1,11 @@
 <template>
   <div class="size">
     <h3>Size</h3>
-    <form-size ref="FormSize" :listSizes="listSizes" />
+    <form-size ref="FormSize" :listSizes="listSizes" :listCategoryParentExists="listCategoryParentExists"/>
 
     <table-size
       ref="TableSize"
+      :listCategoryParentExists="listCategoryParentExists"
       :listSizes="listSizes"
       @getListFollowPage="getListSizes"
       @clickShowFormSize="showFormSize"
@@ -25,6 +26,7 @@ export default {
   computed: {
     ...mapGetters({
       listSizes: "sizeModule/getListSizes",
+      listCategoryParentExists: "categoryModule/getListCategoryParentExists",
     }),
   },
   watch: {},
@@ -40,9 +42,10 @@ export default {
         page: this.$refs["TableSize"].pageable,
       };
       this.$store.dispatch("sizeModule/getDanhSachSize", payload);
+      this.$store.dispatch("categoryModule/getDanhSachCategoryParentExists");
     },
     showFormSize(size) {
-      this.$refs["FormSize"].size = { ...size };
+      this.$refs["FormSize"].size = { ...size , idCategory:size.categoryParent.idCategory };
     },
   },
 };

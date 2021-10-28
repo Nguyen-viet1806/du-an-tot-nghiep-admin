@@ -1,8 +1,43 @@
-import { callApiGetDanhSachSale, callApiSaveSale } from "@/api/sales.js";
+import {
+  callApiGetDanhSachSale,
+  callApiSaveSale,
+  callApiGetDanhSachSaleSort,
+  callApiSearch,
+} from "@/api/sales.js";
 
 const getDanhSachSale = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiGetDanhSachSale(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_SALES", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getDanhSachSaleSort = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachSaleSort(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_SALES", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const search = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiSearch(payload)
       .then((response) => {
         if (response) {
           context.commit("SET_LIST_SALES", response.data.data);
@@ -30,4 +65,6 @@ const saveSale = (context, payload) => {
 export default {
   getDanhSachSale,
   saveSale,
+  getDanhSachSaleSort,
+  search,
 };

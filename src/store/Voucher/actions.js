@@ -1,4 +1,4 @@
-import { callApiGetDanhSachVoucher, callApiSaveVoucher } from "@/api/vouchers.js";
+import { callApiGetDanhSachVoucher, callApiSaveVoucher,callApiGetDanhSachVoucherSort,callApiSearch } from "@/api/vouchers.js";
 
 const getDanhSachVoucher = (context, payload) => {
   return new Promise((resolve, reject) => {
@@ -14,6 +14,37 @@ const getDanhSachVoucher = (context, payload) => {
       });
   });
 };
+
+const getDanhSachVoucherSort = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachVoucherSort(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_VOUCHERS", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const search = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiSearch(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_VOUCHERS", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 const saveVoucher = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiSaveVoucher(payload)
@@ -27,5 +58,7 @@ const saveVoucher = (context, payload) => {
 };
 export default {
   getDanhSachVoucher,
-  saveVoucher
+  saveVoucher,
+  getDanhSachVoucherSort,
+  search,
 };

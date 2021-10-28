@@ -23,8 +23,20 @@
               />
             </div>
             <div class="control">
-              <button type="button" class="btn btn-save">Lưu</button>
-              <button v-on:click="resetFormCategoryParent" type="button" class="btn btn-reset">Làm tươi</button>
+              <button
+                v-on:click="saveCategory"
+                type="button"
+                class="btn btn-save"
+              >
+                Lưu
+              </button>
+              <button
+                v-on:click="resetFormCategoryParent"
+                type="button"
+                class="btn btn-reset"
+              >
+                Làm tươi
+              </button>
             </div>
           </form>
         </div>
@@ -79,6 +91,7 @@
   </div>
 </template>
 <script>
+import { GIA_TRI_TRANG_THAI } from "@/constants/constants";
 export default {
   name: "FormCategory",
   components: {},
@@ -86,6 +99,7 @@ export default {
   data() {
     return {
       isShowCategoryChild: false,
+      GIA_TRI_TRANG_THAI,
       categoryParent: {
         idCategory: null,
         nameCategory: "",
@@ -134,30 +148,47 @@ export default {
         parentId: null,
       };
     },
-    // saveCategoryParent() {
-    //   this.$store.dispatch("categoryModule/saveColor", this.color).then((res) => {
-    //     if (res) {
-    //       let listColorTemp = [...this.listColors];
-    //       if (!this.color.idColor) {
-    //          this.color.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
-    //         if (listColorTemp.length === 5) {
-    //           listColorTemp.length = 4;
-    //         }
-    //         listColorTemp.push(res.data.data);
-    //         this.$store.commit("categoryModule/SET_LIST_COLORS", listColorTemp);
-    //       } else {
-    //         let len = listColorTemp.length;
-    //         for (let i = 0; i < len; i++) {
-    //           if (listColorTemp[i].idColor === res.data.data.idColor) {
-    //             listColorTemp[i] = res.data.data;
-    //           }
-    //         }
-    //         this.$store.commit("categoryModule/SET_LIST_COLORS", listColorTemp);
-    //       }
-    //       this.resetForm();
-    //     }
-    //   });
-    // },
+    saveCategory() {
+      if (this.categoryParent.idCategory) {
+        if (this.categoryChild.idCategory) {
+          // check trong
+          this.categoryParent.listCategoryChildDTO[0] = {
+            ...this.categoryChild,
+          };
+        } else {
+          //check trong
+          if (this.categoryChild.nameCategory.trim() === "") {
+            this.categoryParent.listCategoryChildDTO = null;
+          } else {
+            this.categoryChild.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+            this.categoryParent.listCategoryChildDTO[0] = {
+            ...this.categoryChild,
+          };
+          }
+        }
+      } else {
+        if (this.categoryChild.nameCategory.trim() === "") {
+          this.categoryParent.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+          this.categoryParent.listCategoryChildDTO = null;
+        } else {
+          //check trong cha
+          this.categoryParent.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+          this.categoryChild.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
+          this.categoryParent.listCategoryChildDTO[0] = {
+            ...this.categoryChild,
+          };
+        }
+      }
+      this.$store
+        .dispatch("categoryModule/saveCategoryParent", this.categoryParent)
+        .then((res) => {
+          if (res) {
+            this.$emit("getListFollowPageParent");
+            this.resetFormCategoryParent();
+            this.resetFormCategoryChild();
+          }
+        });
+    },
     addCategoryChild() {
       this.isShowCategoryChild = !this.isShowCategoryChild;
     },

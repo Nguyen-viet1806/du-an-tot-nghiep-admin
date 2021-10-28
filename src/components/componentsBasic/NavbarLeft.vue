@@ -1,21 +1,70 @@
 <template>
   <nav class="navbar-left">
     <div class="menu">
-      <p><router-link to="/admin" class="menu-unit">Trang chủ</router-link></p>
-      <p>
-        <router-link to="/admin/size" class="menu-unit"
-          >Quản lí size</router-link
+      <p class="menu-unit" :class="{ active: checkText('Trang Chủ') }">
+        <router-link to="/admin" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'home']"
+          /></span>
+          Trang chủ</router-link
         >
       </p>
-      <p>
-        <router-link to="/admin/color" class="menu-unit"
-          >Quản lí color</router-link
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Size') }">
+        <router-link to="/admin/size" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'expand-arrows-alt']"
+          /></span>
+          Quản lí size</router-link
         >
       </p>
-      <p><router-link to="/admin/sale" class="menu-unit">Quản lí sale</router-link></p>
-      <p><router-link to="/admin/voucher" class="menu-unit">Quản lí voucher</router-link></p>
-      <p><router-link to="/admin/category" class="menu-unit">Quản lí Category</router-link></p>
-      <p><a class="menu-unit">Trang chủ</a></p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Màu') }">
+        <router-link to="/admin/color" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'palette']"
+          /></span>
+          Quản lí màu</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Sale') }">
+        <router-link to="/admin/sale" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'tags']"
+          /></span>
+          Quản lí sale</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Voucher') }">
+        <router-link to="/admin/voucher" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'percentage']"
+          /></span>
+          Quản lí voucher</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Danh Mục') }">
+        <router-link to="/admin/category" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fab', 'artstation']"
+          /></span>
+          Quản lí danh mục</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Sản Phẩm') }">
+        <router-link to="/admin/product" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fab', 'asymmetrik']"
+          /></span>
+          Quản lí sản phẩm</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ active: checkText('Quản Lí Combo') }">
+        <router-link to="/admin/combo" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'check-double']"
+          /></span>
+          Quản lí combo</router-link
+        >
+      </p>
     </div>
   </nav>
 </template>
@@ -25,31 +74,96 @@ export default {
   name: "NavbarLeft",
   components: {},
   props: {},
-  data() {},
+  data() {
+    return {
+      innerText: "",
+    };
+  },
   computed: {},
   watch: {},
   mounted() {},
-  methods: {},
+  methods: {
+    checkText(text) {
+      return this.innerText.includes(text);
+    },
+    clickMenu(e) {
+      this.innerText = e.target.innerText;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .navbar-left {
-  width: 15%;
+  width: 16%;
   margin-top: 70px;
   height: 100vh;
   position: fixed;
-  background: #2d3446;
+  background: #fafafa;
   & .menu {
-    text-align: center;
+    height: 80vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0 !important;
+      display: none;
+    }
     &-unit {
-      line-height: 40px;
-      height: 40px;
+      margin: 15px auto;
+      background: transparent;
+      border-radius: 8px;
+      line-height: 50px;
+      height: 50px;
+      width: 82%;
       cursor: pointer;
-      color: #768195;
-      &:hover {
-        color: white;
+      & a {
+        font-size: 14px;
+        color: #141414;
+        letter-spacing: -0.3px;
+        & .logoMenu {
+          box-shadow: #f0f2f5 0px 2px 15px 0px;
+          margin-left: 5%;
+          margin-right: 2%;
+          color: #bfbfbf;
+          border-radius: 5px;
+          padding: 8px;
+          background: white;
+        }
       }
+      // box-shadow: #f0f2f5 0px 2px 15px 0px;
+      // background: white;
+      // & a {
+      //   font-weight: 500;
+      //   & .logoMenu {
+      //     margin-left: 5%;
+      //     margin-right: 2%;
+      //     color: white;
+      //     border-radius: 5px;
+      //     padding: 8px;
+      //     background: #1890ff;
+      //   }
+      // }
+    }
+  }
+}
+.active {
+  margin: 15px auto !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  line-height: 50px !important;
+  height: 50px !important;
+  width: 82% !important;
+  cursor: pointer !important;
+  box-shadow: #f0f2f5 0px 2px 15px 0px !important;
+  background: white !important;
+  & a {
+    font-weight: 500 !important;
+    & .logoMenu {
+      margin-left: 5% !important;
+      margin-right: 2% !important;
+      color: white !important;
+      border-radius: 5px !important;
+      padding: 8px !important;
+      background: #1890ff !important;
     }
   }
 }
