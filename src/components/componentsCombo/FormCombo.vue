@@ -10,7 +10,10 @@
             </div>
             <div class="form-group">
               <label>Tên combo:</label>
-              <input type="text" class="form-control" />
+              <input type="text"
+               class="form-control" 
+               :class="{ active: isErrNameCombo }"
+               />
             </div>
             <div class="control">
               <button type="button" class="btn btn-save" v-on:click="saveColor">
@@ -60,6 +63,25 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
+          </div>
         </div>
       </div>
     </div>

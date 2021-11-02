@@ -19,6 +19,7 @@
               <input
                 type="text"
                 class="form-control"
+                :class="{ active: isErrNameVoucher}"
                 id="exampleInputEmail1"
                 v-model="voucher.nameVoucher"
               />
@@ -28,6 +29,7 @@
               <input
                 type="text"
                 class="form-control"
+                :class="{ active: isErrDiscount}"
                 id="exampleInputEmail1"
                 v-model="voucher.discount"
               />
@@ -65,6 +67,7 @@
             <input
               type="date"
               class="form-control"
+              :class="{ active: isErrDateStart}"
               id="exampleInputEmail1"
               v-model="voucher.dateStart"
             />
@@ -74,9 +77,29 @@
             <input
               type="date"
               class="form-control"
+              :class="{ active: isErrDateEnd}"
               id="exampleInputEmail1"
               v-model="voucher.dateEnd"
             />
+          </div>
+        </div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -97,6 +120,13 @@ export default {
   },
   data() {
     return {
+      isErrNameVoucher: false,
+      isErrDiscount: false,
+      isErrDateStart: false,
+      isErrDateEnd: false,
+      isShowNotify: false,
+      checkFormValidate: false,
+      infoNotify: "",
       voucher: {
         idVoucher: null,
         nameVoucher: "",
@@ -109,7 +139,26 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    voucher: {
+      handler() {
+        if (this.voucher.nameVoucher !== "" || this.voucher.nameVouchere !== null) {
+          this.isErrNameVoucher = false;
+        }
+        if (this.voucher.discount !== "" || this.voucher.discount !== null) {
+          this.isErrDiscount = false;
+        }
+        if (this.voucher.dateStart !== "" || this.voucher.dateStart !== null) {
+          this.isErrDateStart = false;
+        }
+        if (this.voucher.dateEnd !== "" || this.voucher.dateEnd !== null) {
+          this.isErrDateEnd = false;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
     resetForm() {
@@ -123,7 +172,59 @@ export default {
         idStatus: null,
       };
     },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+    checkValidate() {
+      if (
+        this.voucher.nameVoucher.trim() === "" ||
+        this.voucher.nameVoucher.trim() === null
+      ) {
+        this.isErrNameVoucher = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.voucher.discount === "" ||
+        this.voucher.discount === null
+      ) {
+        this.isErrDiscount = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.voucher.dateStart < Date.now()
+      ) {
+        this.isErrDateStart = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      } 
+      if (
+        this.voucher.dateEnd < this.voucher.dateStart
+      ) {
+        this.isErrDateEnd = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      } 
+      else {
+        this.isErrNameVoucher = false;
+        this.isErrDiscount = false;
+        this.isErrDateStart = false;
+        this.isErrDateEnd = false;
+        this.isShowNotify = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+    },
     saveVoucher() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
       if (!this.voucher.idVoucher) {
         this.voucher.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }

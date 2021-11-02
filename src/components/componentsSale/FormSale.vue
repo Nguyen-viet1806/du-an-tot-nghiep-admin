@@ -15,7 +15,10 @@
             </div>
             <div class="form-group">
               <label>Tên sale:</label>
-              <input type="text" class="form-control" v-model="sale.nameSale" />
+              <input type="text" 
+              class="form-control" 
+              :class="{ active: isErrNameSale }"
+              v-model="sale.nameSale" />
             </div>
 
             <div class="form-group">
@@ -46,10 +49,30 @@
             <input
               type="number"
               class="form-control"
+              :class="{ active: isErrDiscount }"
               v-model="sale.discount"
               min="1"
               max="100"
             />
+          </div>
+        </div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -70,25 +93,81 @@ export default {
   },
   data() {
     return {
+      isShowNotify: false,
+      isErrNameSale: false,
+      isErrDiscount: false,
+      checkFormValidate: false,
+      infoNotify: "",
       sale: {
         idSale: null,
+        nameSale: "",
         discount: null,
         idStatus: null,
       },
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    sale: {
+      handler() {
+        if (this.sale.nameSale !== "" || this.sale.nameSale !== null) {
+          this.isErrNameSale = false;
+        }
+        if (this.sale.discount !== "" || this.sale.discount !== null) {
+          this.isErrDiscount = false;
+        }        
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
+    closeNotify() {
+      this.isShowNotify = false;
+    },
     resetForm() {
+      this.isErrNameSale = false;
+      this.isErrDiscount = false;
       this.sale = {
         idSale: null,
+        nameSale: "",
         discount: null,
         idStatus: null,
       };
     },
+    checkValidate() {
+      if (
+        this.sale.nameSale.trim() === "" ||
+        this.sale.nameSale.trim() === null
+      ) {
+        this.isErrNameSale = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.sale.discount === "" || 
+        this.sale.discount === null
+      ) {
+        this.isErrDiscount = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      } 
+      else {
+        this.isErrNameSale = false;
+        this.isErrDiscount = false;
+        this.isShowNotify = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+    },
     saveSale() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
       if (!this.sale.idSale) {
         this.sale.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }

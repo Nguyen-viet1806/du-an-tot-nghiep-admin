@@ -19,6 +19,7 @@
                 type="text"
                 class="form-control"
                 v-model="product.nameProduct"
+                :class="{ active: isErrNameProduct }"
               />
             </div>
 
@@ -28,6 +29,7 @@
                 class="form-select"
                 aria-label="Default select example"
                 v-model="product.detailInProduct.idGender"
+                :class="{ active: isErrGenderProduct }"
               >
                 <option value="1">Nam</option>
                 <option value="2">Nữ</option>
@@ -41,6 +43,7 @@
                 class="form-select"
                 aria-label="Default select example"
                 v-model="idDanhMuc"
+                :class="{ active: isErrCategoryParent }"
               >
                 <option value="-1">Chọn danh mục</option>
                 <option
@@ -60,6 +63,7 @@
                 class="form-select"
                 aria-label="Default select example"
                 v-model="product.detailInProduct.idCategory"
+                :class="{ active: isErrCategoryChild }"
               >
                 <option value="-1">Chọn thể loại</option>
                 <option
@@ -80,7 +84,7 @@
               ></textarea>
             </div>
             <label class="mt-2">Chọn ảnh:</label>
-            <div class="card mb-3 mt-3" style="max-width: 540px">
+            <div :class="{ active: isErrFrontPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -100,12 +104,13 @@
                       id="uploadImagev1"
                       type="file"
                       @change="onFileSelectedv1"
+                      
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div class="card mb-3 mt-3" style="max-width: 540px">
+            <div :class="{ active: isErrBackPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -125,12 +130,13 @@
                       id="uploadImagev2"
                       type="file"
                       @change="onFileSelectedv2"
+                      
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div class="card mb-3 mt-3" style="max-width: 540px">
+            <div :class="{ active: isErrCoverPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -183,6 +189,7 @@
                               index
                             ].idColor
                           "
+                          :class="{ active: isErrColor}"
                         >
                           <option value="-1">Chọn màu</option>
                           <option
@@ -195,7 +202,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-4">
+                    <div :class="{ active: isErrImageColor}" class="col-4">
                       <div class="form-group img-file">
                         <input
                           class="form-control input-filev"
@@ -215,6 +222,7 @@
                         "
                         alt=""
                         :id="['uploadPreview' + index]"
+                        
                       />
                     </div>
                   </div>
@@ -241,6 +249,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].idSize
                       "
+                      :class="{ active: isErrSize}"
                     >
                       <option value="-1">Chọn size</option>
                       <option
@@ -262,6 +271,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].price
                       "
+                      :class="{ active: isErrPrice}"
                     />
                   </div>
 
@@ -276,6 +286,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].quantity
                       "
+                      :class="{ active: isErrQuantity}"
                     />
                   </div>
                 </div>
@@ -295,6 +306,25 @@
           </button>
           <button type="button" class="btn btn-reset">Làm tươi</button>
         </div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -309,6 +339,21 @@ export default {
   props: {},
   data() {
     return {
+      isErrNameProduct: false,
+      isErrGenderProduct: false,
+      isErrCategoryParent: false,
+      isErrCategoryChild: false,
+      isErrFrontPhoto: false,
+      isErrBackPhoto: false,
+      isErrCoverPhoto: false,
+      isErrColor: false,
+      isErrImageColor :false,
+      isErrSize: false,
+      isErrPrice: false,
+      isErrQuantity: false,
+      isShowNotify: false,
+      checkFormValidate: false,
+      infoNotify: "",
       DO_MAIN,
       GIA_TRI_TRANG_THAI,
       idDanhMuc: -1,
@@ -410,6 +455,54 @@ export default {
         this.danhSachSize = [];
       }
     },
+    product: {
+      handler() {
+        if (this.product.nameProduct !== "" || this.product.nameProduct !== null) {
+          this.isErrNameProduct = false;
+        }
+        if (this.product.detailInProduct.idGender !== -1) {
+          this.isErrGenderProduct = false;
+        }
+        if (this.idDanhMuc !== -1) {
+          this.isErrCategoryParent = false;
+        }
+        if (this.product.detailInProduct.idCategory !== -1) {
+          this.isErrCategoryChild = false;
+        }
+        if (this.product.frontPhoto !== "" || this.product.frontPhoto !== null) {
+          this.isErrFrontPhoto = false;
+        }
+        if (this.product.backPhoto !== "" || this.product.backPhoto !== null) {
+          this.isErrBackPhoto = false;
+        }
+        if (this.product.coverPhoto !== "" || this.product.coverPhoto !== null) {
+          this.isErrCoverPhoto = false;
+        }
+      
+        // if (this.product.detailInProduct.listDetailColorRequest[index].idColor !== "" || 
+        //   this.product.detailInProduct.listDetailColorRequest[index].idColor !== null
+        // ) {
+        //   this.isErrColor = false;
+        // }
+        // if (this.product.detailInProduct.listDetailColorRequest[index].detailPhoto !== "" || 
+        //   this.product.detailInProduct.listDetailColorRequest[index].detailPhoto !== null
+        // ) {
+        //   this.isErrImageColor = false;
+        // }
+        // if (this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].idSize !== "" || 
+        //   this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].idSize !== null
+        // ) {
+        //   this.isErrSize = false;
+        // }
+        // if (this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].price !== "" || 
+        //   this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].price !== null
+        // ) {
+        //   this.isErrPrice = false;
+        // }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   mounted() {
     this.initData();
@@ -417,6 +510,111 @@ export default {
   methods: {
     initData() {
       this.getColorExists();
+    },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+    checkValidate() {
+      if (
+        this.product.nameProduct.trim() === "" ||
+        this.product.nameProduct.trim() === null
+      ) {
+        this.isErrNameProduct = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.detailInProduct.idGender === -1
+      ) {
+        this.isErrGenderProduct = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.idDanhMuc === -1
+      ) {
+        this.isErrCategoryParent = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.detailInProduct.idCategory === -1
+      ) {
+        this.isErrCategoryChild = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.frontPhoto === "" ||
+        this.product.frontPhoto === null
+      ) {
+        this.isErrFrontPhoto = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.backPhoto === "" ||
+        this.product.backPhoto === null
+      ) {
+        this.isErrBackPhoto = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.coverPhoto === "" ||
+        this.product.coverPhoto === null
+      ) {
+        this.isErrCoverPhoto = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      if (
+        this.product.coverPhoto === "" ||
+        this.product.coverPhoto === null
+      ) {
+        this.isErrCoverPhoto = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      
+      let a = this.product.detailInProduct.listDetailColorRequest.length;
+      let i = 0;
+      for( i ; i<a ; i++ ){
+        console.log(this.product.detailInProduct.listDetailColorRequest[i].idColor)
+      };
+      
+      
+
+      if (
+        this.product.coverPhoto === "" ||
+        this.product.coverPhoto === null
+      ) {
+        this.isErrCoverPhoto = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      else {
+        this.isErrNamePro = false;
+        this.isErrGenderProduct = false;
+        this.isErrCategoryParent = false;
+        this.isErrCategoryChild = false;
+        this.isErrFrontPhoto = false;
+        this.isErrBackPhoto = false
+        this.isErrCoverPhoto = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+
+      
     },
     getColorExists() {
       this.$store.dispatch("colorModule/getDanhSachColorExists").then((res) => {
@@ -531,6 +729,11 @@ export default {
     },
 
     async saveProduct() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
+
       let today = new Date();
       let Month = today.getMonth() + 1;
       let datestring =
