@@ -1,18 +1,20 @@
 <template>
   <div class="category">
     <h3>Danh mục</h3>
-    <form-category ref="FormCategory"
-     @getListFollowPageParent="getListCategoryParent"
+    <form-category
+      ref="FormCategory"
+      @getListFollowPageParent="getListCategoryParent"
+      @clickShowFormCategoryParen="showFormCategoryParent"
     />
     {{ categoryParent }}
     <table-category
-        ref="TableCategory"
-        :listCategoryParent="listCategoryParent"
-        :listCategoryChild="listCategoryChild"
-        @getListFollowPageParent="getListCategoryParent"
-        @getListFollowPageChild="getListCategoryChild"
-        @clickShowFormCategoryParen="showFormCategoryParent"
-        @clickShowFormCategoryChild="showFormCategoryChild"
+      ref="TableCategory"
+      :listCategoryParent="listCategoryParent"
+      :listCategoryChild="listCategoryChild"
+      @getListFollowPageParent="getListCategoryParent"
+      @getListFollowPageChild="getListCategoryChild"
+      @clickShowFormCategoryParen="showFormCategoryParent"
+      @clickShowFormCategoryChild="showFormCategoryChild"
     />
   </div>
 </template>
@@ -20,11 +22,11 @@
 <script>
 import FormCategory from "@/components/componentsCategory/FormCategory.vue";
 import TableCategory from "@/components/componentsCategory/TableCategory.vue";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Category",
-  components: {FormCategory, TableCategory},
+  components: { FormCategory, TableCategory },
   props: {},
   data() {
     return {};
@@ -60,7 +62,7 @@ export default {
     },
 
     showFormCategoryParent(categoryParent) {
-      let categoryTemp = {...categoryParent};
+      let categoryTemp = { ...categoryParent };
       this.$refs["FormCategory"].categoryParent = categoryTemp;
       this.getListCategoryChild(categoryTemp.idCategory);
       this.$refs["FormCategory"].resetFormCategoryChild();
@@ -68,7 +70,7 @@ export default {
     },
 
     showFormCategoryChild(categoryChild) {
-      this.$refs["FormCategory"].categoryChild = {...categoryChild};
+      this.$refs["FormCategory"].categoryChild = { ...categoryChild };
       this.$refs["FormCategory"].isShowCategoryChild = true;
     },
   },

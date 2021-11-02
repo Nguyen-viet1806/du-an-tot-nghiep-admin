@@ -14,5 +14,5 @@ export const GIA_TRI_TRANG_THAI = {
     NOT_ENOUGH: 4,    
   };
 
-  export const DO_MAIN = "http://192.168.0.104:8080";
+  export const DO_MAIN = "http://localhost:8080";
   

@@ -251,6 +251,7 @@ export default {
         .then((res) => {
           if (res) {
             this.$emit("getListFollowPageParent");
+            this.$emit("clickShowFormCategoryParen", this.categoryParent);
             this.resetFormCategoryParent();
             this.resetFormCategoryChild();
           }

@@ -65,8 +65,8 @@ html {
 }
 
 .body-page {
-  margin-left: 16.5%;
-  width: 82.5%;
+  margin-left: 16%;
+  width: 84%;
   min-height: 1000px;
   padding: 80px 28px 100px 28px;
   background: #fafafa;

@@ -65,7 +65,7 @@
               :key="CategoryParent"
             >
               <tr>
-                <th scope="row">{{ index + 1 }}</th>
+                <th scope="row">{{ getSttParent(index) }}</th>
                 <td>{{ CategoryParent.nameCategory }}</td>
                 <td>
                   <div class="form-switch">
@@ -147,7 +147,7 @@
               :key="CategoryChild"
             >
               <tr>
-                <th scope="row">{{ getStt(index) }}</th>
+                <th scope="row">{{ getSttChild(index) }}</th>
                 <td>{{ CategoryChild.nameCategory }}</td>
                 <td>
                   <div class="form-switch">
@@ -253,8 +253,11 @@ export default {
   },
   mounted() {},
   methods: {
-    getStt(index) {
-      return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
+    getSttParent(index) {
+      return this.pageableParent !== 0 ? index + this.pageableParent * 5 + 1 : index + 1;
+    },
+    getSttChild(index) {
+      return this.pageableChild !== 0 ? index + this.pageableChild * 5 + 1 : index + 1;
     },
     getListSort(sort = -1) {
       let payload = {

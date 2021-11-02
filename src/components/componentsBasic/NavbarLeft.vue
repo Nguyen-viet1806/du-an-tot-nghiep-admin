@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar-left">
     <div class="menu">
-      <p class="menu-unit" :class="{ active: checkText('Trang Chủ') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Trang Chủ') }">
         <router-link to="/admin" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'home']"
@@ -9,7 +9,7 @@
           Trang chủ</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Size') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Size') }">
         <router-link to="/admin/size" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'expand-arrows-alt']"
@@ -17,7 +17,7 @@
           Quản lí size</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Màu') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Màu') }">
         <router-link to="/admin/color" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'palette']"
@@ -25,7 +25,7 @@
           Quản lí màu</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Sale') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Sale') }">
         <router-link to="/admin/sale" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'tags']"
@@ -33,7 +33,7 @@
           Quản lí sale</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Voucher') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Voucher') }">
         <router-link to="/admin/voucher" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'percentage']"
@@ -41,7 +41,7 @@
           Quản lí voucher</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Danh Mục') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Danh Mục') }">
         <router-link to="/admin/category" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fab', 'artstation']"
@@ -49,7 +49,7 @@
           Quản lí danh mục</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Sản Phẩm') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Sản Phẩm') }">
         <router-link to="/admin/product" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fab', 'asymmetrik']"
@@ -57,7 +57,7 @@
           Quản lí sản phẩm</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ active: checkText('Quản Lí Combo') }">
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Combo') }">
         <router-link to="/admin/combo" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'check-double']"
@@ -147,7 +147,7 @@ export default {
     }
   }
 }
-.active {
+.activeMenu {
   margin: 15px auto !important;
   background: transparent !important;
   border-radius: 8px !important;
@@ -155,8 +155,8 @@ export default {
   height: 50px !important;
   width: 82% !important;
   cursor: pointer !important;
-  box-shadow: #f0f2f5 0px 2px 15px 0px !important;
   background: white !important;
+   box-shadow: #1890ff 0px 1px 1px, #1890ff 0px 0px 1px 1px !important;
   & a {
     font-weight: 500 !important;
     & .logoMenu {
