@@ -20,6 +20,7 @@
                 v-model="categoryParent.nameCategory"
                 type="text"
                 class="form-control"
+                :class="{ active: isErrNameCategory }"
               />
             </div>
             <div class="control">
@@ -86,6 +87,25 @@
             </button>
           </div>
         </div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -107,6 +127,10 @@ export default {
   },
   data() {
     return {
+      isShowNotify: false,
+      isErrNameCategory: false,
+      checkFormValidate: false,
+      infoNotify: "",
       isShowCategoryChild: false,
       GIA_TRI_TRANG_THAI,
       categoryParent: {
@@ -131,7 +155,17 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    categoryParent: {
+      handler() {
+        if (this.categoryParent.nameCategory !== "" ||this.categoryParent.nameCategory !== null) {
+          this.isErrNameCategory = false;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
     resetFormCategoryParent() {
@@ -157,7 +191,31 @@ export default {
         parentId: null,
       };
     },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+    checkValidate() {
+      if (
+        this.categoryParent.nameCategory.trim() === "" ||
+        this.categoryParent.nameCategory.trim() === null
+      ) {
+        this.isErrNameCategory = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      else {
+        this.isErrNameCategory = false;
+        this.isShowNotify = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+    },
     saveCategory() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
       if (this.categoryParent.idCategory) {
         if (this.categoryChild.idCategory) {
           // check trong

@@ -18,6 +18,7 @@
               <input
                 type="text"
                 class="form-control"
+                :class="{ active: isErrNameColor }"
                 v-model="color.nameColor"
               />
             </div>
@@ -35,7 +36,25 @@
             </div>
           </form>
         </div>
-        <div class="col"></div>
+        <div class="col">
+          <div class="notify">
+            <div
+              id="popup1"
+              v-if="isShowNotify"
+              class="overlay"
+              @click="closeNotify"
+            ></div>
+            <transition name="bounce">
+              <div id="popup1" v-if="isShowNotify" class="popup">
+                <h2>Thông báo:</h2>
+                <a class="close" href="#" @click="closeNotify">&times;</a>
+                <div class="content">
+                  {{ infoNotify }}
+                </div>
+              </div>
+            </transition>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -54,6 +73,10 @@ export default {
   },
   data() {
     return {
+      isShowNotify: false,
+      isErrNameColor: false,
+      checkFormValidate: false,
+      infoNotify: "",
       color: {
         idColor: null,
         nameColor: "",
@@ -62,17 +85,52 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    color: {
+      handler() {
+        if (this.color.nameColor !== "" || this.color.nameColor !== null) {
+          this.isErrNameColor = false;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
+    closeNotify() {
+      this.isShowNotify = false;
+    },
     resetForm() {
+      this.isErrNameColor = false;
       this.color = {
         idColor: null,
         nameColor: "",
         idStatus: null,
       };
     },
+    checkValidate() {
+      if (
+        this.color.nameColor.trim() === "" ||
+        this.color.nameColor.trim() === null
+      ) {
+        this.isErrNameColor = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
+      else {
+        this.isErrNameColor = false;
+        this.isShowNotify = false;
+        this.infoNotify = "";
+        this.checkFormValidate = true;
+      }
+    },
     saveColor() {
+      this.checkValidate();
+      if (!this.checkFormValidate) {
+        return;
+      }
       if (!this.color.idColor) {
         this.color.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }
