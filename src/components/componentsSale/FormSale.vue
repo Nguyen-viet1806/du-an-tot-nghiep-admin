@@ -110,10 +110,10 @@ export default {
   watch: {
     sale: {
       handler() {
-        if (this.sale.nameSale !== "" || this.sale.nameSale !== null) {
+        if (this.sale.nameSale !== "") {
           this.isErrNameSale = false;
         }
-        if (this.sale.discount !== "" || this.sale.discount !== null) {
+        if (this.sale.discount > 0 && this.sale.discount < 100) {
           this.isErrDiscount = false;
         }        
       },
@@ -129,6 +129,7 @@ export default {
     resetForm() {
       this.isErrNameSale = false;
       this.isErrDiscount = false;
+      this.checkFormValidate = false;
       this.sale = {
         idSale: null,
         nameSale: "",
@@ -137,6 +138,7 @@ export default {
       };
     },
     checkValidate() {
+      let check = true
       if (
         this.sale.nameSale.trim() === "" ||
         this.sale.nameSale.trim() === null
@@ -145,23 +147,26 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check= false
       }
       if (
-        this.sale.discount === "" || 
-        this.sale.discount === null
+        this.sale.discount < 0 || 
+        this.sale.discount > 100
       ) {
         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check= false
       } 
-      else {
+      if(check){
         this.isErrNameSale = false;
         this.isErrDiscount = false;
         this.isShowNotify = false;
         this.infoNotify = "";
         this.checkFormValidate = true;
       }
+      
     },
     saveSale() {
       this.checkValidate();
