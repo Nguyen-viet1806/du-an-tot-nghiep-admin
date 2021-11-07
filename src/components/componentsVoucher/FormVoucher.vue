@@ -131,7 +131,7 @@ export default {
         idVoucher: null,
         nameVoucher: "",
         discount: null,
-        dateStart: "",
+        dateStart: null,
         dateEnd: null,
         descriptionVoucher: null,
         idStatus: null,
@@ -142,16 +142,16 @@ export default {
   watch: {
     voucher: {
       handler() {
-        if (this.voucher.nameVoucher !== "" || this.voucher.nameVouchere !== null) {
+        if (this.voucher.nameVoucher !== "") {
           this.isErrNameVoucher = false;
         }
-        if (this.voucher.discount !== "" || this.voucher.discount !== null) {
+        if (this.voucher.discount > 0 && this.voucher.discount < 100) {
           this.isErrDiscount = false;
         }
-        if (this.voucher.dateStart !== "" || this.voucher.dateStart !== null) {
+        if (new Date(this.voucher.dateStart).valueOf() >= Date.now()) {
           this.isErrDateStart = false;
         }
-        if (this.voucher.dateEnd !== "" || this.voucher.dateEnd !== null) {
+        if (new Date(this.voucher.dateEnd).valueOf() >= new Date(this.voucher.dateStart).valueOf() ) {
           this.isErrDateEnd = false;
         }
       },
@@ -162,6 +162,11 @@ export default {
   mounted() {},
   methods: {
     resetForm() {
+      this.isErrNameVoucher = false;
+      this.isErrDiscount = false;
+      this.isErrDateStart = false;
+      this.isErrDateEnd = false;
+      this.isShowNotify = false;
       this.voucher = {
         idVoucher: null,
         nameVoucher: "",
@@ -176,6 +181,7 @@ export default {
       this.isShowNotify = false;
     },
     checkValidate() {
+      let check = true
       if (
         this.voucher.nameVoucher.trim() === "" ||
         this.voucher.nameVoucher.trim() === null
@@ -184,6 +190,7 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check= false
       }
       if (
         this.voucher.discount === "" ||
@@ -193,24 +200,28 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check= false
       }
+
       if (
-        this.voucher.dateStart < Date.now()
+        new Date(this.voucher.dateStart).valueOf() < Date.now()
       ) {
         this.isErrDateStart = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check = false
       } 
       if (
-        this.voucher.dateEnd < this.voucher.dateStart
+        new Date(this.voucher.dateEnd).valueOf() < new Date(this.voucher.dateStart).valueOf()
       ) {
         this.isErrDateEnd = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
+        check = false
       } 
-      else {
+      if(check) {
         this.isErrNameVoucher = false;
         this.isErrDiscount = false;
         this.isErrDateStart = false;

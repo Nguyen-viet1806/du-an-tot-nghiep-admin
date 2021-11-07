@@ -178,8 +178,8 @@
               <div class="form-color">
                 <div class="container">
                   <div class="row">
-                    <div class="col-4">
-                      <div class="form-group">
+                    <div class="col-4" >
+                      <div class="form-group" >
                         <label>Màu:</label>
                         <select
                           class="form-select"
@@ -457,7 +457,7 @@ export default {
     },
     product: {
       handler() {
-        if (this.product.nameProduct !== "" || this.product.nameProduct !== null) {
+        if (this.product.nameProduct !== "") {
           this.isErrNameProduct = false;
         }
         if (this.product.detailInProduct.idGender !== -1) {
@@ -469,36 +469,16 @@ export default {
         if (this.product.detailInProduct.idCategory !== -1) {
           this.isErrCategoryChild = false;
         }
-        if (this.product.frontPhoto !== "" || this.product.frontPhoto !== null) {
+        if (this.product.frontPhoto !== null) {
           this.isErrFrontPhoto = false;
         }
-        if (this.product.backPhoto !== "" || this.product.backPhoto !== null) {
+        if (this.product.backPhoto !== null) {
           this.isErrBackPhoto = false;
         }
-        if (this.product.coverPhoto !== "" || this.product.coverPhoto !== null) {
+        if (this.product.coverPhoto !== null) {
           this.isErrCoverPhoto = false;
         }
-      
-        // if (this.product.detailInProduct.listDetailColorRequest[index].idColor !== "" || 
-        //   this.product.detailInProduct.listDetailColorRequest[index].idColor !== null
-        // ) {
-        //   this.isErrColor = false;
-        // }
-        // if (this.product.detailInProduct.listDetailColorRequest[index].detailPhoto !== "" || 
-        //   this.product.detailInProduct.listDetailColorRequest[index].detailPhoto !== null
-        // ) {
-        //   this.isErrImageColor = false;
-        // }
-        // if (this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].idSize !== "" || 
-        //   this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].idSize !== null
-        // ) {
-        //   this.isErrSize = false;
-        // }
-        // if (this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].price !== "" || 
-        //   this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i].price !== null
-        // ) {
-        //   this.isErrPrice = false;
-        // }
+
       },
       deep: true,
       immediate: true,
@@ -516,8 +496,7 @@ export default {
     },
     checkValidate() {
       if (
-        this.product.nameProduct.trim() === "" ||
-        this.product.nameProduct.trim() === null
+        this.product.nameProduct.trim() === "" 
       ) {
         this.isErrNameProduct = true;
         this.isShowNotify = true;
@@ -549,7 +528,6 @@ export default {
         this.checkFormValidate = false;
       }
       if (
-        this.product.frontPhoto === "" ||
         this.product.frontPhoto === null
       ) {
         this.isErrFrontPhoto = true;
@@ -558,7 +536,6 @@ export default {
         this.checkFormValidate = false;
       }
       if (
-        this.product.backPhoto === "" ||
         this.product.backPhoto === null
       ) {
         this.isErrBackPhoto = true;
@@ -567,7 +544,6 @@ export default {
         this.checkFormValidate = false;
       }
       if (
-        this.product.coverPhoto === "" ||
         this.product.coverPhoto === null
       ) {
         this.isErrCoverPhoto = true;
@@ -576,28 +552,17 @@ export default {
         this.checkFormValidate = false;
       }
       if (
-        this.product.coverPhoto === "" ||
-        this.product.coverPhoto === null
+        this.idDanhMuc === -1
       ) {
-        this.isErrCoverPhoto = true;
+        this.isErrCategoryParent = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      
-      let a = this.product.detailInProduct.listDetailColorRequest.length;
-      let i = 0;
-      for( i ; i<a ; i++ ){
-        console.log(this.product.detailInProduct.listDetailColorRequest[i].idColor)
-      };
-      
-      
-
       if (
-        this.product.coverPhoto === "" ||
-        this.product.coverPhoto === null
+        this.product.detailInProduct.idCategory === -1
       ) {
-        this.isErrCoverPhoto = true;
+        this.isErrCategoryChild = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
@@ -610,11 +575,12 @@ export default {
         this.isErrFrontPhoto = false;
         this.isErrBackPhoto = false
         this.isErrCoverPhoto = false;
+        this.isErrCategoryParent = false;
+        this.isErrCategoryChild = false;
         this.infoNotify = "";
         this.checkFormValidate = true;
       }
 
-      
     },
     getColorExists() {
       this.$store.dispatch("colorModule/getDanhSachColorExists").then((res) => {
