@@ -32,3 +32,18 @@ export function callApiShowProduct(payload) {
   });
 }
 
+export function callApiDeleteProductParent(payload) {
+  return HTTP({
+    url: ENDPOINT.DELETE_PRODUCT_PARENT,
+    method: "DELETE",
+    params: payload,
+  });
+}
+
+export function callApiDeleteProductChild(payload) {
+  return HTTP({
+    url: ENDPOINT.DELETE_PRODUCT_CHILD,
+    method: "DELETE",
+    params: payload,
+  });
+}

@@ -65,6 +65,14 @@
           Quản lí combo</router-link
         >
       </p>
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Hóa Đơn') }">
+        <router-link to="/admin/bill" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'file-invoice-dollar']"
+          /></span>
+          Quản lí hóa đơn</router-link
+        >
+      </p>
     </div>
   </nav>
 </template>
@@ -87,6 +95,8 @@ export default {
       return this.innerText.includes(text);
     },
     clickMenu(e) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       this.innerText = e.target.innerText;
     },
   },

@@ -259,6 +259,7 @@ export default {
     },
     addCategoryChild() {
       this.isShowCategoryChild = !this.isShowCategoryChild;
+      this.resetFormCategoryChild();
     },
   },
 };

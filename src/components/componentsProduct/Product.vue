@@ -1,7 +1,7 @@
 <template>
   <div class="product">
     <h3>Sản phẩm</h3>
-    <form-product ref="FormProduct" />
+    <form-product ref="FormProduct" @getListFollowPage="getListProduct"/>
 
     <table-product ref="TableProduct"  @getListFollowPage="getListProduct" @showFormProduct="showFormProduct"/>
   </div>

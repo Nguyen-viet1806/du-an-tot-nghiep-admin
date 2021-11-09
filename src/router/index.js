@@ -6,6 +6,7 @@ import PageVoucher from "@/views/PageVoucher.vue";
 import PageCategory from "@/views/PageCategory.vue";
 import PageProduct from "@/views/PageProduct.vue";
 import PageCombo from "@/views/PageCombo.vue";
+import PageBill from "@/views/PageBill.vue";
 const routes = [
   {
     path: "/admin/size",
@@ -42,6 +43,12 @@ const routes = [
     name: "PageCombo",
     component: PageCombo,
   },
+  {
+    path: "/admin/bill",
+    name: "PageBill",
+    component: PageBill,
+  },
+  
 ];
 
 const router = createRouter({

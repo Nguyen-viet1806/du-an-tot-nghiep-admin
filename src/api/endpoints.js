@@ -65,4 +65,11 @@ export default {
   GET_LIST_PRODUCT: "/api/webtpf/admin/products/getlistparent/",
   GET_LIST_PRODUCT_CHILD: "/api/webtpf/admin/products/getlistchild",
   SHOW_PRODUCT: "/api/webtpf/admin/products/show",
+  DELETE_PRODUCT_PARENT: "/api/webtpf/admin/products/deleteparent",
+  DELETE_PRODUCT_CHILD: "/api/webtpf/admin/products/deletechild",
+
+  //bill
+  GET_LIST_TINH: "/api/webtpf/getallprovince",
+  GET_LIST_QUAN_HUYEN: "/api/webtpf/getalldistrict",
+  GET_LIST_XA: "/api/webtpf/getallcommune",
 };

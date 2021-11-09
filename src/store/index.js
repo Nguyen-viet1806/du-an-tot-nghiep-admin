@@ -4,7 +4,8 @@ import saleModule from "@/store/Sale";
 import voucherModule from "@/store/Voucher";
 import categoryModule from "@/store/Category";
 import productModule from "@/store/Product";
-import {createStore} from "vuex";
+import billModule from "@/store/Bill";
+import { createStore } from "vuex";
 export default new createStore({
   modules: {
     sizeModule,
@@ -13,10 +14,9 @@ export default new createStore({
     voucherModule,
     categoryModule,
     productModule,
+    billModule,
   },
-  state: {
-   
-  },
+  state: {},
   getters: {},
   mutations: {},
 });

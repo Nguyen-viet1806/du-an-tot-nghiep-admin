@@ -128,6 +128,7 @@
                 <div class="form-switch">
                   <input
                     class="form-check-input"
+                    @change="updateStatusProductParent(Product)"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
@@ -316,6 +317,7 @@
                 <div class="form-switch">
                   <input
                     class="form-check-input"
+                    @change="updateStatusProductChild(Product)"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
@@ -459,6 +461,9 @@ export default {
   },
   methods: {
     initData() {
+      if (this.idProduct === null) {
+        this.$store.commit("productModule/SET_LIST_PRODUCTS_CHILD", []);
+      }
       this.getColorExists();
     },
     getListProductParent(sort = -1) {
@@ -479,7 +484,13 @@ export default {
         idGender: this.idGender && this.idGender === -1 ? "" : this.idGender,
         page: this.pageableParent,
       };
-      this.$store.dispatch("productModule/getListProduct", payload);
+      this.$store
+        .dispatch("productModule/getListProduct", payload)
+        .then((res) => {
+          if (res) {
+            this.$store.commit("productModule/SET_LIST_PRODUCTS_CHILD", []);
+          }
+        });
     },
     getListChildSort(sort = -1) {
       let payload = {
@@ -546,6 +557,16 @@ export default {
         if (res) {
           this.danhSachColor = res.data.data;
         }
+      });
+    },
+    updateStatusProductParent(Product) {
+      this.$store.dispatch("productModule/deleteProductParent", {
+        idProduct: Product.idProduct,
+      });
+    },
+    updateStatusProductChild(Product) {
+      this.$store.dispatch("productModule/deleteProductChild", {
+        idProductDetail: Product.idProductDetail,
       });
     },
     pageNextParent() {

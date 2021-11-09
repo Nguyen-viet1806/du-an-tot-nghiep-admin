@@ -31,9 +31,9 @@
                 v-model="product.detailInProduct.idGender"
                 :class="{ active: isErrGenderProduct }"
               >
-                <option value="1">Nam</option>
-                <option value="2">Nữ</option>
-                <option value="3">Unisex</option>
+                <option :value="Number(1)">Nam</option>
+                <option :value="Number(2)">Nữ</option>
+                <option :value="Number(3)">Unisex</option>
               </select>
             </div>
 
@@ -84,7 +84,11 @@
               ></textarea>
             </div>
             <label class="mt-2">Chọn ảnh:</label>
-            <div :class="{ active: isErrFrontPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
+            <div
+              :class="{ active: isErrFrontPhoto }"
+              class="card mb-3 mt-3"
+              style="max-width: 540px"
+            >
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -104,13 +108,16 @@
                       id="uploadImagev1"
                       type="file"
                       @change="onFileSelectedv1"
-                      
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div :class="{ active: isErrBackPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
+            <div
+              :class="{ active: isErrBackPhoto }"
+              class="card mb-3 mt-3"
+              style="max-width: 540px"
+            >
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -130,13 +137,16 @@
                       id="uploadImagev2"
                       type="file"
                       @change="onFileSelectedv2"
-                      
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div :class="{ active: isErrCoverPhoto}" class="card mb-3 mt-3" style="max-width: 540px">
+            <div
+              :class="{ active: isErrCoverPhoto }"
+              class="card mb-3 mt-3"
+              style="max-width: 540px"
+            >
               <div class="row g-0">
                 <div class="col-md-5">
                   <img
@@ -171,15 +181,21 @@
                 .listDetailColorRequest"
               :key="color"
             >
-              <h5>Màu đỏ</h5>
-              <button class="btn-x" v-on:click="remoteColor(index)">
+              <h5>Màu</h5>
+              <button
+                class="btn-x"
+                v-show="
+                  product.detailInProduct.listDetailColorRequest.length > 2
+                "
+                v-on:click="remoteColor(index)"
+              >
                 <fa class="icon" :icon="['fas', 'times']" />
               </button>
               <div class="form-color">
                 <div class="container">
                   <div class="row">
-                    <div class="col-4" >
-                      <div class="form-group" >
+                    <div class="col-4">
+                      <div class="form-group">
                         <label>Màu:</label>
                         <select
                           class="form-select"
@@ -189,20 +205,21 @@
                               index
                             ].idColor
                           "
-                          :class="{ active: isErrColor}"
+                          :class="{ active: isErrColor }"
                         >
                           <option value="-1">Chọn màu</option>
                           <option
                             v-for="color in danhSachColor"
                             :key="color.idColor"
                             :value="color.idColor"
+                            :disabled="checkDuplicateColor(color.idColor)"
                           >
                             {{ color.nameColor }}
                           </option>
                         </select>
                       </div>
                     </div>
-                    <div :class="{ active: isErrImageColor}" class="col-4">
+                    <div :class="{ active: isErrImageColor }" class="col-4">
                       <div class="form-group img-file">
                         <input
                           class="form-control input-filev"
@@ -222,7 +239,6 @@
                         "
                         alt=""
                         :id="['uploadPreview' + index]"
-                        
                       />
                     </div>
                   </div>
@@ -249,13 +265,14 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].idSize
                       "
-                      :class="{ active: isErrSize}"
+                      :class="{ active: isErrSize }"
                     >
                       <option value="-1">Chọn size</option>
                       <option
                         v-for="size in danhSachSize"
                         :key="size.idSize"
                         :value="size.idSize"
+                        :disabled="checkDuplicateSize(size.idSize,index)"
                       >
                         {{ size.nameSize }}
                       </option>
@@ -271,7 +288,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].price
                       "
-                      :class="{ active: isErrPrice}"
+                      :class="{ active: isErrPrice }"
                     />
                   </div>
 
@@ -286,7 +303,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].quantity
                       "
-                      :class="{ active: isErrQuantity}"
+                      :class="{ active: isErrQuantity }"
                     />
                   </div>
                 </div>
@@ -304,7 +321,9 @@
           <button type="button" class="btn btn-save" @click="saveProduct">
             Lưu
           </button>
-          <button type="button" class="btn btn-reset">Làm tươi</button>
+          <button type="button" class="btn btn-reset" @click="resetForm">
+            Làm tươi
+          </button>
         </div>
         <div class="col">
           <div class="notify">
@@ -347,7 +366,7 @@ export default {
       isErrBackPhoto: false,
       isErrCoverPhoto: false,
       isErrColor: false,
-      isErrImageColor :false,
+      isErrImageColor: false,
       isErrSize: false,
       isErrPrice: false,
       isErrQuantity: false,
@@ -408,7 +427,7 @@ export default {
       size: {
         dateCreate: null,
         idProductDetail: null,
-        idSize: null,
+        idSize: -1,
         quantity: null,
         price: null,
         idSale: null,
@@ -478,7 +497,6 @@ export default {
         if (this.product.coverPhoto !== null) {
           this.isErrCoverPhoto = false;
         }
-
       },
       deep: true,
       immediate: true,
@@ -488,6 +506,41 @@ export default {
     this.initData();
   },
   methods: {
+    resetForm() {
+      this.idDanhMuc = -1;
+      this.product = {
+        idProduct: null,
+        nameProduct: "",
+        dateCreate: null,
+        totalProduct: 0,
+        idStatus: null,
+        descriptionProduct: "",
+        frontPhoto: null,
+        backPhoto: null,
+        coverPhoto: null,
+        detailInProduct: {
+          idGender: -1,
+          idCategory: -1,
+          listDetailColorRequest: [
+            {
+              idColor: -1,
+              detailPhoto: null,
+              listSizeInColor: [
+                {
+                  dateCreate: null,
+                  idProductDetail: null,
+                  idSize: -1,
+                  quantity: null,
+                  price: null,
+                  idSale: null,
+                  idStatus: null,
+                },
+              ],
+            },
+          ],
+        },
+      };
+    },
     initData() {
       this.getColorExists();
     },
@@ -495,92 +548,72 @@ export default {
       this.isShowNotify = false;
     },
     checkValidate() {
-      if (
-        this.product.nameProduct.trim() === "" 
-      ) {
+      if (this.product.nameProduct.trim() === "") {
         this.isErrNameProduct = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.detailInProduct.idGender === -1
-      ) {
+      if (this.product.detailInProduct.idGender === -1) {
         this.isErrGenderProduct = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.idDanhMuc === -1
-      ) {
+      if (this.idDanhMuc === -1) {
         this.isErrCategoryParent = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.detailInProduct.idCategory === -1
-      ) {
+      if (this.product.detailInProduct.idCategory === -1) {
         this.isErrCategoryChild = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.frontPhoto === null
-      ) {
+      if (this.product.frontPhoto === null) {
         this.isErrFrontPhoto = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.backPhoto === null
-      ) {
+      if (this.product.backPhoto === null) {
         this.isErrBackPhoto = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.coverPhoto === null
-      ) {
+      if (this.product.coverPhoto === null) {
         this.isErrCoverPhoto = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.idDanhMuc === -1
-      ) {
+      if (this.idDanhMuc === -1) {
         this.isErrCategoryParent = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (
-        this.product.detailInProduct.idCategory === -1
-      ) {
+      if (this.product.detailInProduct.idCategory === -1) {
         this.isErrCategoryChild = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-      }
-      else {
+      } else {
         this.isErrNamePro = false;
         this.isErrGenderProduct = false;
         this.isErrCategoryParent = false;
         this.isErrCategoryChild = false;
         this.isErrFrontPhoto = false;
-        this.isErrBackPhoto = false
+        this.isErrBackPhoto = false;
         this.isErrCoverPhoto = false;
         this.isErrCategoryParent = false;
         this.isErrCategoryChild = false;
         this.infoNotify = "";
         this.checkFormValidate = true;
       }
-
     },
     getColorExists() {
       this.$store.dispatch("colorModule/getDanhSachColorExists").then((res) => {
@@ -588,6 +621,38 @@ export default {
           this.danhSachColor = res.data.data;
         }
       });
+    },
+    checkDuplicateColor(idColor) {
+      for (
+        let i = 0;
+        i < this.product.detailInProduct.listDetailColorRequest.length;
+        i++
+      ) {
+        if (
+          this.product.detailInProduct.listDetailColorRequest[i].idColor ===
+          idColor
+        ) {
+          return true;
+        }
+      }
+      return false;
+    },
+    checkDuplicateSize(idSize,index) {
+      for (
+        let i = 0;
+        i <
+        this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor
+          .length;
+        i++
+      ) {
+        if (
+          this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i]
+            .idSize === idSize
+        ) {
+          return true;
+        }
+      }
+      return false;
     },
     onFileSelectedv1(event) {
       // this.isPreviewImg = true;
@@ -630,13 +695,14 @@ export default {
       // this.isImg = false;
       this.product.detailInProduct.listDetailColorRequest[index].detailPhoto =
         event.target.files[0];
-        var oFReader = new FileReader();
+      var oFReader = new FileReader();
       if (event.target.files[0]) {
         oFReader.readAsDataURL(
           document.getElementById("uploadImage" + index).files[0]
         );
         oFReader.onload = function () {
-          document.getElementById("uploadPreview" + index).src = oFReader.result;
+          document.getElementById("uploadPreview" + index).src =
+            oFReader.result;
         };
       }
     },
@@ -702,8 +768,8 @@ export default {
 
       let today = new Date();
       let Month = today.getMonth() + 1;
-      let datestring =
-        today.getFullYear() + "-" + Month + "-" + today.getDate();
+      let day = today.getDate() > 10 ? today.getDate() : "0" + today.getDate();
+      let datestring = today.getFullYear() + "-" + Month + "-" + day;
       if (!this.product.idProduct) {
         this.product.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
         this.product.dateCreate = datestring;
@@ -737,8 +803,8 @@ export default {
         for (
           let x = 0;
           x <
-          this.product.detailInProduct.listDetailColorRequest[i]
-            .listSizeInColor.length;
+          this.product.detailInProduct.listDetailColorRequest[i].listSizeInColor
+            .length;
           x++
         ) {
           if (
@@ -754,10 +820,14 @@ export default {
           }
         }
       }
-      let payload = { ...this.product };
+      let payload = {
+        ...this.product,
+      };
       this.$store.dispatch("productModule/saveProduct", payload).then((res) => {
         if (res) {
-          console.log(res);
+          this.resetForm();
+          this.$emit("getListFollowPage");
+          this.$emit("getListFollowPage");
         }
       });
     },

@@ -101,5 +101,5 @@ export default {
 };
 </script>
 
-<style lnag="scss" scoped>
+<style lang="scss" scoped>
 </style>

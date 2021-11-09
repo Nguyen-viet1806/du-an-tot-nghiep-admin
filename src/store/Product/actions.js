@@ -1,4 +1,11 @@
-import { callApiSaveProduct ,callApiGetListProduct,callApiGetListProductChild,callApiShowProduct} from "@/api/product.js";
+import {
+  callApiSaveProduct,
+  callApiDeleteProductParent,
+  callApiDeleteProductChild,
+  callApiGetListProduct,
+  callApiGetListProductChild,
+  callApiShowProduct,
+} from "@/api/product.js";
 import { callApiUploadFile } from "@/api/common.js";
 
 const uploadFile = (context, payload) => {
@@ -43,7 +50,6 @@ const getListProductChild = (context, payload) => {
   });
 };
 
-
 const showProduct = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiShowProduct(payload)
@@ -55,9 +61,34 @@ const showProduct = (context, payload) => {
       });
   });
 };
+
 const saveProduct = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiSaveProduct(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const deleteProductParent = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiDeleteProductParent(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const deleteProductChild = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiDeleteProductChild(payload)
       .then((reponse) => {
         resolve(reponse);
       })
@@ -72,4 +103,6 @@ export default {
   getListProduct,
   getListProductChild,
   showProduct,
+  deleteProductParent,
+  deleteProductChild,
 };
