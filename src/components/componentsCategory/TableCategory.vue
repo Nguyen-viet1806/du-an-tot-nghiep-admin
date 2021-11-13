@@ -260,6 +260,7 @@ export default {
       return this.pageableChild !== 0 ? index + this.pageableChild * 5 + 1 : index + 1;
     },
     getListSort(sort = -1) {
+        this.$store.commit("categoryModule/SET_LIST_CATEGORYS_CHILD", [])
       let payload = {
         sort: sort,
         page: this.pageableParent,

@@ -158,7 +158,10 @@ export default {
   watch: {
     categoryParent: {
       handler() {
-        if (this.categoryParent.nameCategory !== "" ||this.categoryParent.nameCategory !== null) {
+        if (
+          this.categoryParent.nameCategory !== "" ||
+          this.categoryParent.nameCategory !== null
+        ) {
           this.isErrNameCategory = false;
         }
       },
@@ -203,8 +206,7 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-      }
-      else {
+      } else {
         this.isErrNameCategory = false;
         this.isShowNotify = false;
         this.infoNotify = "";
@@ -229,8 +231,8 @@ export default {
           } else {
             this.categoryChild.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
             this.categoryParent.listCategoryChildDTO[0] = {
-            ...this.categoryChild,
-          };
+              ...this.categoryChild,
+            };
           }
         }
       } else {
@@ -251,7 +253,10 @@ export default {
         .then((res) => {
           if (res) {
             this.$emit("getListFollowPageParent");
-            this.$emit("clickShowFormCategoryParen", this.categoryParent);
+            this.$store.commit("categoryModule/SET_LIST_CATEGORYS_CHILD", [])
+            if (this.categoryParent.idCategory) {
+              this.$emit("clickShowFormCategoryParen", this.categoryParent);
+            }
             this.resetFormCategoryParent();
             this.resetFormCategoryChild();
           }

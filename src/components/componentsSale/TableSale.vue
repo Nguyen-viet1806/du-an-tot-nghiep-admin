@@ -141,6 +141,7 @@ export default {
   computed: {},
   watch: {
     pageable() {
+      this.idTrangThai = -1;
       this.$emit("getListFollowPage");
     },
   },

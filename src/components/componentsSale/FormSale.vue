@@ -140,8 +140,18 @@ export default {
     checkValidate() {
       let check = true
       if (
+        this.sale.discount < 0 || 
+        this.sale.discount > 100
+      ) {
+        this.isErrDiscount = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Discount phải là số lớn hơn 0 và nhỏ hơn 100 !";
+        this.checkFormValidate = false;
+        check= false
+      } 
+      if (
         this.sale.nameSale.trim() === "" ||
-        this.sale.nameSale.trim() === null
+        this.sale.nameSale === null
       ) {
         this.isErrNameSale = true;
         this.isShowNotify = true;
@@ -149,16 +159,13 @@ export default {
         this.checkFormValidate = false;
         check= false
       }
-      if (
-        this.sale.discount < 0 || 
-        this.sale.discount > 100
-      ) {
-        this.isErrDiscount = true;
+      if( this.sale.discount === null){
+         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
         check= false
-      } 
+      }
       if(check){
         this.isErrNameSale = false;
         this.isErrDiscount = false;
@@ -181,10 +188,9 @@ export default {
           let listSaleTemp = [...this.listSales];
           if (!this.sale.idSale) {
             if (listSaleTemp.length === 5) {
-              listSaleTemp.length = 4;
-            }
-            listSaleTemp.push(res.data.data);
+              listSaleTemp.push(res.data.data);
             this.$store.commit("saleModule/SET_LIST_SALES", listSaleTemp);
+            }
           } else {
             let len = listSaleTemp.length;
             for (let i = 0; i < len; i++) {

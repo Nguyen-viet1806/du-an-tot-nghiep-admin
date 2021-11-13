@@ -159,6 +159,8 @@ export default {
   computed: {},
   watch: {
     pageable() {
+      this.idTrangThai = -1;
+      this.idDanhMuc = -1;
       this.$emit("getListFollowPage");
     },
   },
@@ -197,13 +199,17 @@ export default {
       this.$emit("clickShowFormSize", size);
     },
     updateStatus(size, event) {
+      let payload = {
+        ...size,
+        idCategory: size.categoryParent.idCategory
+      }
       let checked = event.target.checked;
       if (checked) {
-        size.idStatus = this.GIA_TRI_TRANG_THAI.EXISTS;
-        this.$store.dispatch("sizeModule/saveSize", size);
+        payload.idStatus = this.GIA_TRI_TRANG_THAI.EXISTS;
+        this.$store.dispatch("sizeModule/saveSize", payload);
       } else {
-        size.idStatus = this.GIA_TRI_TRANG_THAI.DELETE;
-        this.$store.dispatch("sizeModule/saveSize", size);
+        payload.idStatus = this.GIA_TRI_TRANG_THAI.DELETE;
+        this.$store.dispatch("sizeModule/saveSize", payload);
       }
     },
   },

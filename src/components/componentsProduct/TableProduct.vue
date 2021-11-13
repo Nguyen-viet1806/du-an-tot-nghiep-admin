@@ -412,9 +412,24 @@ export default {
   },
   watch: {
     pageableParent() {
+      this.idStatusParent = -1,
+      this.idStatusChild = -1,
+      this.idCategoryParent = -1,
+      this.idCategoryParentv = -1,
+      this.idCategoryChild = -1,
+      this.idGender = -1,
+       this.idColor = -1,
+      this.idSize = -1,
+      this.idTag = -1,
       this.$emit("getListFollowPage");
     },
     pageableChild() {
+      this.idStatusChild = -1,
+      this.idCategoryParentv = -1,
+      this.idCategoryChild = -1,
+       this.idColor = -1,
+      this.idSize = -1,
+      this.idTag = -1,
       this.getListChildPage();
     },
     idCategoryParentv() {

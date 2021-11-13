@@ -35,7 +35,7 @@ export function callApiGetDanhSachCategoryChildSort(payload) {
 
 export function callApiSearch(payload) {
   return HTTP({
-    url: ENDPOINT.SAVE_CATEGORY_PARENT,
+    url: ENDPOINT.SEARCH_CATEGORY_PARENT,
     method: "GET",
     params: payload,
   });

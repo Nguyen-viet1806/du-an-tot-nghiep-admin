@@ -19,7 +19,7 @@ export function callApiGetDanhSachColorSort(payload) {
 
 export function callApiSearch(payload) {
   return HTTP({
-    url: ENDPOINT.SAVE_COLOR,
+    url: ENDPOINT.SEARCH_COLOR,
     method: "GET",
     params: payload,
   });

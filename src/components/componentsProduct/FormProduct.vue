@@ -184,8 +184,8 @@
               <h5>Màu</h5>
               <button
                 class="btn-x"
-                v-show="
-                  product.detailInProduct.listDetailColorRequest.length > 2
+                v-if="
+                  !product.detailInProduct.listDetailColorRequest[0]
                 "
                 v-on:click="remoteColor(index)"
               >
@@ -768,7 +768,7 @@ export default {
 
       let today = new Date();
       let Month = today.getMonth() + 1;
-      let day = today.getDate() > 10 ? today.getDate() : "0" + today.getDate();
+      let day = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
       let datestring = today.getFullYear() + "-" + Month + "-" + day;
       if (!this.product.idProduct) {
         this.product.idStatus = GIA_TRI_TRANG_THAI.EXISTS;

@@ -139,10 +139,10 @@ export default {
           let listColorTemp = [...this.listColors];
           if (!this.color.idColor) {
             if (listColorTemp.length === 5) {
-              listColorTemp.length = 4;
-            }
-            listColorTemp.push(res.data.data);
+                listColorTemp.push(res.data.data);
             this.$store.commit("colorModule/SET_LIST_COLORS", listColorTemp);
+            }
+          
           } else {
             let len = listColorTemp.length;
             for (let i = 0; i < len; i++) {
