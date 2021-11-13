@@ -15,10 +15,12 @@
             </div>
             <div class="form-group">
               <label>Tên sale:</label>
-              <input type="text" 
-              class="form-control" 
-              :class="{ active: isErrNameSale }"
-              v-model="sale.nameSale" />
+              <input
+                type="text"
+                class="form-control"
+                :class="{ active: isErrNameSale }"
+                v-model="sale.nameSale"
+              />
             </div>
 
             <div class="form-group">
@@ -115,7 +117,7 @@ export default {
         }
         if (this.sale.discount > 0 && this.sale.discount < 100) {
           this.isErrDiscount = false;
-        }        
+        }
       },
       deep: true,
       immediate: true,
@@ -138,42 +140,35 @@ export default {
       };
     },
     checkValidate() {
-      let check = true
-      if (
-        this.sale.discount < 0 || 
-        this.sale.discount > 100
-      ) {
+      let check = true;
+      if (this.sale.discount < 0 || this.sale.discount > 100) {
         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Discount phải là số lớn hơn 0 và nhỏ hơn 100 !";
         this.checkFormValidate = false;
-        check= false
-      } 
-      if (
-        this.sale.nameSale.trim() === "" ||
-        this.sale.nameSale === null
-      ) {
+        check = false;
+      }
+      if (this.sale.nameSale.trim() === "" || this.sale.nameSale === null) {
         this.isErrNameSale = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if( this.sale.discount === null){
-         this.isErrDiscount = true;
+      if (this.sale.discount === null) {
+        this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if(check){
+      if (check) {
         this.isErrNameSale = false;
         this.isErrDiscount = false;
         this.isShowNotify = false;
         this.infoNotify = "";
         this.checkFormValidate = true;
       }
-      
     },
     saveSale() {
       this.checkValidate();
@@ -187,10 +182,8 @@ export default {
         if (res) {
           let listSaleTemp = [...this.listSales];
           if (!this.sale.idSale) {
-            if (listSaleTemp.length === 5) {
-              listSaleTemp.push(res.data.data);
+            listSaleTemp.push(res.data.data);
             this.$store.commit("saleModule/SET_LIST_SALES", listSaleTemp);
-            }
           } else {
             let len = listSaleTemp.length;
             for (let i = 0; i < len; i++) {

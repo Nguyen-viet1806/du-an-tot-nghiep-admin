@@ -141,10 +141,7 @@
                 </div>
               </td>
               <td>
-                <button
-                  @click="getListChild(Product.idProduct)"
-                  class="btn-show"
-                >
+                <button @click="getListChild(Product)" class="btn-show">
                   Show
                 </button>
               </td>
@@ -229,6 +226,7 @@
             class="form-select form-select-sm"
             aria-label="Default select example"
             v-model="idCategoryParentv"
+            disabled
           >
             <option value="-1">Chọn danh mục</option>
             <option
@@ -412,25 +410,25 @@ export default {
   },
   watch: {
     pageableParent() {
-      this.idStatusParent = -1,
-      this.idStatusChild = -1,
-      this.idCategoryParent = -1,
-      this.idCategoryParentv = -1,
-      this.idCategoryChild = -1,
-      this.idGender = -1,
-       this.idColor = -1,
-      this.idSize = -1,
-      this.idTag = -1,
-      this.$emit("getListFollowPage");
+      (this.idStatusParent = -1),
+        (this.idStatusChild = -1),
+        (this.idCategoryParent = -1),
+        (this.idCategoryParentv = -1),
+        (this.idCategoryChild = -1),
+        (this.idGender = -1),
+        (this.idColor = -1),
+        (this.idSize = -1),
+        (this.idTag = -1),
+        this.$emit("getListFollowPage");
     },
     pageableChild() {
-      this.idStatusChild = -1,
-      this.idCategoryParentv = -1,
-      this.idCategoryChild = -1,
-       this.idColor = -1,
-      this.idSize = -1,
-      this.idTag = -1,
-      this.getListChildPage();
+      (this.idStatusChild = -1),
+        (this.idCategoryParentv = -1),
+        (this.idCategoryChild = -1),
+        (this.idColor = -1),
+        (this.idSize = -1),
+        (this.idTag = -1),
+        this.getListChildPage();
     },
     idCategoryParentv() {
       if (this.idCategoryParentv > 0) {
@@ -480,6 +478,13 @@ export default {
         this.$store.commit("productModule/SET_LIST_PRODUCTS_CHILD", []);
       }
       this.getColorExists();
+    },
+    search() {
+      let payload = {
+        name: this.keyWordSearch,
+        page: this.pageableParent,
+      };
+      this.$store.dispatch("productModule/search", payload);
     },
     getListProductParent(sort = -1) {
       let payload = {
@@ -534,11 +539,12 @@ export default {
       };
       this.$store.dispatch("productModule/getListProductChild", payload);
     },
-    getListChild(idProduct, isShow = true) {
-      this.idProduct = idProduct;
+    getListChild(Product, isShow = true) {
+      this.idProduct = Product.idProduct;
+      this.idCategoryParentv = Product.categoryParentDTO.idCategory;
       let payload = {
         sort: -1,
-        idProduct: idProduct,
+        idProduct: Product.idProduct,
         idStatus: "",
         idColor: "",
         idSize: "",
@@ -547,7 +553,7 @@ export default {
       };
       this.$store.dispatch("productModule/getListProductChild", payload);
       this.$store
-        .dispatch("productModule/showProduct", { idProduct: idProduct })
+        .dispatch("productModule/showProduct", { idProduct: Product.idProduct })
         .then((res) => {
           if (res) {
             if (isShow) {

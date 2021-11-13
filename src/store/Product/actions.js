@@ -5,6 +5,7 @@ import {
   callApiGetListProduct,
   callApiGetListProductChild,
   callApiShowProduct,
+  callApiSearch
 } from "@/api/product.js";
 import { callApiUploadFile } from "@/api/common.js";
 
@@ -34,6 +35,20 @@ const getListProduct = (context, payload) => {
       });
   });
 };
+const search = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiSearch(payload)
+      .then((response) => {
+        if (response) {
+          context.commit("SET_LIST_PRODUCTS_PARENT", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
 const getListProductChild = (context, payload) => {
   return new Promise((resolve, reject) => {
@@ -49,6 +64,7 @@ const getListProductChild = (context, payload) => {
       });
   });
 };
+
 
 const showProduct = (context, payload) => {
   return new Promise((resolve, reject) => {
@@ -105,4 +121,5 @@ export default {
   showProduct,
   deleteProductParent,
   deleteProductChild,
+  search,
 };

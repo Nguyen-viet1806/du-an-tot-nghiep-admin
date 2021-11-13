@@ -67,6 +67,7 @@ export default {
   SHOW_PRODUCT: "/api/webtpf/admin/products/show",
   DELETE_PRODUCT_PARENT: "/api/webtpf/admin/products/deleteparent",
   DELETE_PRODUCT_CHILD: "/api/webtpf/admin/products/deletechild",
+  SEARCH_PRODUCT_PARENT: "/api/webtpf/admin/products/search",
 
   //bill
   GET_LIST_TINH: "/api/webtpf/getallprovince",

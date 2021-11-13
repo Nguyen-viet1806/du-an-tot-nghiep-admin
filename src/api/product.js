@@ -47,3 +47,11 @@ export function callApiDeleteProductChild(payload) {
     params: payload,
   });
 }
+
+export function callApiSearch(payload) {
+  return HTTP({
+    url: ENDPOINT.SEARCH_PRODUCT_PARENT,
+    method: "GET",
+    params: payload,
+  });
+}
