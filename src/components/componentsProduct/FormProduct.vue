@@ -50,8 +50,9 @@
                   v-for="CategoryParent in listCategoryParentExists"
                   :key="CategoryParent"
                   :value="CategoryParent.idCategory"
+                  :disabled="CategoryParent.idStatus == 1"
                 >
-                  {{ CategoryParent.nameCategory }}
+                  {{ CategoryParent.nameCategory }} {{CategoryParent.idStatus == 1 ? "(Đã xóa)" : ""}}
                 </option>
               </select>
             </div>
@@ -70,8 +71,9 @@
                   v-for="CategoryChild in danhSachCategoryChild"
                   :key="CategoryChild"
                   :value="CategoryChild.idCategory"
+                  :disabled="CategoryChild.idStatus == 1"
                 >
-                  {{ CategoryChild.nameCategory }}
+                  {{ CategoryChild.nameCategory }} {{CategoryChild.idStatus == 1 ? "(Đã xóa)" : ""}}
                 </option>
               </select>
             </div>
@@ -184,9 +186,7 @@
               <h5>Màu</h5>
               <button
                 class="btn-x"
-                v-if="
-                  !product.detailInProduct.listDetailColorRequest[0]
-                "
+                v-if="index != 0"
                 v-on:click="remoteColor(index)"
               >
                 <fa class="icon" :icon="['fas', 'times']" />
@@ -212,9 +212,9 @@
                             v-for="color in danhSachColor"
                             :key="color.idColor"
                             :value="color.idColor"
-                            :disabled="checkDuplicateColor(color.idColor)"
+                            :disabled="checkDuplicateColor(color.idColor) || color.idStatus == 1"
                           >
-                            {{ color.nameColor }}
+                            {{ color.nameColor }} {{(color.idStatus == 1) ? "(Đã xóa)" : ""}}
                           </option>
                         </select>
                       </div>
@@ -250,7 +250,11 @@
                   .listDetailColorRequest[index].listSizeInColor"
                 :key="size"
               >
-                <button class="btn-x-v" v-on:click="remoteSize(i, index)">
+                <button
+                  class="btn-x-v"
+                  v-if="!(index == 0 && i == 0)"
+                  v-on:click="remoteSize(i, index)"
+                >
                   <fa class="icon" :icon="['fas', 'times']" />
                 </button>
                 <div class="form-size">
@@ -272,9 +276,9 @@
                         v-for="size in danhSachSize"
                         :key="size.idSize"
                         :value="size.idSize"
-                        :disabled="checkDuplicateSize(size.idSize,index)"
+                        :disabled="checkDuplicateSize(size.idSize, index) || size.idStatus == 1"
                       >
-                        {{ size.nameSize }}
+                        {{ size.nameSize }} {{size.idStatus == 1 ? "(Đã xóa)" : ""}}
                       </option>
                     </select>
                   </div>
@@ -637,17 +641,17 @@ export default {
       }
       return false;
     },
-    checkDuplicateSize(idSize,index) {
+    checkDuplicateSize(idSize, index) {
       for (
         let i = 0;
         i <
-        this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor
-          .length;
+        this.product.detailInProduct.listDetailColorRequest[index]
+          .listSizeInColor.length;
         i++
       ) {
         if (
-          this.product.detailInProduct.listDetailColorRequest[index].listSizeInColor[i]
-            .idSize === idSize
+          this.product.detailInProduct.listDetailColorRequest[index]
+            .listSizeInColor[i].idSize === idSize
         ) {
           return true;
         }
@@ -708,6 +712,15 @@ export default {
     },
 
     addColor() {
+      let danhSachColorTemp = this.danhSachColor;
+      if (
+        this.product.detailInProduct.listDetailColorRequest?.length ==
+        danhSachColorTemp.length
+      ) {
+        this.isShowNotify = true;
+        this.infoNotify = "Không đủ màu để tạo tiếp sản phẩm !";
+        return;
+      }
       let colorTemp = {
         idColor: -1,
         detailPhoto: null,
@@ -726,10 +739,22 @@ export default {
       this.product.detailInProduct.listDetailColorRequest.push({
         ...colorTemp,
       });
-      console.log(this.product);
     },
 
     addSize(index) {
+      let danhSachSizeTemp = this.danhSachSize;
+      if(this.danhSachSize?.length == 0){
+        this.isShowNotify = true;
+        this.infoNotify = "Bạn chưa chọn danh mục !! !";
+        return;
+      }
+      if(this.product.detailInProduct.listDetailColorRequest[
+        index
+      ].listSizeInColor?.length == danhSachSizeTemp?.length){
+        this.isShowNotify = true;
+        this.infoNotify = "Không đủ size để tạo tiếp sản phẩm !! !";
+        return;
+      }
       let sizeTemp = { ...this.size };
       this.product.detailInProduct.listDetailColorRequest[
         index

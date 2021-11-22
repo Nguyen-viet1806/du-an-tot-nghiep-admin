@@ -1,16 +1,13 @@
 <template>
   <div class="navbar-top">
     <div class="logo">
-      <img class="icon" src="@/assets/logoTpf.svg" width="75"/>
+      <img class="icon" src="@/assets/logoTpf.svg" width="75" />
       <h2 class="logo-name">TPF</h2>
     </div>
     <div class="navbar-top-right">
-      <div class="user">
-        Nguyễn Quốc Việt
-      </div>
-      <div class="sign-in">
-        <fa class="icon" :icon="['fas', 'sign-in-alt']"
-        />
+      <div class="user">Nguyễn Quốc Việt</div>
+      <div class="sign-in" @click="logout">
+        <fa class="icon" :icon="['fas', 'sign-in-alt']" />
         Sign In
       </div>
     </div>
@@ -22,13 +19,17 @@ export default {
   name: "NavBarTop",
   components: {},
   props: {},
-  data() {
-  },
+  data() {},
   computed: {},
   watch: {},
-  mounted() {
+  mounted() {},
+  methods: {
+    logout() {
+      localStorage.clear();
+       this.$emit("testLogin");
+      this.$store.dispatch("loginRegisterModule/logout");
+    },
   },
-  methods: {},
 };
 </script>
 
@@ -68,13 +69,13 @@ export default {
     align-items: center;
 
     & .sign-in {
+      cursor: pointer;
       margin-right: 2%;
     }
 
     & .user {
       margin-right: 2%;
     }
-
   }
 }
 

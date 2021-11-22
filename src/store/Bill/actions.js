@@ -2,6 +2,10 @@ import {
   callApiGetDanhSachTinh,
   callApiGetDanhSachQuanHuyen,
   callApiGetDanhSachXa,
+  callApiGetDanhSachBill,
+  callApiGetDanhSachBillFilter,
+  callApiGetDanhSachProductInBill,
+  callApiSaveBill
 } from "@/api/bill.js";
 
 const getDanhSachTinh = (context, payload) => {
@@ -40,9 +44,67 @@ const getDanhSachXa = (context, payload) => {
   });
 };
 
+const getDanhSachBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachBill(payload)
+      .then((response) => {
+        if(response){
+          context.commit("SET_LIST_BILL", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getDanhSachBillFilter = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachBillFilter(payload)
+      .then((response) => {
+        if(response){
+          context.commit("SET_LIST_BILL", response.data.data);
+        }
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getDanhSachProductInBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachProductInBill(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+
+const saveBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiSaveBill(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
 export default {
   getDanhSachTinh,
   getDanhSachQuanHuyen,
   getDanhSachXa,
+  getDanhSachBill,
+  getDanhSachBillFilter,
+  getDanhSachProductInBill,
+  saveBill,
 };

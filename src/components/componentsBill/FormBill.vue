@@ -1,23 +1,28 @@
 <template>
   <div class="form-tpf">
-    <div class="row">
-      <div class="col mt-4">
-        <form @submit="onSubmit" >
+    <form @submit.prevent="saveBill">
+      <div class="row">
+        <div class="col mt-4">
           <div class="row">
             <div class="col">
               <div class="form-group" v-show="false">
                 <label>Id bill:</label>
-                <input style="cursor: no-drop" class="form-control" disabled />
+                <input
+                  v-model="bill.idBill"
+                  style="cursor: no-drop"
+                  class="form-control"
+                  disabled
+                />
               </div>
-              <div class="form-group ">
+              <div class="form-group">
                 <label for="validationCustom01" class="form-label"
                   >Tên người mua:</label
                 >
                 <input
+                  v-model="bill.emailUser"
                   type="text"
-                  class="form-control "
+                  class="form-control"
                   id="validationCustom01"
-                  value=""
                   required
                 />
               </div>
@@ -26,10 +31,10 @@
                   >Số điện thoại:</label
                 >
                 <input
+                  v-model="bill.phoneUser"
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
                   required
                 />
               </div>
@@ -38,34 +43,95 @@
                   >Email:</label
                 >
                 <input
+                  v-model="bill.emailUser"
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
                   required
                 />
               </div>
               <div class="form-group mt-1">
+                <label for="validationCustom04" class="form-label"
+                  >Trạng thái đơn hàng:</label
+                >
+                <select
+                  v-model="bill.idStatus"
+                  class="form-select"
+                  id="validationCustom04"
+                  required
+                >
+                  <option selected value="">Chọn trạng thái đơn hàng</option>
+                  <option :value="GIA_TRI_TRANG_THAI.PROCESSING">
+                    Đang xử lý
+                  </option>
+                  <option :value="GIA_TRI_TRANG_THAI.CONFIRMED">
+                    Đã xác nhận
+                  </option>
+                  <option :value="GIA_TRI_TRANG_THAI.DELIVERY">
+                    Đang giao
+                  </option>
+                  <option :value="GIA_TRI_TRANG_THAI.PAID">
+                    Đã thanh toán
+                  </option>
+                  <option :value="GIA_TRI_TRANG_THAI.CANCE">Hủy</option>
+                </select>
+              </div>
+              <div class="form-group mt-1">
                 <label for="validationCustom04" class="form-label">Tỉnh:</label>
-                <select class="form-select" id="validationCustom04" required>
-                  <option selected disabled value="">Choose...</option>
-                  <option>...</option>
+                <select
+                  v-model="bill.addressRequestDTO.idProvince"
+                  class="form-select"
+                  id="validationDefault04"
+                  required
+                >
+                  <option selected value="">Chọn tỉnh</option>
+                  <option
+                    v-for="Province in listProvince"
+                    :key="Province"
+                    :value="Province.idProvince"
+                  >
+                    {{ Province.nameProvince }}
+                  </option>
                 </select>
               </div>
               <div class="form-group mt-1">
                 <label for="validationCustom04" class="form-label"
                   >Quận,huyện:</label
                 >
-                <select class="form-select" id="validationCustom04" required>
-                  <option selected disabled value="">Choose...</option>
-                  <option>...</option>
+                <select
+                  :disabled="isDisabledDistrict"
+                  v-model="bill.addressRequestDTO.idDistrict"
+                  class="form-select"
+                  id="validationDefault04"
+                  required
+                >
+                  <option selected value="">Chọn quận, huyện</option>
+                  <option
+                    v-for="District in listDistrict"
+                    :key="District"
+                    :value="District.idDistrict"
+                  >
+                    {{ District.nameDistrict }}
+                  </option>
                 </select>
               </div>
               <div class="form-group mt-1">
                 <label for="validationCustom04" class="form-label">Xã:</label>
-                <select class="form-select" id="validationCustom04" required>
-                  <option selected disabled value="">Choose...</option>
-                  <option>...</option>
+                <select
+                  :disabled="isDisabledCommune"
+                  v-model="bill.addressRequestDTO.idCommune"
+                  class="form-select"
+                  id="validationDefault04"
+                  required
+                >
+                  <option selected value="">Chọn xã</option>
+                  <option
+                    v-for="Commune in listCommune"
+                    :key="Commune"
+                    :value="Commune.idCommune"
+                  >
+                    {{ Commune.nameCommune }}
+                  </option>
                 </select>
               </div>
               <div class="form-group mt-1">
@@ -76,6 +142,7 @@
                   class="form-control"
                   id="validationTextarea"
                   placeholder="Số nhà, ngõ"
+                  v-model="bill.addressRequestDTO.detailAddress"
                   required
                 ></textarea>
               </div>
@@ -89,7 +156,7 @@
                   type="date"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
+                  v-model="bill.dateCreate"
                   required
                 />
               </div>
@@ -101,8 +168,7 @@
                   type="date"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
-                  required
+                  v-model="bill.dateSuccess"
                 />
               </div>
               <div class="form-group">
@@ -113,8 +179,7 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
-                  required
+                  v-model="bill.idVoucher"
                 />
               </div>
               <div class="form-group">
@@ -125,7 +190,8 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
+                  v-model="bill.transportFee"
+                  :disabled="!isNhanVienTaoHoaDon"
                   required
                 />
               </div>
@@ -137,8 +203,7 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
-                  required
+                  v-model="bill.deposit"
                 />
               </div>
               <div class="form-group">
@@ -149,7 +214,7 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
+                  v-model="bill.payment"
                   required
                 />
               </div>
@@ -161,7 +226,7 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  value=""
+                  v-model="bill.total"
                   required
                 />
               </div>
@@ -170,19 +235,17 @@
                   >Mô tả:</label
                 >
                 <textarea
-                  class="form-control"
+                  class="form-control mota"
                   id="validationTextarea"
-                  placeholder="Số nhà, ngõ"
-                  required
+                  v-model="bill.descriptionBill"
                 ></textarea>
               </div>
+              <p class="mt-4 text-center" v-if="bill.billType != 0">
+                <input type="checkbox" v-model="isNhanVienTaoHoaDon" /> Nhân
+                viên tạo hóa đơn
+              </p>
               <div class="control">
-                <button
-                  type="submit"
-                  class="btn btn-save"
-                >
-                  Lưu
-                </button>
+                <button type="submit" class="btn btn-save">Lưu</button>
                 <button
                   v-on:click="resetForm"
                   type="button"
@@ -193,64 +256,345 @@
               </div>
             </div>
           </div>
-        </form>
-      </div>
-      <div class="col">
-        <h5>Sản phẩm có trong hóa đơn</h5>
-        <table class="table table-hover mt-4">
-          <thead>
-            <tr>
-              <th scope="col">STT</th>
-              <th scope="col"></th>
-              <th scope="col">Tên sản phẩm</th>
-              <th scope="col">Xóa/Khôi phục</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">123</th>
-              <td>123</td>
-              <td>
-               
-              </td>
-              <td>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="notify">
-        <div
-          id="popup1"
-          v-if="isShowNotify"
-          class="overlay"
-          @click="closeNotify"
-        ></div>
-        <transition name="bounce">
-          <div id="popup1" v-if="isShowNotify" class="popup">
-            <h2>Thông báo:</h2>
-            <a class="close" href="#" @click="closeNotify">&times;</a>
-            <div class="content">
-              {{ infoNotify }}
-            </div>
+        </div>
+        <div class="col">
+          <div class="table-product">
+            <h5>Sản phẩm có trong hóa đơn</h5>
+            <button @click="showProductInBill" class="btn btn-save">
+              Thêm sản phẩm
+            </button>
           </div>
-        </transition>
+          <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-hover mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">STT</th>
+                  <th scope="col"></th>
+                  <th scope="col">Tên</th>
+                  <th scope="col">Size,Màu</th>
+                  <th scope="col">Số lượng</th>
+                  <th scope="col">Hàng còn</th>
+                  <th scope="col">Giá</th>
+                  <th scope="col">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(bill, index) in listProductInBill" :key="bill">
+                  <th scope="row">{{ getStt(index) }}</th>
+                  <td>
+                    <img
+                      width="80"
+                      :src="DO_MAIN + bill.productChildResponseDTO.detailPhoto"
+                    />
+                  </td>
+                  <td>{{ bill.productChildResponseDTO.nameProduct }}</td>
+                  <td>
+                    {{
+                      bill.productChildResponseDTO.size.nameSize +
+                      ", " +
+                      bill.productChildResponseDTO.color.nameColor
+                    }}
+                  </td>
+                  <td>
+                    <input
+                      class="input-quantity"
+                      type="number"
+                      min="1"
+                      :max="bill.productChildResponseDTO.quantity"
+                      v-model="bill.quantity"
+                      required
+                    />
+                  </td>
+                  <td>
+                    {{ bill.productChildResponseDTO.quantity }}
+                  </td>
+
+                  <td>{{ bill.price }}</td>
+                  <td>Xóa</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="notify">
+          <div
+            id="popup1"
+            v-if="isShowNotify"
+            class="overlay"
+            @click="closeNotify"
+          ></div>
+          <transition name="bounce">
+            <div id="popup1" v-if="isShowNotify" class="popup">
+              <h2>Thông báo:</h2>
+              <a class="close" href="#" @click="closeNotify">&times;</a>
+              <div class="content">
+                {{ infoNotify }}
+              </div>
+            </div>
+          </transition>
+        </div>
+        <div class="notifyv">
+          <div
+            id="popupv"
+            v-if="isShowNotifyV"
+            class="overlayv"
+            @click="closeNotifyV"
+          ></div>
+          <transition name="bounce">
+            <div id="popupv" v-if="isShowNotifyV" class="popupv">
+              <a class="closev" href="#" @click="closeNotifyV">&times;</a>
+              <div class="contentv">
+                <table-product
+                  ref="TableProduct"
+                  @getListFollowPage="getListProduct"
+                  @addProductInBill="addProductInBill"
+                />
+              </div>
+            </div>
+          </transition>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script>
+import TableProduct from "@/components/componentsBill/TableProduct.vue";
+import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 export default {
   name: "FormBill",
-  components: {},
+  components: { TableProduct },
   props: {},
-  data() {},
+  data() {
+    return {
+      isNhanVienTaoHoaDon: false,
+      pageable: 0,
+      DO_MAIN,
+      GIA_TRI_TRANG_THAI,
+      isShowNotify: false,
+      infoNotify: "",
+      isShowNotifyV: false,
+      isDisabledDistrict: true,
+      isDisabledCommune: true,
+      listProvince: [],
+      listDistrict: [],
+      listCommune: [],
+      listProductInBill: [],
+      bill: {
+        idBill: null,
+        idUser: null,
+        idAddress: null,
+        phoneUser: "",
+        emailUser: "",
+        dateCreate: null,
+        dateSuccess: null,
+        descriptionBill: "",
+        total: null,
+        deposit: null,
+        payment: null,
+        transportFee: 30000,
+        idVoucher: null,
+        idStatus: null,
+        billType: null,
+        listProductDetail: [],
+        addressRequestDTO: {
+          idAddress: null,
+          idProvince: "",
+          idDistrict: "",
+          idCommune: "",
+          detailAddress: "",
+        },
+      },
+    };
+  },
   computed: {},
-  watch: {},
-  mounted() {},
-  methods: {},
+  watch: {
+    "bill.addressRequestDTO.idProvince": {
+      handler() {
+        if (
+          this.bill.addressRequestDTO.idProvince.length > 0 ||
+          this.bill.addressRequestDTO.idProvince != ""
+        ) {
+          this.isDisabledDistrict = false;
+          this.$store
+            .dispatch("billModule/getDanhSachQuanHuyen", {
+              idProvince: Number(this.bill.addressRequestDTO.idProvince),
+            })
+            .then((res) => {
+              if (res) {
+                this.listDistrict = res.data.data;
+              }
+            });
+        } else if (
+          this.bill.addressRequestDTO.idProvince.length == 0 ||
+          this.bill.addressRequestDTO.idProvince == ""
+        ) {
+          this.isDisabledDistrict = true;
+          this.listDistrict = [];
+        }
+      },
+      deep: true,
+    },
+    "bill.addressRequestDTO.idDistrict": {
+      handler() {
+        if (
+          this.bill.addressRequestDTO.idDistrict.length > 0 ||
+          this.bill.addressRequestDTO.idDistrict != ""
+        ) {
+          this.isDisabledCommune = false;
+          this.$store
+            .dispatch("billModule/getDanhSachXa", {
+              idDistrict: Number(this.bill.addressRequestDTO.idDistrict),
+              idProvince: Number(this.bill.addressRequestDTO.idProvince),
+            })
+            .then((res) => {
+              if (res) {
+                this.listCommune = res.data.data;
+              }
+            });
+        } else if (
+          this.bill.addressRequestDTO.idDistrict.length == 0 ||
+          this.bill.addressRequestDTO.idDistrict == ""
+        ) {
+          this.isDisabledCommune = true;
+          this.listCommune = [];
+        }
+      },
+      deep: true,
+    },
+    "bill.billType": {
+      handler() {
+        if (this.bill.billType == 0) {
+          this.isNhanVienTaoHoaDon = false;
+        }
+      },
+      deep: true,
+    },
+    isNhanVienTaoHoaDon() {
+      if (!this.isNhanVienTaoHoaDon) {
+        this.bill.transportFee = 30000;
+      }
+    },
+  },
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.getListTinh();
+    },
+    showProductInBill() {
+      this.isShowNotifyV = true;
+      this.getListProduct();
+    },
+    addProductInBill(Product) {
+      this.isShowNotifyV = false;
+      for (let i = 0; i < this.listProductInBill.length; i++) {
+        if (
+          this.listProductInBill[i].productChildResponseDTO.idProductDetail ===
+          Product.idProductDetail
+        ) {
+          this.listProductInBill[i].quantity += 1;
+          return;
+        }
+      }
+      this.listProductInBill.push({
+        idBill: this.bill.idBill,
+        idBillProduct: null,
+        idStatus: 2,
+        price: Product.price,
+        productChildResponseDTO: { ...Product },
+        quantity: 1,
+      });
+    },
+    getListProduct() {
+      this.$nextTick(() => {
+        let payload = {
+          sort: -1,
+          idStatus: -1,
+          idCategoryParent: -1,
+          idCategoryChild: -1,
+          idGender: -1,
+          page: this.$refs["TableProduct"].pageableParent,
+        };
+        this.$store.dispatch("productModule/getListProduct", payload);
+      });
+    },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+    closeNotifyV() {
+      this.isShowNotifyV = false;
+    },
+    getStt(index) {
+      return index + 1;
+    },
+    resetForm() {
+      this.listProductInBill = [];
+      this.bill = {
+        idBill: null,
+        idUser: null,
+        idAddress: null,
+        phoneUser: "",
+        emailUser: "",
+        dateCreate: null,
+        dateSuccess: null,
+        descriptionBill: "",
+        total: null,
+        deposit: null,
+        payment: null,
+        transportFee: 30000,
+        idVoucher: null,
+        idStatus: null,
+        listProductDetail: [],
+        addressRequestDTO: {
+          idAddress: null,
+          idProvince: "",
+          idDistrict: "",
+          idCommune: "",
+          detailAddress: "",
+        },
+      };
+    },
+    getListTinh() {
+      this.$store.dispatch("billModule/getDanhSachTinh").then((res) => {
+        if (res) {
+          this.listProvince = res.data.data;
+        }
+      });
+    },
+    saveBill() {
+      if (this.isNhanVienTaoHoaDon) {
+        this.bill.billType = 1;
+      }
+      this.bill.listProductDetail = [];
+      this.listProductInBill.forEach((item) => {
+        if (
+          item.productChildResponseDTO.idProductDetail &&
+          item.productChildResponseDTO.idProductDetail != null
+        ) {
+          this.bill.listProductDetail.push({
+            idProductDetail: item.productChildResponseDTO.idProductDetail,
+            quantity: item.quantity,
+            idStatus: item.idStatus,
+          });
+        }
+      });
+
+      let payload = {
+        ...this.bill,
+      };
+      this.$store.dispatch("billModule/saveBill", payload).then((res) => {
+        if (res) {
+          this.isShowNotify = true;
+          this.infoNotify = "Lưu bill thành công";
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
+        }
+      });
+    },
+  },
 };
 </script>
 
@@ -259,5 +603,47 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.table-product {
+  display: flex;
+  justify-content: space-between;
+}
+.my-custom-scrollbar {
+  position: relative;
+  height: 55vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #990033;
+  }
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #d4aa70;
+  }
+}
+.table-wrapper-scroll-y {
+  display: block;
+}
+.input-quantity {
+  width: 50px;
+  text-align: center;
+  border: 1px solid gray;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+.mota {
+  min-height: 80px;
 }
 </style>

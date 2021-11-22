@@ -11,7 +11,7 @@ export default {
   SEARCH_SIZE: "/api/webtpf/admin/sizes/search/",
   FILTER_SIZE: "/api/webtpf/admin/sizes/findbystatus/",
   GET_LIST_SIZE_SORT: "/api/webtpf/admin/sizes/getallsort",
-  GET_LIST_SIZE_EXIST_BY_CATEGORY: "/api/webtpf/admin/sizes/findbyidcategory/",
+  GET_LIST_SIZE_EXIST_BY_CATEGORY: "/api/webtpf/admin/sizes/findbycategory/",
   //color
   GET_ALL_COLOR: "/api/webtpf/admin/colors/getall/",
   GET_COLOR_BY_ID: "/api/webtpf/admin/colors/findbyid/",
@@ -20,7 +20,7 @@ export default {
   SEARCH_COLOR: "/api/webtpf/admin/colors/search/",
   FILTER_COLOR: "/api/webtpf/admin/colors/findbystatus/",
   GET_LIST_COLOR_SORT: "/api/webtpf/admin/colors/getallsort",
-  GET_LIST_COLOR_EXISTS:"/api/webtpf/admin/colors/findexists",
+  GET_LIST_COLOR_EXISTS:"/api/webtpf/admin/colors/findall",
 
   //Sale
   GET_ALL_SALE: "/api/webtpf/admin/sales/getall/",
@@ -48,7 +48,7 @@ export default {
   SEARCH_CATEGORY_PARENT: "/api/webtpf/admin/categories/parent/search/",
   FILTER_CATEGORY_PARENT: "/api/webtpf/admin/categories/parent/findbystatus/",
   GET_LIST_CATEGORY_PARENT_SORT: "/api/webtpf/admin/categories/parent/getallsort",
-  GET_CATEGORY_EXISTS: "/api/webtpf/admin/categories/getexists",
+  GET_CATEGORY_EXISTS: "/api/webtpf/admin/categories/parent/getallcategoryparent",
   
   //CategoryChild
   GET_ALL_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/getall/",
@@ -58,7 +58,7 @@ export default {
   SEARCH_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/search/",
   FILTER_CATEGORY_CHILD: "/api/webtpf/admin/categories/child/findbystatus/",
   GET_LIST_CATEGORY_CHILD_SORT: "/api/webtpf/admin/categories/child/getallsort",
-  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/admin/categories/child/findbyparent/",
+  GET_LIST_CATEGORY_CHILD_EXISTS_BY_PARENT: "/api/webtpf/admin/categories/child/findallbyparent/",
 
   //product
   SAVE_PRODUCT:  "/api/webtpf/admin/products/save",
@@ -73,4 +73,12 @@ export default {
   GET_LIST_TINH: "/api/webtpf/getallprovince",
   GET_LIST_QUAN_HUYEN: "/api/webtpf/getalldistrict",
   GET_LIST_XA: "/api/webtpf/getallcommune",
+  
+  GET_LIST_BILL: "/api/webtpf/admin/bills/getalllist",
+  GET_LIST_BILL_FILTER: "/api/webtpf/admin/bills/getalllistandfilter",
+  GET_LIST_PRODUCT_IN_BILL: "/api/webtpf/admin/bills/getalllistbillproduct",
+  SAVE_BILL: "/api/webtpf/admin/bills/save",
+
+  LOGIN: "/api/webtpf/login",
+  LOGOUT: "/api/webtpf/logout",
 };

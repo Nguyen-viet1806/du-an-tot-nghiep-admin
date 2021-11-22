@@ -24,4 +24,34 @@ export function callApiGetDanhSachXa(payload) {
   });
 }
 
+export function callApiGetDanhSachBill(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_BILL,
+    method: "GET",
+    params: payload
+  });
+}
 
+export function callApiGetDanhSachBillFilter(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_BILL_FILTER,
+    method: "GET",
+    params: payload
+  });
+}
+
+export function callApiGetDanhSachProductInBill(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_PRODUCT_IN_BILL,
+    method: "GET",
+    params: payload
+  });
+}
+
+export function callApiSaveBill(payload) {
+  return HTTP({
+    url: ENDPOINT.SAVE_BILL,
+    method: "POST",
+    data: payload
+  });
+}

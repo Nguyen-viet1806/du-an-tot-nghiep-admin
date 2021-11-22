@@ -5,6 +5,7 @@ import voucherModule from "@/store/Voucher";
 import categoryModule from "@/store/Category";
 import productModule from "@/store/Product";
 import billModule from "@/store/Bill";
+import loginRegisterModule from "@/store/LoginRegister";
 import { createStore } from "vuex";
 export default new createStore({
   modules: {
@@ -15,6 +16,7 @@ export default new createStore({
     categoryModule,
     productModule,
     billModule,
+    loginRegisterModule,
   },
   state: {},
   getters: {},

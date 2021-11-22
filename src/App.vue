@@ -1,25 +1,117 @@
 <template>
   <div>
-    <navbar-top />
-    <navbar-left />
-    <div class="body-page">
-      <router-view />
-    </div>
+    <template v-if="checkLogin && checkLoginDN">
+      <div class="notify">
+        <div
+          id="popup1"
+          v-if="isShowNotify"
+          class="overlay"
+          @click="closeNotify"
+        ></div>
+        <transition name="bounce">
+          <div id="popup1" v-if="isShowNotify && !checkLoginDN" class="popup">
+            <h2>Thông báo:</h2>
+            <a class="close" @click="closeNotify">&times;</a>
+            <div class="content">
+              {{ infoNotify }}
+            </div>
+          </div>
+        </transition>
+      </div>
+      <login @clickLogin="login" />
+    </template>
+    <template v-if="islogin">
+      <navbar-top @testLogin="testLogin"/>
+      <navbar-left />
+      <div class="body-page">
+        <router-view />
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
+import { HTTP } from "@/api/http-common.js";
+import Login from "@/components/componentsLogin/Login.vue";
 import NavbarTop from "@/components/componentsBasic/NavbarTop.vue";
 import NavbarLeft from "@/components/componentsBasic/NavbarLeft.vue";
 export default {
   name: "App",
-  components: { NavbarTop, NavbarLeft },
+  components: { NavbarTop, NavbarLeft, Login },
   props: {},
-  data() {},
-  computed: {},
+  data() {
+    return {
+      HTTP,
+      checkLogin: true,
+      islogin: false,
+      isShowNotify: false,
+      infoNotify: "",
+    };
+  },
+  computed: {
+    checkLoginDN() {
+      if (this.$route.query.erro) {
+        return false;
+      }
+      else{
+        return true;
+      }
+    },
+  },
+  created() {
+  },
   watch: {},
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.testLogin();
+  },
+  methods: {
+    testLogin() {
+      if (localStorage.getItem("token") !== null) {
+        this.checkLogin = false;
+        this.islogin = true;
+      }else{
+        this.checkLogin = true;
+        this.islogin = false;
+      }
+    },
+    login(emailg, passg) {
+      this.$store
+        .dispatch("loginRegisterModule/Login", {
+          username: emailg,
+          password: passg,
+        })
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đăng nhập thành công";
+            localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("refresh_token", res.data.refresh_token);
+            localStorage.setItem("UserInfo", JSON.stringify(res.data));
+            HTTP.defaults.headers["Token"] = localStorage.getItem("token");
+            HTTP.defaults.headers["refresh_token"] =
+              localStorage.getItem("refresh_token");
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
+            }
+            setTimeout(() => {
+              (this.checkLogin = false), (this.islogin = true);
+            }, 1500);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Sai tài khoản hoặc mật khẩu!!!";
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
+            }
+          }
+        });
+    },
+    closeNotify() {
+      this.isShowNotify = false;
+    },
+  },
 };
 </script>
 
@@ -201,7 +293,8 @@ html {
 }
 .active {
   border: 1px solid red !important;
- box-shadow: rgba(219, 17, 27, 0.25) 0px 1px 1px, rgba(240, 11, 11, 0.24) 0px 0px 1px 1px;
+  box-shadow: rgba(219, 17, 27, 0.25) 0px 1px 1px,
+    rgba(240, 11, 11, 0.24) 0px 0px 1px 1px;
 }
 //tb
 .overlay {
@@ -279,6 +372,67 @@ html {
   }
   100% {
     transform: scale(1);
+  }
+}
+.overlayv {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  transition: opacity 500ms;
+  visibility: visible;
+  opacity: 1;
+}
+
+.popupv {
+  box-shadow: #b0b7bd 0px 2px 15px 0px;
+  visibility: visible;
+  opacity: 1;
+  padding: 50px;
+  background: #fff;
+  border-radius: 5px;
+  width: 81.5%;
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  transition: all 1s ease-in-out;
+  z-index: 1002;
+}
+.popupv h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popupv .closev {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popupv .closev:hover {
+  color: #06d85f;
+}
+.popupv .contentv {
+  height: 70vh;
+  overflow: auto;
+  overflow-x: hidden;
+   &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #990033;
+  }
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #d4aa70;
   }
 }
 // .page-link{
