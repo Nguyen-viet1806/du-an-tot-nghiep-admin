@@ -32,3 +32,27 @@ export function callApiSaveSale(payload) {
     data: payload,
   });
 }
+
+export function callApiApsSale(payload) {
+  return HTTP({
+    url: ENDPOINT.APS_SALE,
+    method: "POST",
+    data: payload,
+  });
+}
+
+export function callApiDeleteProductInSale(payload) {
+  return HTTP({
+    url: ENDPOINT.DELETE_PRODUCT_IN_SALE,
+    method: "POST",
+    data: payload,
+  });
+}
+
+export function callApiGetListProductSale(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_PRODUCT_SALE,
+    method: "GET",
+    params: payload,
+  });
+}

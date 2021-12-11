@@ -48,6 +48,14 @@ export function callApiGetDanhSachProductInBill(payload) {
   });
 }
 
+export function callApiGetDanhSachComboInBill(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_LIST_COMBO_IN_BILL,
+    method: "GET",
+    params: payload
+  });
+}
+
 export function callApiSaveBill(payload) {
   return HTTP({
     url: ENDPOINT.SAVE_BILL,

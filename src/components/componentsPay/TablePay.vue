@@ -86,7 +86,7 @@
           <td>{{ bill.phoneUser }}</td>
           <td>{{ bill.dateCreate }}</td>
           <td>{{ bill.dateSuccess }}</td>
-          <td>{{ bill.nameStatus }}</td>
+          <td>{{ bill.idStatus }}</td>
           <td>
             <button v-on:click="showBill(bill)" class="btn-show">Show</button>
           </td>
@@ -129,7 +129,7 @@
 import { GIA_TRI_TRANG_THAI } from "@/constants/constants";
 import { mapGetters } from "vuex";
 export default {
-  name: "TableBill",
+  name: "TablePay",
   components: {},
   props: {},
   data() {
@@ -142,7 +142,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      listBill: "billModule/getListBill",
+      listBillByBillType: "billModule/getListBillByBillType",
     }),
   },
   watch: {

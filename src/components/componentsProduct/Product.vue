@@ -1,9 +1,13 @@
 <template>
   <div class="product">
     <h3>Sản phẩm</h3>
-    <form-product ref="FormProduct" @getListFollowPage="getListProduct"/>
+    <form-product ref="FormProduct" @getListFollowPage="getListProduct" />
 
-    <table-product ref="TableProduct"  @getListFollowPage="getListProduct" @showFormProduct="showFormProduct"/>
+    <table-product
+      ref="TableProduct"
+      @getListFollowPage="getListProduct"
+      @showFormProduct="showFormProduct"
+    />
   </div>
 </template>
 
@@ -43,9 +47,10 @@ export default {
     getCategoryExists() {
       this.$store.dispatch("categoryModule/getDanhSachCategoryParentExists");
     },
-    showFormProduct(product){
-     this.$refs["FormProduct"].product = product.productResponseShowDTO
-     this.$refs["FormProduct"].idDanhMuc = product.idCategoryParent
+    showFormProduct(product) {
+      this.$router.push({ path: this.$route.path, query: { isShow: true } });
+      this.$refs["FormProduct"].product = product.productResponseShowDTO;
+      this.$refs["FormProduct"].idDanhMuc = product.idCategoryParent;
     },
   },
 };

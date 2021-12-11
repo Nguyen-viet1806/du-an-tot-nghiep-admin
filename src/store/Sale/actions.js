@@ -3,6 +3,9 @@ import {
   callApiSaveSale,
   callApiGetDanhSachSaleSort,
   callApiSearch,
+  callApiApsSale,
+  callApiDeleteProductInSale,
+  callApiGetListProductSale,
 } from "@/api/sales.js";
 
 const getDanhSachSale = (context, payload) => {
@@ -62,9 +65,48 @@ const saveSale = (context, payload) => {
   });
 };
 
+const apsSale = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiApsSale(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const deleteProductInSale = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiDeleteProductInSale(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getListProductSale = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetListProductSale(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export default {
   getDanhSachSale,
   saveSale,
   getDanhSachSaleSort,
   search,
+  apsSale,
+  deleteProductInSale,
+  getListProductSale,
 };

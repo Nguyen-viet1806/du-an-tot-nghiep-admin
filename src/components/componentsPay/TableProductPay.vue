@@ -97,10 +97,10 @@
               <th scope="col">Số lượng</th>
               <th scope="col">Mô tả</th>
               <th scope="col">
-                <div class="btn-arrow-up cusor" @click="getListProductParent(0)">
+                <div class="btn-arrow-up" @click="getListProductParent(0)">
                   <fa class="icon" :icon="['fas', 'arrow-up']" /></div
                 ><div
-                  class="btn-arrow-down cusor"
+                  class="btn-arrow-down"
                   @click="getListProductParent(1)"
                 >
                   <fa class="icon" :icon="['fas', 'arrow-down']" />
@@ -239,13 +239,13 @@
               </select>
             </div>
             <div class="col-md-4 mt-2">
-              <button
+              <div
                 type="button"
-                class="btn btn-filter w-100"
+                class="btn btn-filter w-100 cusor"
                 @click="getListChildSort(-1)"
               >
                 Lọc
-              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -263,11 +263,11 @@
               <th scope="col">Số lượng</th>
               <th scope="col">Giá</th>
               <th scope="col">
-                <button class="btn-arrow-up" @click="getListChildSort(0)">
-                  <fa class="icon" :icon="['fas', 'arrow-up']" /></button
-                ><button class="btn-arrow-down" @click="getListChildSort(1)">
+                <div class="btn-arrow-up" @click="getListChildSort(0)">
+                  <fa class="icon" :icon="['fas', 'arrow-up']" /></div
+                ><div class="btn-arrow-down" @click="getListChildSort(1)">
                   <fa class="icon" :icon="['fas', 'arrow-down']" />
-                </button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -342,7 +342,7 @@ import {
 } from "@/constants/constants";
 import { mapGetters } from "vuex";
 export default {
-  name: "TableProduct",
+  name: "TableProductPay",
   components: {},
   props: {},
   data() {

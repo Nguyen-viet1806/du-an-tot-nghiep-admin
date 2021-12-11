@@ -30,6 +30,9 @@ export default {
   SEARCH_SALE: "/api/webtpf/admin/sales/search/",
   FILTER_SALE: "/api/webtpf/admin/sales/findbystatus/",
   GET_LIST_SALE_SORT: "/api/webtpf/admin/sales/getallsort",
+  APS_SALE: "/api/webtpf/admin/productsale/addsaletoproduct",
+  DELETE_PRODUCT_IN_SALE: "/api/webtpf/admin/productsale/cancelsaletoproduct",
+  GET_LIST_PRODUCT_SALE: "/api/webtpf/admin/productsale/getlistsaleproduct",
 
   //Voucher
   GET_ALL_VOUCHER: "/api/webtpf/admin/vouchers/getall/",
@@ -77,7 +80,15 @@ export default {
   GET_LIST_BILL: "/api/webtpf/admin/bills/getalllist",
   GET_LIST_BILL_FILTER: "/api/webtpf/admin/bills/getalllistandfilter",
   GET_LIST_PRODUCT_IN_BILL: "/api/webtpf/admin/bills/getalllistbillproduct",
+  GET_LIST_COMBO_IN_BILL: "/api/webtpf/admin/bills/getalllistbillcombo",
   SAVE_BILL: "/api/webtpf/admin/bills/save",
+
+//combo 
+  SAVE_COMBO: "/api/webtpf/admin/combos/save",
+  DELETE_COMBO: "/api/webtpf/admin/combos/delete/",
+  GET_ALL_COMBO_WITH_PAGE: "/api/webtpf/admin/combos/getall",
+  SEARCH_COMBO: "api/webtpf/admin/combos/search",
+  GET_COMBO_DETAIL_BY_IDCOMBO: "/api/webtpf/admin/combo-details/find-by-id-combo/",
 
   LOGIN: "/api/webtpf/login",
   LOGOUT: "/api/webtpf/logout",

@@ -3,6 +3,7 @@ import {
   callApiSaveSize,
   callApiGetDanhSachSizeSort,
   callApiSearch,
+  callApiGetSizeById,
 } from "@/api/sizes.js";
 import {
   callApiGetDanhSachSizeByCategory
@@ -76,10 +77,24 @@ const saveSize = (context, payload) => {
       });
   });
 };
+
+const getSizeById = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetSizeById(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export default {
   getDanhSachSize,
   saveSize,
   getDanhSachSizeSort,
   search,
   getDanhSachSizeByCategory,
+  getSizeById,
 };

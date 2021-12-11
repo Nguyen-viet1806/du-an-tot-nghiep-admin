@@ -17,6 +17,14 @@ export function callApiGetDanhSachColorSort(payload) {
   });
 }
 
+export function callApiGetColorById(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_COLOR_BY_ID + payload,
+    method: "GET",
+  });
+}
+
+
 export function callApiSearch(payload) {
   return HTTP({
     url: ENDPOINT.SEARCH_COLOR,

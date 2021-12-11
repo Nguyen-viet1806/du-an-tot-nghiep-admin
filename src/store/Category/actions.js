@@ -6,6 +6,7 @@ import {
   callApiGetDanhSachCategoryParentSort,
   callApiGetDanhSachCategoryChildSort,
   callApiSearch,
+  callApiGetCategoryById,
 } from "@/api/category.js";
 import {
   callApiGetDanhSachCategoryToSize,
@@ -43,7 +44,6 @@ const getDanhSachCategoryParentExists = (context, payload) => {
 
 
 const getDanhSachCategoryChildExistsByParent = (context, payload) => {
-  console.log("ádasd")
   return new Promise((resolve, reject) => {
     callApiGetDanhSachCategoryChildByParent(payload)
       .then((response) => {
@@ -141,6 +141,19 @@ const saveCategoryChild = (context, payload) => {
   });
 };
 
+const getCategoryParentById = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetCategoryById(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+
 export default {
   getDanhSachCategoryParent,
   saveCategoryParent,
@@ -151,4 +164,5 @@ export default {
   getDanhSachCategoryChildSort,
   search,
   getDanhSachCategoryChildExistsByParent,
+  getCategoryParentById,
 };

@@ -207,6 +207,7 @@ html {
   }
 }
 .btn-save {
+  text-align: center;
   border-radius: 10px/25px;
   border: 1px solid #06d85f;
   background: #06d85f;
@@ -395,7 +396,7 @@ html {
   border-radius: 5px;
   width: 81.5%;
   position: fixed;
-  top: 120px;
+  top: 80px;
   right: 20px;
   transition: all 1s ease-in-out;
   z-index: 1002;

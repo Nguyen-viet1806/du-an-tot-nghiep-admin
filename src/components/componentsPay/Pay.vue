@@ -1,6 +1,6 @@
 <template>
   <div class="combo">
-    <h3>Hóa đơn</h3>
+    <h3>Bán hàng</h3>
     <form-bill ref="FormBill" />
     <table-bill
       @showBill="showBill"
@@ -10,10 +10,10 @@
   </div>
 </template>
 <script>
-import FormBill from "@/components/componentsBill/FormBill.vue";
-import TableBill from "@/components/componentsBill/TableBill.vue";
+import FormBill from "@/components/componentsPay/FormPay.vue";
+import TableBill from "@/components/componentsPay/TablePay.vue";
 export default {
-  name: "Combo",
+  name: "Pay",
   components: { FormBill, TableBill },
   props: {},
   data() {},
@@ -43,7 +43,13 @@ export default {
         idVoucher: bill.idVoucher,
         idStatus: bill.idStatus,
         billType: bill.billType,
-        listProductDetail: [],
+        listProductDetail: [
+          {
+            idProductDetail: null,
+            quantity: null,
+            idStatus: null,
+          },
+        ],
         addressRequestDTO: {
           idAddress: null,
           idProvince: bill.address.province.idProvince,
@@ -54,7 +60,6 @@ export default {
       };
       this.$refs["FormBill"].bill = billTemp;
       this.getListProductInBill(bill);
-      this.getListComboInBill(bill);
     },
     getListProductInBill(bill) {
       let payload = {
@@ -62,30 +67,12 @@ export default {
         limit: 1000000,
         idBill: bill.idBill,
       };
-      this.$store
-        .dispatch("billModule/getDanhSachProductInBill", payload)
-        .then((res) => {
-          if (res) {
-            this.$refs["FormBill"].listProductInBill = res.data.data;
-          }
-        });
+      this.$store.dispatch("billModule/getDanhSachProductInBill", payload).then(res => {
+        if(res){
+           this.$refs["FormBill"].listProductInBill = res.data.data;
+        }
+      });
     },
-
-    getListComboInBill(bill) {
-      let payload = {
-        page: 0,
-        limit: 1000000,
-        idBill: bill.idBill,
-      };
-      this.$store
-        .dispatch("billModule/getDanhSachComboInBill", payload)
-        .then((res) => {
-          if (res) {
-            this.$refs["FormBill"].listComboInBill = res.data.data;
-          }
-        });
-    },
-
     getListBill() {
       let payload = {
         page: this.$refs["TableBill"].pageable,

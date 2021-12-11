@@ -3,7 +3,7 @@ import {
   callApiSaveColor,
   callApiGetDanhSachColorSort,
   callApiSearch,
-  
+  callApiGetColorById,
 } from "@/api/colors.js";
 import {
   callApiGetDanhSachColorExists,
@@ -67,6 +67,18 @@ const search = (context, payload) => {
   });
 };
 
+const getColorById = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetColorById(payload)
+      .then((reponse) => {
+        resolve(reponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 const saveColor = (context, payload) => {
   return new Promise((resolve, reject) => {
     callApiSaveColor(payload)
@@ -85,4 +97,5 @@ export default {
   getDanhSachColorSort,
   search,
   getDanhSachColorExists,
+  getColorById,
 };

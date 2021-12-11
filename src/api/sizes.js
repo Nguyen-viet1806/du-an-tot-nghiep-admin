@@ -32,3 +32,10 @@ export function callApiSaveSize(payload) {
     data: payload,
   });
 }
+
+export function callApiGetSizeById(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_SIZE_BY_ID + payload,
+    method: "GET",
+  });
+}

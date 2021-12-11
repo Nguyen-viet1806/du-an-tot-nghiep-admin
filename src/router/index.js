@@ -7,6 +7,7 @@ import PageCategory from "@/views/PageCategory.vue";
 import PageProduct from "@/views/PageProduct.vue";
 import PageCombo from "@/views/PageCombo.vue";
 import PageBill from "@/views/PageBill.vue";
+import PagePay from "@/views/PagePay.vue";
 const routes = [
   {
     path: "/admin/size",
@@ -47,6 +48,11 @@ const routes = [
     path: "/admin/bill",
     name: "PageBill",
     component: PageBill,
+  },
+  {
+    path: "/admin/pay",
+    name: "PagePay",
+    component: PagePay,
   },
   
 ];

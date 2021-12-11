@@ -56,3 +56,10 @@ export function callApiSaveCategoryChild(payload) {
     data: payload,
   });
 }
+
+export function callApiGetCategoryById(payload) {
+  return HTTP({
+    url: ENDPOINT.GET_CATEGORY_PARENT_BY_ID + payload,
+    method: "GET",
+  });
+}

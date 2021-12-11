@@ -5,7 +5,8 @@ import {
   callApiGetDanhSachBill,
   callApiGetDanhSachBillFilter,
   callApiGetDanhSachProductInBill,
-  callApiSaveBill
+  callApiSaveBill,
+  callApiGetDanhSachComboInBill,
 } from "@/api/bill.js";
 
 const getDanhSachTinh = (context, payload) => {
@@ -86,6 +87,17 @@ const getDanhSachProductInBill = (context, payload) => {
   });
 };
 
+const getDanhSachComboInBill = (context, payload) => {
+  return new Promise((resolve, reject) => {
+    callApiGetDanhSachComboInBill(payload)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
 const saveBill = (context, payload) => {
   return new Promise((resolve, reject) => {
@@ -107,4 +119,5 @@ export default {
   getDanhSachBillFilter,
   getDanhSachProductInBill,
   saveBill,
+  getDanhSachComboInBill,
 };

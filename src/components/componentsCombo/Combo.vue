@@ -1,11 +1,9 @@
 <template>
   <div class="combo">
     <h3>Combo</h3>
-    <form-combo ref="FormCombo"  />
+    <form-combo ref="FormCombo" @getListCombo="getListCombo"/>
 
-    <table-combo
-      ref="TableCombo"
-    />
+    <table-combo ref="TableCombo" @showCombo="showCombo" @getListCombo="getListCombo"/>
   </div>
 </template>
 
@@ -20,7 +18,37 @@ export default {
   computed: {},
   watch: {},
   mounted() {},
-  methods: {},
+  methods: {
+    showCombo(combo) {
+      let comboTemp = {
+        ...combo,
+        comboDetail: [],
+      };
+      this.$refs["FormCombo"].combo = comboTemp;
+      this.getComboDetail(combo);
+    },
+    getComboDetail(combo) {
+      let payload = {
+        page: 0,
+        idCombo: combo.idCombo,
+      };
+      this.$store
+        .dispatch("comboModule/getComboDetailByIdCombo", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["FormCombo"].listProductInCombo = res.data.data;
+          }
+        });
+    },
+    getListCombo() {
+      let payload = {
+        sort: -1,
+        idStatus: 2,
+        page: this.refs["TableCombo"].pageable,
+      };
+      this.$store.dispatch("comboModule/getAllCombo", payload);
+    },
+  },
 };
 </script>
 

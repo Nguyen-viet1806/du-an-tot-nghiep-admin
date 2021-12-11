@@ -1,6 +1,6 @@
 <template>
   <div class="form-tpf">
-    <form @submit.prevent="saveBill">
+    <form @submit="saveBill">
       <div class="row">
         <div class="col mt-4">
           <div class="row">
@@ -191,7 +191,7 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.transportFee"
-                  disabled
+                  :disabled="!isNhanVienTaoHoaDon"
                   required
                 />
               </div>
@@ -240,6 +240,10 @@
                   v-model="bill.descriptionBill"
                 ></textarea>
               </div>
+              <!-- <p class="mt-4 text-center" v-if="bill.billType != 0">
+                <input type="checkbox" v-model="isNhanVienTaoHoaDon" /> Nhân
+                viên tạo hóa đơn
+              </p> -->
               <div class="control">
                 <button type="submit" class="btn btn-save">Lưu</button>
                 <button
@@ -254,13 +258,13 @@
           </div>
         </div>
         <div class="col">
-          <h5>Sản phẩm có trong hóa đơn:</h5>
+           <h5>Sản phẩm có trong hóa đơn</h5>
           <div class="table-product">
+           
             <div @click="showProductInBill" class="btn btn-save">
               Thêm sản phẩm
             </div>
-
-            <div @click="showComboInBill" class="btn btn-info">Thêm combo</div>
+             <div @click="showComboInBill" class="btn btn-info">Thêm combo</div>
           </div>
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-hover mt-4">
@@ -277,12 +281,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(bill, index) in listProductInBill.length <= 0
-                    ? []
-                    : listProductInBill"
-                  :key="bill"
-                >
+                <tr v-for="(bill, index) in listProductInBill" :key="bill">
                   <th scope="row">{{ getStt(index) }}</th>
                   <td>
                     <img
@@ -313,7 +312,7 @@
                   </td>
 
                   <td>{{ bill.price }}</td>
-                  <td><div class="btn btn-danger" @click="deleteProduct(index)">Xóa</div></td>
+                   <td><div class="btn btn-danger" @click="deleteProduct(index)">Xóa</div></td>
                 </tr>
                 <tr
                   v-for="(bill, index) in listComboInBill.length <= 0
@@ -346,7 +345,11 @@
                     {{ bill.comboResponseDTO.quantity }}
                   </td>
                   <td>{{ bill.price }}</td>
-                  <td><div class="btn btn-danger" @click="deleteCombo(index)">Xóa</div></td>
+                  <td>
+                    <div class="btn btn-danger" @click="deleteCombo(index)">
+                      Xóa
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -380,7 +383,7 @@
             <div id="popupv" v-if="isShowNotifyV" class="popupv">
               <a class="closev" href="#" @click="closeNotifyV">&times;</a>
               <div class="contentv">
-                <table-product
+                <table-product-pay
                   ref="TableProduct"
                   @getListFollowPage="getListProduct"
                   @addProduct="addProductInBill"
@@ -400,7 +403,7 @@
             <div id="popupv" v-if="isShowNotifyV1" class="popupv">
               <a class="closev" href="#" @click="closeNotifyV1">&times;</a>
               <div class="contentv">
-                <table-combo
+                <table-combo-pay
                   ref="TableProduct"
                   @addComboInBill="addComboInBill"
                 />
@@ -414,15 +417,16 @@
 </template>
 
 <script>
-import TableProduct from "@/components/componentsBill/TableProduct.vue";
-import TableCombo from "@/components/componentsBill/TableCombo.vue";
+import TableProductPay from "@/components/componentsPay/TableProductPay.vue";
+import TableComboPay from "@/components/componentsPay/TableComboPay.vue";
 import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 export default {
-  name: "FormBill",
-  components: { TableProduct, TableCombo },
+  name: "Formpay",
+  components: { TableProductPay, TableComboPay },
   props: {},
   data() {
     return {
+      isNhanVienTaoHoaDon: true,
       pageable: 0,
       DO_MAIN,
       GIA_TRI_TRANG_THAI,
@@ -520,6 +524,19 @@ export default {
       },
       deep: true,
     },
+    "bill.billType": {
+      handler() {
+        if (this.bill.billType == 0) {
+          this.isNhanVienTaoHoaDon = false;
+        }
+      },
+      deep: true,
+    },
+    isNhanVienTaoHoaDon() {
+      if (!this.isNhanVienTaoHoaDon) {
+        this.bill.transportFee = 30000;
+      }
+    },
   },
   mounted() {
     this.initData();
@@ -528,18 +545,9 @@ export default {
     initData() {
       this.getListTinh();
     },
-    deleteProduct(index) {
-      this.listProductInBill.splice(index, 1);
-    },
-    deleteCombo(index) {
-      this.listComboInBill.splice(index, 1);
-    },
     showProductInBill() {
       this.isShowNotifyV = true;
       this.getListProduct();
-    },
-    showComboInBill() {
-      this.isShowNotifyV1 = true;
     },
     addProductInBill(Product) {
       this.isShowNotifyV = false;
@@ -560,6 +568,15 @@ export default {
         productChildResponseDTO: { ...Product },
         quantity: 1,
       });
+    },
+    deleteProduct(index) {
+      this.listProductInBill.splice(index, 1);
+    },
+    deleteCombo(index) {
+      this.listComboInBill.splice(index, 1);
+    },
+    showComboInBill() {
+      this.isShowNotifyV1 = true;
     },
     addComboInBill(Combo) {
       this.isShowNotifyV1 = false;
@@ -607,7 +624,6 @@ export default {
     },
     resetForm() {
       this.listProductInBill = [];
-      this.listComboInBill = [];
       this.bill = {
         idBill: null,
         idUser: null,
@@ -642,6 +658,9 @@ export default {
       });
     },
     saveBill() {
+      if (this.isNhanVienTaoHoaDon) {
+        this.bill.billType = 1;
+      }
       this.bill.listProductDetail = [];
       this.bill.listCombo = [];
       this.listProductInBill.forEach((item) => {
@@ -656,6 +675,7 @@ export default {
           });
         }
       });
+
       this.listComboInBill.forEach((item) => {
         if (
           item.comboResponseDTO.idCombo &&
@@ -668,6 +688,7 @@ export default {
           });
         }
       });
+
       let payload = {
         ...this.bill,
       };

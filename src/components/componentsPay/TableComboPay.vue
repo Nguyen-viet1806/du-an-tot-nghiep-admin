@@ -17,24 +17,6 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="form-group">
-          <input
-            type="date"
-            class="form-control"
-            id="validationCustom01"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="date"
-            class="form-control"
-            id="validationCustom01"
-            required
-          />
-        </div>
-      </div>
-      <div class="col-md-4">
         <div class="row">
           <div class="col-md-8 mt-2">
             <select
@@ -65,10 +47,12 @@
       <thead>
         <tr>
           <th scope="col">STT</th>
-          <th scope="col">Tên người mua</th>
-          <th scope="col">Số điện thoại</th>
+          <th scope="col"></th>
+          <th scope="col">Tên combo</th>
+          <th scope="col">Giá combo</th>
+          <th scope="col">Số lượng</th>
           <th scope="col">Ngày tạo</th>
-          <th scope="col">Ngày giao thành công</th>
+          <th scope="col">Mô tả combo</th>
           <th scope="col">Trạng thái</th>
           <th scope="col">
             <button class="btn-arrow-up" @click="getListSort(0)">
@@ -79,16 +63,36 @@
           </th>
         </tr>
       </thead>
-      <tbody v-for="(bill, index) in listBill" :key="bill">
+      <tbody v-for="(combo, index) in listCombo" :key="combo">
         <tr>
           <th scope="row">{{ getStt(index) }}</th>
-          <td>{{ bill.emailUser }}</td>
-          <td>{{ bill.phoneUser }}</td>
-          <td>{{ bill.dateCreate }}</td>
-          <td>{{ bill.dateSuccess }}</td>
-          <td>{{ bill.nameStatus }}</td>
           <td>
-            <button v-on:click="showBill(bill)" class="btn-show">Show</button>
+            <img width="80" :src="DO_MAIN + combo.frontPhoto" /><img
+              width="80"
+              :src="DO_MAIN + combo.backPhoto"
+            /><img width="80" :src="DO_MAIN + combo.coverPhoto" />
+          </td>
+          <td>{{ combo.nameCombo }}</td>
+          <td>{{ combo.price }}</td>
+          <td>{{ combo.quantity }}</td>
+          <td>{{ combo.createAt }}</td>
+          <td>{{ combo.descriptionCombo }}</td>
+
+          <td>
+            <div class="form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+                :checked="
+                  combo.idStatus === GIA_TRI_TRANG_THAI.EXISTS ? true : false
+                "
+              />
+            </div>
+          </td>
+          <td>
+            <div v-on:click="showCombo(combo)" class="btn-show cuso">Chọn combo</div>
           </td>
         </tr>
       </tbody>
@@ -126,14 +130,15 @@
 </template>
 
 <script>
-import { GIA_TRI_TRANG_THAI } from "@/constants/constants";
+import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 import { mapGetters } from "vuex";
 export default {
-  name: "TableBill",
+  name: "TableCombo",
   components: {},
   props: {},
   data() {
     return {
+      DO_MAIN,
       keyWordSearch: "",
       idTrangThai: -1,
       pageable: 0,
@@ -142,33 +147,50 @@ export default {
   },
   computed: {
     ...mapGetters({
-      listBill: "billModule/getListBill",
+      listCombo: "comboModule/getListCombo",
     }),
   },
   watch: {
     pageable() {
-      this.$emit("getListBill");
+      this.getListCombo();
     },
   },
-  mounted() {},
+  mounted() {
+    this.initData();
+  },
   methods: {
-    showBill(bill) {
-      this.$emit("showBill", bill);
+    initData() {
+      this.getListCombo();
     },
     pageNext() {
       this.pageable++;
     },
-    getStt(index) {
-      return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
-    },
+
     pagePre() {
       if (this.pageable > 0) {
         this.pageable--;
       }
     },
+    showCombo(combo) {
+      this.$emit("addComboInBill", combo);
+    },
+    getStt(index) {
+      return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
+    },
+    getListCombo() {
+      let payload = {
+        sort: -1,
+        idStatus: 2,
+        page: this.pageable,
+      };
+      this.$store.dispatch("comboModule/getAllCombo", payload);
+    },
   },
 };
 </script>
 
-<style lnag="scss" scoped>
+<style lang="scss" scoped>
+.cuso{
+  cursor: pointer;
+}
 </style>

@@ -31,6 +31,7 @@
                 v-model="product.detailInProduct.idGender"
                 :class="{ active: isErrGenderProduct }"
               >
+                <option :value="Number(-1)">Chọn giới tính</option>
                 <option :value="Number(1)">Nam</option>
                 <option :value="Number(2)">Nữ</option>
                 <option :value="Number(3)">Unisex</option>
@@ -47,12 +48,20 @@
               >
                 <option value="-1">Chọn danh mục</option>
                 <option
-                  v-for="CategoryParent in listCategoryParentExists"
+                  v-for="CategoryParent in isShow
+                    ? listCategoryParentExists.filter(
+                        (item) =>
+                          item.idStatus == 2 || item.idCategory == idDanhMuc
+                      )
+                    : listCategoryParentExists.filter(
+                        (item) => item.idStatus == 2
+                      )"
                   :key="CategoryParent"
                   :value="CategoryParent.idCategory"
                   :disabled="CategoryParent.idStatus == 1"
                 >
-                  {{ CategoryParent.nameCategory }} {{CategoryParent.idStatus == 1 ? "(Đã xóa)" : ""}}
+                  {{ CategoryParent.nameCategory }}
+                  {{ CategoryParent.idStatus == 1 ? "(Đã xóa)" : "" }}
                 </option>
               </select>
             </div>
@@ -68,12 +77,21 @@
               >
                 <option value="-1">Chọn thể loại</option>
                 <option
-                  v-for="CategoryChild in danhSachCategoryChild"
+                  v-for="CategoryChild in isShow
+                    ? danhSachCategoryChild.filter(
+                        (item) =>
+                          item.idStatus == 2 ||
+                          item.idCategory == product.detailInProduct.idCategory
+                      )
+                    : danhSachCategoryChild.filter(
+                        (item) => item.idStatus == 2
+                      )"
                   :key="CategoryChild"
                   :value="CategoryChild.idCategory"
                   :disabled="CategoryChild.idStatus == 1"
                 >
-                  {{ CategoryChild.nameCategory }} {{CategoryChild.idStatus == 1 ? "(Đã xóa)" : ""}}
+                  {{ CategoryChild.nameCategory }}
+                  {{ CategoryChild.idStatus == 1 ? "(Đã xóa)" : "" }}
                 </option>
               </select>
             </div>
@@ -209,12 +227,26 @@
                         >
                           <option value="-1">Chọn màu</option>
                           <option
-                            v-for="color in danhSachColor"
+                            v-for="color in isShow
+                              ? danhSachColor.filter(
+                                  (item) =>
+                                    item.idStatus == 2 ||
+                                    item.idColor ==
+                                      product.detailInProduct
+                                        .listDetailColorRequest[index].idColor
+                                )
+                              : danhSachColor.filter(
+                                  (item) => item.idStatus == 2
+                                )"
                             :key="color.idColor"
                             :value="color.idColor"
-                            :disabled="checkDuplicateColor(color.idColor) || color.idStatus == 1"
+                            :disabled="
+                              checkDuplicateColor(color.idColor) ||
+                              color.idStatus == 1
+                            "
                           >
-                            {{ color.nameColor }} {{(color.idStatus == 1) ? "(Đã xóa)" : ""}}
+                            {{ color.nameColor }}
+                            {{ color.idStatus == 1 ? "(Đã xóa)" : "" }}
                           </option>
                         </select>
                       </div>
@@ -273,12 +305,25 @@
                     >
                       <option value="-1">Chọn size</option>
                       <option
-                        v-for="size in danhSachSize"
+                        v-for="size in isShow
+                          ? danhSachSize.filter(
+                              (item) =>
+                                item.idStatus == 2 ||
+                                item.idSize ==
+                                  product.detailInProduct
+                                    .listDetailColorRequest[index]
+                                    .listSizeInColor[i].idSize
+                            )
+                          : danhSachSize.filter((item) => item.idStatus == 2)"
                         :key="size.idSize"
                         :value="size.idSize"
-                        :disabled="checkDuplicateSize(size.idSize, index) || size.idStatus == 1"
+                        :disabled="
+                          checkDuplicateSize(size.idSize, index) ||
+                          size.idStatus == 1
+                        "
                       >
-                        {{ size.nameSize }} {{size.idStatus == 1 ? "(Đã xóa)" : ""}}
+                        {{ size.nameSize }}
+                        {{ size.idStatus == 1 ? "(Đã xóa)" : "" }}
                       </option>
                     </select>
                   </div>
@@ -447,10 +492,25 @@ export default {
     ...mapGetters({
       listCategoryParentExists: "categoryModule/getListCategoryParentExists",
     }),
+    isShow() {
+      return this.$route.query.isShow;
+    },
   },
   watch: {
     idDanhMuc() {
       if (this.idDanhMuc > 0) {
+        // let dsCategoryTemp = this.listCategoryParentExists.map(
+        //   (item) => item.idCategory
+        // );
+        // if (!dsCategoryTemp.includes(this.idDanhMuc)) {
+        //   this.$store
+        //     .dispatch("categoryModule/getCategoryParentById", this.idDanhMuc)
+        //     .then((res) => {
+        //       if (res) {
+        //           this.listCategoryParentExists.push(res.data)
+        //       }
+        //     });
+        // }
         this.isDisabledCategoryChild = false;
         this.$store
           .dispatch(
@@ -460,6 +520,9 @@ export default {
           .then((res) => {
             if (res) {
               this.danhSachCategoryChild = res.data.data;
+              // .filter(
+              //   (item) => item.idStatus == 2
+              // );
             }
           });
         this.$store
@@ -470,6 +533,9 @@ export default {
           .then((res) => {
             if (res) {
               this.danhSachSize = res.data.data;
+              // .filter(
+              //   (item) => item.idStatus == 2
+              // );
             }
           });
       } else if (this.idDanhMuc < 0) {
@@ -505,12 +571,57 @@ export default {
       deep: true,
       immediate: true,
     },
+
+    // "product.detailInProduct.listDetailColorRequest": {
+    //   handler() {
+    //     this.product.detailInProduct.listDetailColorRequest.forEach((item) => {
+    //       if (item.idColor != null) {
+    //         let dsColorTemp = this.danhSachColor.map((item) => item.idColor);
+    //         if (!dsColorTemp.includes(item.idColor)) {
+    //           if (item.idColor > 0) {
+    //             this.$store
+    //               .dispatch("colorModule/getColorById", item.idColor)
+    //               .then((res) => {
+    //                 if (res) {
+    //                   this.danhSachColor.push(res.data.data);
+    //                 }
+    //               });
+    //           }
+    //         }
+    //       }
+    //       for (let index = 0; index < item.listSizeInColor.length; index++) {
+    //         if (item.listSizeInColor[index].idSize != null) {
+    //           let dsSizeTemp = this.danhSachSize.map((item) => item.idSize);
+    //           if (!dsSizeTemp.includes(item.listSizeInColor[index].idSize)) {
+    //             if (item.listSizeInColor[index].idSize > 0) {
+    //               this.$store
+    //                 .dispatch(
+    //                   "sizeModule/getSizeById",
+    //                   item.listSizeInColor[index].idSize
+    //                 )
+    //                 .then((res) => {
+    //                   if (res) {
+    //                     this.danhSachSize.push(res.data.data);
+    //                   }
+    //                 });
+    //             }
+    //           }
+    //         }
+    //       }
+    //     });
+    //   },
+    //   deep: true,
+    //   immediate: true,
+    // },
   },
   mounted() {
     this.initData();
+    this.$router.push({ path: this.$route.path, query: { isShow: false } });
   },
   methods: {
     resetForm() {
+      this.$router.push({ path: this.$route.path, query: { isShow: false } });
+      // this.getColorExists();
       this.idDanhMuc = -1;
       this.product = {
         idProduct: null,
@@ -623,6 +734,9 @@ export default {
       this.$store.dispatch("colorModule/getDanhSachColorExists").then((res) => {
         if (res) {
           this.danhSachColor = res.data.data;
+          // .filter(
+          //   (item) => item.idStatus == 2
+          // );
         }
       });
     },
@@ -743,14 +857,15 @@ export default {
 
     addSize(index) {
       let danhSachSizeTemp = this.danhSachSize;
-      if(this.danhSachSize?.length == 0){
+      if (this.danhSachSize?.length == 0) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn chưa chọn danh mục !! !";
         return;
       }
-      if(this.product.detailInProduct.listDetailColorRequest[
-        index
-      ].listSizeInColor?.length == danhSachSizeTemp?.length){
+      if (
+        this.product.detailInProduct.listDetailColorRequest[index]
+          .listSizeInColor?.length == danhSachSizeTemp?.length
+      ) {
         this.isShowNotify = true;
         this.infoNotify = "Không đủ size để tạo tiếp sản phẩm !! !";
         return;

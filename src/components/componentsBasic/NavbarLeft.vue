@@ -65,12 +65,28 @@
           Quản lí combo</router-link
         >
       </p>
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Bán Hàng') }">
+        <router-link to="/admin/pay" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'money-bill-wave-alt']"
+          /></span>
+          Quản lí bán hàng</router-link
+        >
+      </p>
       <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Hóa Đơn') }">
         <router-link to="/admin/bill" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'file-invoice-dollar']"
           /></span>
           Quản lí hóa đơn</router-link
+        >
+      </p>
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Quyền') }">
+        <router-link to="/admin/pay" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'user-lock']"
+          /></span>
+          Quản lí quyền</router-link
         >
       </p>
     </div>
