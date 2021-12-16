@@ -88,27 +88,29 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(product, index) in listProductDetailTemp.productDetailSaleResponseDTOS" :key="product">
+                <tr
+                  v-for="(
+                    product, index
+                  ) in listProductDetailTemp.productDetailSaleResponseDTOS"
+                  :key="product"
+                >
                   <th scope="row">{{ index + 1 }}</th>
                   <td>
-                    <img
-                      width="80"
-                      :src="DO_MAIN + product.detailPhoto"
-                    />
+                    <img width="80" :src="DO_MAIN + product.detailPhoto" />
                   </td>
                   <td>{{ product.nameProduct }}</td>
                   <td>
-                    {{
-                      product.size.nameSize +
-                      ", " +
-                      product.color.nameColor
-                    }}
+                    {{ product.size.nameSize + ", " + product.color.nameColor }}
                   </td>
                   <td>
                     {{ product.quantity }}
                   </td>
                   <td>{{ product.price }}</td>
-                   <td><div @click="deleteProduct(index)" class="btn btn-danger" >Xóa</div></td>
+                  <td>
+                    <div @click="deleteProduct(index)" class="btn btn-danger">
+                      Xóa
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -245,11 +247,24 @@ export default {
       this.isErrNameSale = false;
       this.isErrDiscount = false;
       this.checkFormValidate = false;
+      this.listProductDetailTemp = {
+        saleDTO: {
+          idSale: null,
+          nameSale: null,
+          discount: null,
+          idStatus: null,
+          descriptionSale: null,
+        },
+        productDetailSaleResponseDTOS: [],
+      };
       this.sale = {
         idSale: null,
         nameSale: "",
         discount: null,
         idStatus: null,
+        listProductDetail: [],
+        dateStart: null,
+        dateEnd: null,
       };
     },
     checkValidate() {
@@ -283,18 +298,27 @@ export default {
         this.checkFormValidate = true;
       }
     },
-    addProductInSale(Product){
+    addProductInSale(Product) {
       this.isShowNotifyV = false;
-      for (let i = 0; i < this.listProductDetailTemp.productDetailSaleResponseDTOS.length; i++) {
+      for (
+        let i = 0;
+        i < this.listProductDetailTemp.productDetailSaleResponseDTOS?.length;
+        i++
+      ) {
         if (
-          this.listProductDetailTemp.productDetailSaleResponseDTOS[i].idProductDetail ===
-          Product.idProductDetail
+          this.listProductDetailTemp.productDetailSaleResponseDTOS[i]
+            .idProductDetail === Product.idProductDetail
         ) {
+          this.isShowNotify = true;
+        this.infoNotify = "Sản phẩm này đã tồn tại!";
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
           return;
         }
       }
       this.listProductDetailTemp.productDetailSaleResponseDTOS.push({
-         ...Product,
+        ...Product,
       });
     },
     saveSale() {
@@ -302,7 +326,10 @@ export default {
       if (!this.checkFormValidate) {
         return;
       }
-      if (this.listProductDetailTemp.productDetailSaleResponseDTOS && this.listProductDetailTemp.productDetailSaleResponseDTOS.length == 0) {
+      if (
+        this.listProductDetailTemp.productDetailSaleResponseDTOS &&
+        this.listProductDetailTemp.productDetailSaleResponseDTOS.length == 0
+      ) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn chưa chọn sản phẩm";
         if (this.isShowNotify) {
@@ -313,19 +340,41 @@ export default {
       if (!this.sale.idSale) {
         this.sale.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }
-      this.listProductDetailTemp.productDetailSaleResponseDTOS.forEach(item => {
-        this.sale.listProductDetail.push({
-          idProductDetail: item.idProductDetail,
-          idStatus: GIA_TRI_TRANG_THAI.EXISTS,
-        })
-      });
-      this.$store.dispatch("saleModule/saveSale", this.sale).then((res) => {
+
+      this.listProductDetailTemp.productDetailSaleResponseDTOS.forEach(
+        (item) => {
+          console.log(this.sale);
+          console.log(this.sale.listProductDetail);
+          this.sale.listProductDetail.push({
+            idProductDetail: item.idProductDetail,
+            idStatus: GIA_TRI_TRANG_THAI.EXISTS,
+          });
+        }
+      );
+
+      let payload = {
+        sale: {
+          idSale: this.sale.idSale,
+          nameSale: this.sale.nameSale,
+          discount: this.sale.discount,
+          idStatus: this.sale.idStatus,
+          descriptionSale: this.sale.descriptionSale,
+        },
+        listProductDetail: [...this.sale.listProductDetail],
+        dateStart: this.sale.dateStart,
+        dateEnd: this.sale.dateEnd,
+      };
+      this.$store.dispatch("saleModule/saveSale", payload).then((res) => {
         if (res) {
+        this.isShowNotify = true;
+        this.infoNotify = "Thêm sản phẩm thành công!";
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
           this.$emit("getListSale");
           this.resetForm();
         }
       });
-
     },
   },
 };
@@ -370,5 +419,10 @@ export default {
   &[type="number"] {
     -moz-appearance: textfield;
   }
+}
+.control {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>

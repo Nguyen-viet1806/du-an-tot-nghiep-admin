@@ -13,7 +13,7 @@ export function callApiDeleteCombo(payload) {
   return HTTP({
     url: ENDPOINT.DELETE_COMBO,
     method: "DELETE",
-    data: payload,
+    params: payload,
   });
 }
 

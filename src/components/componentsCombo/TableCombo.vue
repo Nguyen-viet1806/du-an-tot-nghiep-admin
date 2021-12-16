@@ -83,6 +83,7 @@
               <input
                 class="form-check-input"
                 type="checkbox"
+                @change="deleteCombo(combo)"
                 role="switch"
                 id="flexSwitchCheckDefault"
                 :checked="
@@ -180,10 +181,20 @@ export default {
     getListCombo() {
       let payload = {
         sort: -1,
-        idStatus: 2,
+        idStatus: -1,
         page: this.pageable,
       };
       this.$store.dispatch("comboModule/getAllCombo", payload);
+    },
+    deleteCombo(combo) {
+       let payload = {
+        idCombo: combo.idCombo
+      }
+      this.$store.dispatch("comboModule/deleteCombo", payload).then(res => {
+        if(res){
+          this.getListCombo();
+        }
+      });
     },
   },
 };

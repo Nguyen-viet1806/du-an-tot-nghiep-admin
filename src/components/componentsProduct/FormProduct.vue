@@ -204,7 +204,8 @@
               <h5>Màu</h5>
               <button
                 class="btn-x"
-                v-if="index != 0"
+                v-if="index != 0 && product.detailInProduct.listDetailColorRequest[index]
+                          .listSizeInColor[0].idProductDetail == null"
                 v-on:click="remoteColor(index)"
               >
                 <fa class="icon" :icon="['fas', 'times']" />
@@ -284,7 +285,8 @@
               >
                 <button
                   class="btn-x-v"
-                  v-if="!(index == 0 && i == 0)"
+                  v-if="i != 0 && product.detailInProduct.listDetailColorRequest[index]
+                          .listSizeInColor[i].idProductDetail == null"
                   v-on:click="remoteSize(i, index)"
                 >
                   <fa class="icon" :icon="['fas', 'times']" />

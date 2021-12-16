@@ -318,6 +318,14 @@ export default {
     },
     addProductInCombo(Product) {
       this.isShowNotifyV = false;
+      if (Product.quantity < 1) {
+        this.isShowNotify = true;
+        this.infoNotify = `Sản phẩm đã hết`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        return;
+      }
       for (let i = 0; i < this.listProductInCombo.length; i++) {
         if (
           this.listProductInCombo[i].productDetail.idProductDetail ===

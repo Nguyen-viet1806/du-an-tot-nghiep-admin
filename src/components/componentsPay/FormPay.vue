@@ -1,6 +1,6 @@
 <template>
   <div class="form-tpf">
-    <form @submit="saveBill">
+    <form @submit.prevent="saveBill">
       <div class="row">
         <div class="col mt-4">
           <div class="row">
@@ -14,7 +14,7 @@
                   disabled
                 />
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="validationCustom01" class="form-label"
                   >Tên người mua:</label
                 >
@@ -25,7 +25,7 @@
                   id="validationCustom01"
                   required
                 />
-              </div>
+              </div> -->
               <div class="form-group">
                 <label for="validationCustom01" class="form-label"
                   >Số điện thoại:</label
@@ -47,7 +47,6 @@
                   type="text"
                   class="form-control"
                   id="validationCustom01"
-                  required
                 />
               </div>
               <div class="form-group mt-1">
@@ -64,12 +63,6 @@
                   <option :value="GIA_TRI_TRANG_THAI.PROCESSING">
                     Đang xử lý
                   </option>
-                  <option :value="GIA_TRI_TRANG_THAI.CONFIRMED">
-                    Đã xác nhận
-                  </option>
-                  <option :value="GIA_TRI_TRANG_THAI.DELIVERY">
-                    Đang giao
-                  </option>
                   <option :value="GIA_TRI_TRANG_THAI.PAID">
                     Đã thanh toán
                   </option>
@@ -82,7 +75,6 @@
                   v-model="bill.addressRequestDTO.idProvince"
                   class="form-select"
                   id="validationDefault04"
-                  required
                 >
                   <option selected value="">Chọn tỉnh</option>
                   <option
@@ -103,7 +95,6 @@
                   v-model="bill.addressRequestDTO.idDistrict"
                   class="form-select"
                   id="validationDefault04"
-                  required
                 >
                   <option selected value="">Chọn quận, huyện</option>
                   <option
@@ -122,7 +113,6 @@
                   v-model="bill.addressRequestDTO.idCommune"
                   class="form-select"
                   id="validationDefault04"
-                  required
                 >
                   <option selected value="">Chọn xã</option>
                   <option
@@ -143,9 +133,12 @@
                   id="validationTextarea"
                   placeholder="Số nhà, ngõ"
                   v-model="bill.addressRequestDTO.detailAddress"
-                  required
                 ></textarea>
               </div>
+              <p class="mt-4 text-center" v-if="bill.billType != 0">
+                <input type="checkbox" v-model="isSuDungDiaChiCuaHang" /> Sử
+                dụng địa chỉ cửa hàng
+              </p>
             </div>
             <div class="col">
               <div class="form-group">
@@ -192,7 +185,6 @@
                   id="validationCustom01"
                   v-model="bill.transportFee"
                   :disabled="!isNhanVienTaoHoaDon"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -215,7 +207,6 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.payment"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -240,10 +231,6 @@
                   v-model="bill.descriptionBill"
                 ></textarea>
               </div>
-              <!-- <p class="mt-4 text-center" v-if="bill.billType != 0">
-                <input type="checkbox" v-model="isNhanVienTaoHoaDon" /> Nhân
-                viên tạo hóa đơn
-              </p> -->
               <div class="control">
                 <button type="submit" class="btn btn-save">Lưu</button>
                 <button
@@ -258,13 +245,12 @@
           </div>
         </div>
         <div class="col">
-           <h5>Sản phẩm có trong hóa đơn</h5>
+          <h5>Sản phẩm có trong hóa đơn</h5>
           <div class="table-product">
-           
             <div @click="showProductInBill" class="btn btn-save">
               Thêm sản phẩm
             </div>
-             <div @click="showComboInBill" class="btn btn-info">Thêm combo</div>
+            <div @click="showComboInBill" class="btn btn-info">Thêm combo</div>
           </div>
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-hover mt-4">
@@ -304,6 +290,7 @@
                       min="1"
                       :max="bill.productChildResponseDTO.quantity"
                       v-model="bill.quantity"
+                      @change="checkQuantity(index, $event)"
                       required
                     />
                   </td>
@@ -312,7 +299,11 @@
                   </td>
 
                   <td>{{ bill.price }}</td>
-                   <td><div class="btn btn-danger" @click="deleteProduct(index)">Xóa</div></td>
+                  <td>
+                    <div class="btn btn-danger" @click="deleteProduct(index)">
+                      Xóa
+                    </div>
+                  </td>
                 </tr>
                 <tr
                   v-for="(bill, index) in listComboInBill.length <= 0
@@ -338,6 +329,7 @@
                       min="1"
                       :max="bill.comboResponseDTO.quantity"
                       v-model="bill.quantity"
+                      @change="checkQuantityCombo(index,$event)"
                       required
                     />
                   </td>
@@ -426,6 +418,7 @@ export default {
   props: {},
   data() {
     return {
+      isSuDungDiaChiCuaHang: false,
       isNhanVienTaoHoaDon: true,
       pageable: 0,
       DO_MAIN,
@@ -450,12 +443,12 @@ export default {
         dateCreate: null,
         dateSuccess: null,
         descriptionBill: "",
-        total: null,
-        deposit: null,
-        payment: null,
+        total: 0,
+        deposit: 0,
+        payment: 0,
         transportFee: 30000,
         idVoucher: null,
-        idStatus: null,
+        idStatus: "",
         billType: null,
         listProductDetail: [],
         listCombo: [],
@@ -471,6 +464,25 @@ export default {
   },
   computed: {},
   watch: {
+    isSuDungDiaChiCuaHang() {
+      if (this.isSuDungDiaChiCuaHang) {
+        this.bill.addressRequestDTO = {
+          idAddress: null,
+          idProvince: 2,
+          idDistrict: 27,
+          idCommune: 379,
+          detailAddress: "Số 2 ngõ 17",
+        };
+      } else {
+        this.bill.addressRequestDTO = {
+          idAddress: null,
+          idProvince: "",
+          idDistrict: "",
+          idCommune: "",
+          detailAddress: "",
+        };
+      }
+    },
     "bill.addressRequestDTO.idProvince": {
       handler() {
         if (
@@ -542,6 +554,48 @@ export default {
     this.initData();
   },
   methods: {
+    checkQuantity(index, e) {
+      if (Number(e.target.value) < 1) {
+        this.isShowNotify = true;
+        this.infoNotify = `Số lượng tối thiểu mua là :1`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        this.listProductInBill[index].quantity = 1;
+      } else if (
+        Number(e.target.value) >
+        this.listProductInBill[index].productChildResponseDTO.quantity
+      ) {
+        this.isShowNotify = true;
+        this.infoNotify = `Số lượng tối đa có thể mua là: ${this.listProductInBill[index].productChildResponseDTO.quantity}`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        this.listProductInBill[index].quantity =
+          this.listProductInBill[index].productChildResponseDTO.quantity;
+      }
+    },
+    checkQuantityCombo(index, e) {
+      if (Number(e.target.value) < 1) {
+        this.isShowNotify = true;
+        this.infoNotify = `Số lượng tối thiểu mua là :1`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        this.listComboInBill[index].quantity = 1;
+      } else if (
+        Number(e.target.value) >
+        this.listComboInBill[index].comboResponseDTO.quantity
+      ) {
+        this.isShowNotify = true;
+        this.infoNotify = `Số lượng tối đa có thể mua là: ${this.listComboInBill[index].comboResponseDTO.quantity}`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        this.listComboInBill[index].quantity =
+          this.listComboInBill[index].comboResponseDTO.quantity;
+      }
+    },
     initData() {
       this.getListTinh();
     },
@@ -551,6 +605,14 @@ export default {
     },
     addProductInBill(Product) {
       this.isShowNotifyV = false;
+      if (Product.quantity < 1) {
+        this.isShowNotify = true;
+        this.infoNotify = `Sản phẩm đã hết`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        return;
+      }
       for (let i = 0; i < this.listProductInBill.length; i++) {
         if (
           this.listProductInBill[i].productChildResponseDTO.idProductDetail ===
@@ -580,6 +642,14 @@ export default {
     },
     addComboInBill(Combo) {
       this.isShowNotifyV1 = false;
+      if (Combo.quantity < 1) {
+        this.isShowNotify = true;
+        this.infoNotify = `Combo đã hết`;
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        return;
+      }
       for (let i = 0; i < this.listComboInBill.length; i++) {
         if (
           this.listComboInBill[i].comboResponseDTO.idCombo === Combo.idCombo
@@ -623,7 +693,9 @@ export default {
       return index + 1;
     },
     resetForm() {
+      this.isSuDungDiaChiCuaHang = false;
       this.listProductInBill = [];
+      this.listComboInBill = [];
       this.bill = {
         idBill: null,
         idUser: null,
@@ -633,12 +705,12 @@ export default {
         dateCreate: null,
         dateSuccess: null,
         descriptionBill: "",
-        total: null,
-        deposit: null,
-        payment: null,
+        total: 0,
+        deposit: 0,
+        payment: 0,
         transportFee: 30000,
         idVoucher: null,
-        idStatus: null,
+        idStatus: "",
         listProductDetail: [],
         listCombo: [],
         addressRequestDTO: {
@@ -658,6 +730,17 @@ export default {
       });
     },
     saveBill() {
+      if (
+        this.listProductInBill.length == 0 &&
+        this.listComboInBill.length == 0
+      ) {
+        this.isShowNotify = true;
+        this.infoNotify = "Bạn chưa chọn sản phẩm";
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        return;
+      }
       if (this.isNhanVienTaoHoaDon) {
         this.bill.billType = 1;
       }
@@ -691,6 +774,7 @@ export default {
 
       let payload = {
         ...this.bill,
+        idUser: JSON.parse(localStorage.getItem("UserInfo")).idUser,
       };
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {

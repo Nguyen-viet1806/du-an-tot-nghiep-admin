@@ -1,7 +1,6 @@
 <template>
   <div class="table-tpf">
-
-<div class="row">
+    <div class="row">
       <div class="col-md-4">
         <div class="input-group">
           <input
@@ -62,8 +61,8 @@
           </th>
         </tr>
       </thead>
-      <tbody v-for="(Sale,index) in listSales" :key="Sale">
-        <tr >
+      <tbody v-for="(Sale, index) in listSales" :key="Sale">
+        <tr>
           <th scope="row">{{ getStt(index) }}</th>
           <td>{{ Sale.nameSale }}</td>
           <td>{{ Sale.discount }}%</td>
@@ -76,7 +75,9 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
-                :checked="Sale.idStatus === GIA_TRI_TRANG_THAI.EXISTS ? true : false"
+                :checked="
+                  Sale.idStatus === GIA_TRI_TRANG_THAI.EXISTS ? true : false
+                "
               />
             </div>
           </td>
@@ -179,12 +180,19 @@ export default {
     },
     updateStatus(Sale, event) {
       let checked = event.target.checked;
+      let payload = {};
       if (checked) {
-        Sale.idStatus = this.GIA_TRI_TRANG_THAI.EXISTS;
-        this.$store.dispatch("saleModule/saveSale", Sale);
+        payload = {
+          idSale: Sale.idSale,
+          idStatus: this.GIA_TRI_TRANG_THAI.EXISTS,
+        };
+        this.$store.dispatch("saleModule/deleteProductInSale", payload);
       } else {
-        Sale.idStatus = this.GIA_TRI_TRANG_THAI.DELETE;
-        this.$store.dispatch("saleModule/saveSale", Sale);
+        payload = {
+          idSale: Sale.idSale,
+          idStatus: this.GIA_TRI_TRANG_THAI.DELETE,
+        };
+        this.$store.dispatch("saleModule/deleteProductInSale", payload);
       }
     },
   },
@@ -192,5 +200,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

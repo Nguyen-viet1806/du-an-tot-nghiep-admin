@@ -289,7 +289,11 @@
                     : "Unisex"
                 }}
               </td>
-              <td>{{ Product.listTag }}</td>
+              <td>
+                <p v-if="Product.listTag.includes(1)" ><span class="badge bg-warning text-dark">Đang sale</span></p>
+                <p v-if="Product.listTag.includes(2)"><span class="badge bg-danger">Hot</span></p>
+                <p v-if="Product.listTag.includes(3)"><span class="badge bg-secondary">Hết hàng</span></p>
+              </td>
               <td>{{ Product.quantity }}</td>
               <td>{{ Product.price }}đ</td>
               <td>

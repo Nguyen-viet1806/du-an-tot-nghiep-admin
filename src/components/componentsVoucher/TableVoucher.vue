@@ -51,8 +51,8 @@
           <th scope="col">STT</th>
           <th scope="col">Tên Voucher</th>
           <th scope="col">Discount</th>
-          <th scope="col">Ngày bắt đầu</th>
-          <th scope="col">Ngày kết thúc</th>
+          <th scope="col">Điều kiện áp dụng</th>
+          <th scope="col">Mã voucher</th>
           <th scope="col">Mô tả</th>
           <th scope="col">Xóa/Khôi phục</th>
           <th scope="col">
@@ -69,8 +69,8 @@
           <th scope="row">{{ getStt(index) }}</th>
           <td>{{ Voucher.nameVoucher }}</td>
           <td>{{ Voucher.discount }}%</td>
-          <td>{{ Voucher.dateStart }}</td>
-          <td>{{ Voucher.dateEnd }}</td>
+          <td>{{ Voucher.condition }}</td>
+          <td>{{ Voucher.codeVoucher }}</td>
           <td>{{ Voucher.descriptionVoucher }}</td>
           <td>
             <div class="form-switch">

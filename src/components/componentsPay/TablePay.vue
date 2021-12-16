@@ -60,7 +60,6 @@
         </div>
       </div>
     </div>
-
     <table class="table table-hover mt-4">
       <thead>
         <tr>
@@ -71,9 +70,9 @@
           <th scope="col">Ngày giao thành công</th>
           <th scope="col">Trạng thái</th>
           <th scope="col">
-            <button class="btn-arrow-up" @click="getListSort(0)">
+            <button class="btn-arrow-up">
               <fa class="icon" :icon="['fas', 'arrow-up']" /></button
-            ><button class="btn-arrow-down" @click="getListSort(1)">
+            ><button class="btn-arrow-down">
               <fa class="icon" :icon="['fas', 'arrow-down']" />
             </button>
           </th>
@@ -82,11 +81,11 @@
       <tbody v-for="(bill, index) in listBill" :key="bill">
         <tr>
           <th scope="row">{{ getStt(index) }}</th>
-          <td>{{ bill.emailUser }}</td>
+          <td>{{ bill.userResponseDTO.lastName }}</td>
           <td>{{ bill.phoneUser }}</td>
           <td>{{ bill.dateCreate }}</td>
           <td>{{ bill.dateSuccess }}</td>
-          <td>{{ bill.idStatus }}</td>
+          <td>{{ bill.nameStatus }}</td>
           <td>
             <button v-on:click="showBill(bill)" class="btn-show">Show</button>
           </td>
@@ -142,7 +141,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      listBillByBillType: "billModule/getListBillByBillType",
+      listBill: "billModule/getListBill",
     }),
   },
   watch: {

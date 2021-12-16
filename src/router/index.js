@@ -8,7 +8,13 @@ import PageProduct from "@/views/PageProduct.vue";
 import PageCombo from "@/views/PageCombo.vue";
 import PageBill from "@/views/PageBill.vue";
 import PagePay from "@/views/PagePay.vue";
+import PageHome from "@/views/PageHome.vue";
 const routes = [
+  {
+    path: "/admin",
+    name: "PageHome",
+    component: PageHome,
+  },
   {
     path: "/admin/size",
     name: "PageSize",

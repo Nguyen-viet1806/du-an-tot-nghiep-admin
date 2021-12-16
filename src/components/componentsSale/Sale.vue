@@ -1,7 +1,11 @@
 <template>
   <div class="sale">
     <h3>Sale</h3>
-    <form-sale ref="FormSale" :listSales="listSales"  @getListSale="getListSale"/>
+    <form-sale
+      ref="FormSale"
+      :listSales="listSales"
+      @getListSale="getListSale"
+    />
 
     <table-sale
       ref="TableSale"
@@ -42,13 +46,27 @@ export default {
       this.$store.dispatch("saleModule/getDanhSachSale", payload);
     },
     showFormSale(sale) {
-      this.$refs["FormSale"].sale = { ...sale };
       let payload = {
         page: 0,
         limit: 100000000,
         idSale: sale.idSale,
       };
-      this.$store.dispatch("saleModule/getListProductSale", payload);
+      this.$store
+        .dispatch("saleModule/getListProductSale", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["FormSale"].sale = {
+              ...sale,
+              listProductDetail: [],
+              dateStart: res.data.data.dateStart,
+              dateEnd: res.data.data.dateEnd,
+            };
+            this.$refs["FormSale"].listProductDetailTemp = {
+              saleDTO: res.data.data.saleDTO,
+              productDetailSaleResponseDTOS: res.data.data.lstProductChild,
+            };
+          }
+        });
     },
   },
 };

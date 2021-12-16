@@ -77,6 +77,7 @@ export default {
       let payload = {
         page: this.$refs["TableBill"].pageable,
         limit: 5,
+        billType: 1,
       };
       this.$store.dispatch("billModule/getDanhSachBill", payload);
     },

@@ -27,7 +27,7 @@ export function callApiSearch(payload) {
 
 export function callApiSaveSale(payload) {
   return HTTP({
-    url: ENDPOINT.SAVE_SALE,
+    url: ENDPOINT.APS_SALE,
     method: "POST",
     data: payload,
   });

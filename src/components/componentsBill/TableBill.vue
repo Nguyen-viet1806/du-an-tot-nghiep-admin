@@ -82,7 +82,7 @@
       <tbody v-for="(bill, index) in listBill" :key="bill">
         <tr>
           <th scope="row">{{ getStt(index) }}</th>
-          <td>{{ bill.emailUser }}</td>
+          <td>{{ bill.userResponseDTO.lastName }}</td>
           <td>{{ bill.phoneUser }}</td>
           <td>{{ bill.dateCreate }}</td>
           <td>{{ bill.dateSuccess }}</td>

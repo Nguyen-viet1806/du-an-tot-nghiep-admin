@@ -9,6 +9,14 @@
           Trang chủ</router-link
         >
       </p>
+      <p class="menu-unit" :class="{ activeMenu: checkText('Tin Nhắn') }">
+        <router-link to="/admin/size" @click="clickMenu"
+          ><span class="logoMenu"
+            ><fa class="icon" :icon="['fas', 'envelope-open-text']"
+          /></span>
+          Tin nhắn</router-link
+        >
+      </p>
       <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Size') }">
         <router-link to="/admin/size" @click="clickMenu"
           ><span class="logoMenu"
@@ -86,7 +94,7 @@
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'user-lock']"
           /></span>
-          Quản lí quyền</router-link
+          Quản lí account</router-link
         >
       </p>
     </div>

@@ -1,5 +1,5 @@
-const getListBill = (state) => state.listBill.filter(item => item.billType == 0);
-const getListBillByBillType = (state) => state.listBill.filter(item => item.billType == 1);
+const getListBill = (state) => state.listBill
+const getListBillByBillType = (state) => state.listBill
 export default {
   getListBill,
   getListBillByBillType,

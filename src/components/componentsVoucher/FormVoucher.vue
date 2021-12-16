@@ -63,23 +63,23 @@
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="exampleInputEmail1">Ngày bắt đầu:</label>
+            <label for="exampleInputEmail1">Điều kiện áp dụng:</label>
             <input
-              type="date"
+              type="text"
               class="form-control"
-              :class="{ active: isErrDateStart}"
+              :class="{ active: isErrCondition}"
               id="exampleInputEmail1"
-              v-model="voucher.dateStart"
+              v-model="voucher.condition"
             />
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail1">Ngày kết thúc:</label>
+            <label for="exampleInputEmail1">Mã voucher:</label>
             <input
-              type="date"
+              type="text"
               class="form-control"
-              :class="{ active: isErrDateEnd}"
+              :class="{ active: isErrCodeVoucher}"
               id="exampleInputEmail1"
-              v-model="voucher.dateEnd"
+              v-model="voucher.codeVoucher"
             />
           </div>
         </div>
@@ -131,8 +131,8 @@ export default {
         idVoucher: null,
         nameVoucher: "",
         discount: null,
-        dateStart: null,
-        dateEnd: null,
+        condition: null,
+        codeVoucher: null,
         descriptionVoucher: null,
         idStatus: null,
       },
@@ -142,17 +142,17 @@ export default {
   watch: {
     voucher: {
       handler() {
-        if (this.voucher.nameVoucher !== "") {
+        if (this.voucher.nameVoucher !== "" && this.voucher.nameVoucher != null) {
           this.isErrNameVoucher = false;
         }
         if (this.voucher.discount > 0 && this.voucher.discount < 100) {
           this.isErrDiscount = false;
         }
-        if (new Date(this.voucher.dateStart).valueOf() >= Date.now()) {
-          this.isErrDateStart = false;
+        if (this.voucher.condition !== "" && this.voucher.condition != null) {
+          this.isErrCondition = false;
         }
-        if (new Date(this.voucher.dateEnd).valueOf() >= new Date(this.voucher.dateStart).valueOf() ) {
-          this.isErrDateEnd = false;
+        if (this.voucher.codeVoucher !== "" && this.voucher.codeVoucher != null) {
+          this.isErrCodeVoucher = false;
         }
       },
       deep: true,
@@ -164,15 +164,15 @@ export default {
     resetForm() {
       this.isErrNameVoucher = false;
       this.isErrDiscount = false;
-      this.isErrDateStart = false;
-      this.isErrDateEnd = false;
+      this.isErrCondition = false;
+      this.isErrCodeVoucher = false;
       this.isShowNotify = false;
       this.voucher = {
         idVoucher: null,
         nameVoucher: "",
         discount: null,
-        dateStart: null,
-        dateEnd: null,
+        condition: null,
+        codeVoucher: null,
         descriptionVoucher: null,
         idStatus: null,
       };
@@ -202,25 +202,26 @@ export default {
         this.checkFormValidate = false;
         check= false
       }
-
-      if (
-        new Date(this.voucher.dateStart).valueOf() < Date.now()
+       if (
+        this.voucher.condition === "" ||
+        this.voucher.condition === null
       ) {
-        this.isErrDateStart = true;
+        this.isErrCondition = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check = false
-      } 
-      if (
-        new Date(this.voucher.dateEnd).valueOf() < new Date(this.voucher.dateStart).valueOf()
+        check= false
+      }
+       if (
+        this.voucher.codeVoucher === "" ||
+        this.voucher.codeVoucher === null
       ) {
-        this.isErrDateEnd = true;
+        this.isErrCodeVoucher = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check = false
-      } 
+        check= false
+      }
       if(check) {
         this.isErrNameVoucher = false;
         this.isErrDiscount = false;
