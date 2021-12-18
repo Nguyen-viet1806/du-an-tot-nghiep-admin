@@ -204,8 +204,11 @@
               <h5>Màu</h5>
               <button
                 class="btn-x"
-                v-if="index != 0 && product.detailInProduct.listDetailColorRequest[index]
-                          .listSizeInColor[0].idProductDetail == null"
+                v-if="
+                  index != 0 &&
+                  product.detailInProduct.listDetailColorRequest[index]
+                    .listSizeInColor[0].idProductDetail == null
+                "
                 v-on:click="remoteColor(index)"
               >
                 <fa class="icon" :icon="['fas', 'times']" />
@@ -224,7 +227,12 @@
                               index
                             ].idColor
                           "
-                          :class="{ active: isErrColor }"
+                          :class="{
+                            active:
+                              product.detailInProduct.listDetailColorRequest[
+                                index
+                              ].idColor == -1 && isClickLuu,
+                          }"
                         >
                           <option value="-1">Chọn màu</option>
                           <option
@@ -252,7 +260,7 @@
                         </select>
                       </div>
                     </div>
-                    <div :class="{ active: isErrImageColor }" class="col-4">
+                    <div class="col-4">
                       <div class="form-group img-file">
                         <input
                           class="form-control input-filev"
@@ -262,7 +270,22 @@
                         />
                       </div>
                     </div>
-                    <div class="col-4">
+                    <div
+                      class="col-4"
+                      :class="{
+                        active:
+                          product.detailInProduct.listDetailColorRequest[index]
+                            .detailPhoto == null && isClickLuu,
+                      }"
+                    >
+                      <p
+                        v-if="
+                          product.detailInProduct.listDetailColorRequest[index]
+                            .detailPhoto == null && isClickLuu
+                        "
+                      >
+                        Bạn chưa chọn ảnh
+                      </p>
                       <img
                         width="110"
                         :src="
@@ -285,8 +308,11 @@
               >
                 <button
                   class="btn-x-v"
-                  v-if="i != 0 && product.detailInProduct.listDetailColorRequest[index]
-                          .listSizeInColor[i].idProductDetail == null"
+                  v-if="
+                    i != 0 &&
+                    product.detailInProduct.listDetailColorRequest[index]
+                      .listSizeInColor[i].idProductDetail == null
+                  "
                   v-on:click="remoteSize(i, index)"
                 >
                   <fa class="icon" :icon="['fas', 'times']" />
@@ -303,7 +329,11 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].idSize
                       "
-                      :class="{ active: isErrSize }"
+                      :class="{
+                        active:
+                          product.detailInProduct.listDetailColorRequest[index]
+                            .listSizeInColor[i].idSize == -1 && isClickLuu,
+                      }"
                     >
                       <option value="-1">Chọn size</option>
                       <option
@@ -339,7 +369,15 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].price
                       "
-                      :class="{ active: isErrPrice }"
+                      :class="{
+                        active:
+                          (product.detailInProduct.listDetailColorRequest[index]
+                            .listSizeInColor[i].price == null ||
+                            product.detailInProduct.listDetailColorRequest[
+                              index
+                            ].listSizeInColor[i].price?.length == 0) &&
+                          isClickLuu,
+                      }"
                     />
                   </div>
 
@@ -354,7 +392,15 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].quantity
                       "
-                      :class="{ active: isErrQuantity }"
+                      :class="{
+                        active:
+                          (product.detailInProduct.listDetailColorRequest[index]
+                            .listSizeInColor[i].quantity == null ||
+                            product.detailInProduct.listDetailColorRequest[
+                              index
+                            ].listSizeInColor[i].quantity?.length == 0) &&
+                          isClickLuu,
+                      }"
                     />
                   </div>
                 </div>
@@ -409,6 +455,7 @@ export default {
   props: {},
   data() {
     return {
+      isClickLuu: false,
       isErrNameProduct: false,
       isErrGenderProduct: false,
       isErrCategoryParent: false,
@@ -461,13 +508,13 @@ export default {
         },
       },
       color: {
-        idColor: null,
+        idColor: -1,
         detailPhoto: null,
         listSizeInColor: [
           {
             dateCreate: null,
             idProductDetail: null,
-            idSize: null,
+            idSize: -1,
             quantity: null,
             price: null,
             idSale: null,
@@ -548,6 +595,9 @@ export default {
     },
     product: {
       handler() {
+        if(this.product.nameProduct == " "){
+          this.product.nameProduct = ""
+        }
         if (this.product.nameProduct !== "") {
           this.isErrNameProduct = false;
         }
@@ -622,6 +672,7 @@ export default {
   },
   methods: {
     resetForm() {
+      this.isClickLuu = false;
       this.$router.push({ path: this.$route.path, query: { isShow: false } });
       // this.getColorExists();
       this.idDanhMuc = -1;
@@ -718,17 +769,65 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-      } else {
-        this.isErrNamePro = false;
-        this.isErrGenderProduct = false;
-        this.isErrCategoryParent = false;
-        this.isErrCategoryChild = false;
-        this.isErrFrontPhoto = false;
-        this.isErrBackPhoto = false;
-        this.isErrCoverPhoto = false;
-        this.isErrCategoryParent = false;
-        this.isErrCategoryChild = false;
-        this.infoNotify = "";
+      }
+      let checkThuocTinh = false;
+      for (
+        let i = 0;
+        i < this.product.detailInProduct.listDetailColorRequest.length;
+        i++
+      ) {
+        if (
+          this.product.detailInProduct.listDetailColorRequest[i].idColor ==
+            -1 ||
+          this.product.detailInProduct.listDetailColorRequest[i].detailPhoto ==
+            null
+        ) {
+          this.isShowNotify = true;
+          this.infoNotify = "Không để trống các trường màu đỏ !";
+          this.checkFormValidate = false;
+          checkThuocTinh = true;
+          break;
+        } else {
+          for (
+            let j = 0;
+            j <
+            this.product.detailInProduct.listDetailColorRequest[i]
+              .listSizeInColor.length;
+            j++
+          ) {
+            if (
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].idSize == -1 ||
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].price == null ||
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].price?.length == 0 ||
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].quantity == null ||
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].quantity?.length == 0
+            ) {
+              this.isShowNotify = true;
+              this.infoNotify = "Không để trống các trường màu đỏ !";
+              this.checkFormValidate = false;
+              checkThuocTinh = true;
+              break;
+            }
+          }
+        }
+      }
+      if (
+        !checkThuocTinh &&
+        !this.isErrNamePro &&
+        !this.isErrGenderProduct &&
+        !this.isErrCategoryParent &&
+        !this.isErrCategoryChild &&
+        !this.isErrFrontPhoto &&
+        !this.isErrBackPhoto &&
+        !this.isErrCoverPhoto &&
+        !this.isErrCategoryParent &&
+        !this.isErrCategoryChild
+      ) {
         this.checkFormValidate = true;
       }
     },
@@ -903,6 +1002,7 @@ export default {
     },
 
     async saveProduct() {
+      this.isClickLuu = true;
       this.checkValidate();
       if (!this.checkFormValidate) {
         return;
@@ -965,13 +1065,31 @@ export default {
       let payload = {
         ...this.product,
       };
-      this.$store.dispatch("productModule/saveProduct", payload).then((res) => {
-        if (res) {
-          this.resetForm();
-          this.$emit("getListFollowPage");
-          this.$emit("getListFollowPage");
-        }
-      });
+      this.$store
+        .dispatch("productModule/saveProduct", payload)
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Tạo sản phẩm thành công !! !";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+            this.resetForm();
+            this.$emit("getListFollowPage");
+            this.$emit("getListFollowPage");
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Tạo sản phẩm thất bại !! !";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
+          }
+        });
     },
   },
 };

@@ -18,7 +18,7 @@
               <label>Danh mục:</label>
               <select
                 class="form-select"
-                :class="{ active: isErrCategory  }"
+                :class="{ active: isErrCategory }"
                 aria-label="Default select example"
                 v-model="size.idCategory"
               >
@@ -117,7 +117,7 @@ export default {
         if (this.size.nameSize !== "" || this.size.nameSize !== null) {
           this.isErrNameSize = false;
         }
-        if (this.size.idCategory !== -1 ) {
+        if (this.size.idCategory !== -1) {
           this.isErrCategory = false;
         }
       },
@@ -141,6 +141,12 @@ export default {
       };
     },
     checkValidate() {
+      if (this.size.idCategory === -1) {
+        this.isErrCategory = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+      }
       if (
         this.size.nameSize.trim() === "" ||
         this.size.nameSize.trim() === null
@@ -150,17 +156,7 @@ export default {
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
       }
-      if (this.size.idCategory === -1) {
-        this.isErrCategory = true;
-        this.isShowNotify = true;
-        this.infoNotify = "Không để trống các trường màu đỏ !";
-        this.checkFormValidate = false;
-      } 
-      else {
-        this.isErrNameSize = false;
-        this.isErrCategory = false;
-        this.isShowNotify = false;
-        this.infoNotify = "";
+      if (!this.isErrNameSize && !this.isErrCategory) {
         this.checkFormValidate = true;
       }
     },
@@ -174,6 +170,11 @@ export default {
       }
       this.$store.dispatch("sizeModule/saveSize", this.size).then((res) => {
         if (res) {
+          this.isShowNotify = true;
+          this.infoNotify = "Lưu size thành công";
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
           if (!this.size.idSize) {
             let listSizeTemp = [...this.listSizes];
             listSizeTemp.push(res.data.data);

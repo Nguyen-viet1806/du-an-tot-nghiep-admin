@@ -34,7 +34,7 @@
               v-on:click="resetForm"
               type="button"
               class="btn btn-filter w-100"
-              @click="getListSort(-1)"
+              @click="getListSort(-1, true)"
             >
               Lọc
             </button>
@@ -153,7 +153,7 @@ export default {
   },
   watch: {
     pageable() {
-      this.getListCombo();
+      this.$emit("getListCombo");
     },
   },
   mounted() {
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     initData() {
-      this.getListCombo();
+      this.$emit("getListCombo");
     },
     pageNext() {
       this.pageable++;
@@ -178,21 +178,27 @@ export default {
     getStt(index) {
       return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
     },
-    getListCombo() {
+    getListSort(sort = -1, isLoc = false) {
+      if (isLoc) {
+        this.pageable = 0;
+      }
+      this.$emit("getListCombo", sort, this.idTrangThai, isLoc);
+    },
+    search() {
+      this.pageable = 0;
       let payload = {
-        sort: -1,
-        idStatus: -1,
+        name: this.keyWordSearch,
         page: this.pageable,
       };
-      this.$store.dispatch("comboModule/getAllCombo", payload);
+      this.$store.dispatch("comboModule/search", payload);
     },
     deleteCombo(combo) {
-       let payload = {
-        idCombo: combo.idCombo
-      }
-      this.$store.dispatch("comboModule/deleteCombo", payload).then(res => {
-        if(res){
-          this.getListCombo();
+      let payload = {
+        idCombo: combo.idCombo,
+      };
+      this.$store.dispatch("comboModule/deleteCombo", payload).then((res) => {
+        if (res) {
+          this.$emit("getListCombo");
         }
       });
     },

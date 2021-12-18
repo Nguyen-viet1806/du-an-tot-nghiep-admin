@@ -5,7 +5,7 @@
       <h2 class="logo-name">TPF</h2>
     </div>
     <div class="navbar-top-right">
-      <div class="user">Nguyễn Quốc Việt</div>
+      <div class="user">{{tenAcc}}</div>
       <div class="sign-in" @click="logout">
         <fa class="icon" :icon="['fas', 'sign-in-alt']" />
         Sign In
@@ -20,7 +20,11 @@ export default {
   components: {},
   props: {},
   data() {},
-  computed: {},
+  computed: {
+    tenAcc(){
+     return JSON.parse(localStorage.getItem("UserInfo")).firstName + " " + JSON.parse(localStorage.getItem("UserInfo")).lastName
+    }
+  },
   watch: {},
   mounted() {},
   methods: {

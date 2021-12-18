@@ -48,7 +48,7 @@
             <button
               type="button"
               class="btn btn-filter w-100"
-              @click="getListSizeSort(-1)"
+              @click="getListSizeSort(-1,true)"
             >
               Lọc
             </button>
@@ -177,7 +177,10 @@ export default {
         this.pageable--;
       }
     },
-    getListSizeSort(sort = -1) {
+    getListSizeSort(sort = -1, isLoc = false) {
+      if (isLoc) {
+        this.pageable = 0;
+      }
       let payload = {
         sort: sort,
         page: this.pageable,
@@ -189,6 +192,7 @@ export default {
       this.$store.dispatch("sizeModule/getDanhSachSizeSort", payload);
     },
     search() {
+      this.pageable = 0;
       let payload = {
         name: this.keyWordSearch,
         page: this.pageable,
@@ -201,8 +205,8 @@ export default {
     updateStatus(size, event) {
       let payload = {
         ...size,
-        idCategory: size.categoryParent.idCategory
-      }
+        idCategory: size.categoryParent.idCategory,
+      };
       let checked = event.target.checked;
       if (checked) {
         payload.idStatus = this.GIA_TRI_TRANG_THAI.EXISTS;

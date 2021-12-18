@@ -1,9 +1,13 @@
 <template>
   <div class="combo">
     <h3>Combo</h3>
-    <form-combo ref="FormCombo" @getListCombo="getListCombo"/>
+    <form-combo ref="FormCombo" @getListCombo="getListCombo" />
 
-    <table-combo ref="TableCombo" @showCombo="showCombo" @getListCombo="getListCombo"/>
+    <table-combo
+      ref="TableCombo"
+      @showCombo="showCombo"
+      @getListCombo="getListCombo"
+    />
   </div>
 </template>
 
@@ -40,11 +44,14 @@ export default {
           }
         });
     },
-    getListCombo() {
+    getListCombo(sort = -1,idStatus = -1, isLoc = false) {
+      if (isLoc) {
+        this.$refs["TableCombo"].pageable = 0;
+      }
       let payload = {
-        sort: -1,
-        idStatus: 2,
-        page: this.refs["TableCombo"].pageable,
+        sort: sort,
+        idStatus: idStatus,
+        page: this.$refs["TableCombo"].pageable,
       };
       this.$store.dispatch("comboModule/getAllCombo", payload);
     },

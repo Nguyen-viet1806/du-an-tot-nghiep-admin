@@ -23,7 +23,12 @@
           </div>
           <div class="form-group">
             <label>Giá combo:</label>
-            <input v-model="combo.price" type="number" class="form-control" />
+            <input
+              v-model="combo.price"
+              type="number"
+              class="form-control"
+              required
+            />
           </div>
           <div class="form-group">
             <label>Số lượng combo:</label>
@@ -31,6 +36,7 @@
               v-model="combo.quantity"
               type="number"
               class="form-control"
+              required
             />
           </div>
           <div class="form-group">
@@ -154,7 +160,11 @@
                 </td>
                 <td>{{ product.productDetail.quantity }}</td>
                 <td>{{ product.productDetail.price }}</td>
-                <td><button @click="deleteProduct(index)" class="btn btn-danger">xóa</button></td>
+                <td>
+                  <button @click="deleteProduct(index)" class="btn btn-danger">
+                    xóa
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -238,10 +248,23 @@ export default {
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    combo: {
+      handler() {
+        if (this.combo.nameCombo == " ") {
+          this.combo.nameCombo = "";
+        }
+        if (this.combo.descriptionCombo == " ") {
+          this.combo.descriptionCombo = "";
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {},
   methods: {
-    deleteProduct(index){
+    deleteProduct(index) {
       this.listProductInCombo.splice(index, 1);
     },
     resetForm() {
@@ -400,25 +423,36 @@ export default {
       let payload = {
         ...this.combo,
       };
-      this.$store.dispatch("comboModule/saveCombo", payload).then((res) => {
-        if (res) {
-          if (res.data.message == "Lưu combo thành công!") {
-            this.isShowNotify = true;
-            this.infoNotify = res.data.message;
-            if (this.isShowNotify) {
-              setTimeout(this.closeNotify, 1000);
+      this.$store
+        .dispatch("comboModule/saveCombo", payload)
+        .then((res) => {
+          if (res) {
+            if (res.data.message == "Lưu combo thành công!") {
+              this.isShowNotify = true;
+              this.infoNotify = res.data.message;
+              if (this.isShowNotify) {
+                setTimeout(this.closeNotify, 1000);
+              }
+              this.resetForm();
+              this.$emit("getListCombo");
+            } else {
+              this.isShowNotify = true;
+              this.infoNotify = res.data.message;
+              if (this.isShowNotify) {
+                setTimeout(this.closeNotify, 1000);
+              }
             }
-            this.resetForm();
-            this.$emit("getListCombo");
-          } else {
+          }
+        })
+        .catch((err) => {
+          if (err) {
             this.isShowNotify = true;
-            this.infoNotify = res.data.message;
+            this.infoNotify = "Tạo combo thất bại";
             if (this.isShowNotify) {
               setTimeout(this.closeNotify, 1000);
             }
           }
-        }
-      });
+        });
     },
   },
 };
