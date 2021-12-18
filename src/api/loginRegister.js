@@ -21,3 +21,43 @@ export function callApiLogin(payload) {
   });
 }
 
+export function callApiHome(payload) {
+  return HTTP({
+    url: ENDPOINT.HOME,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiChangePassword(payload) {
+  return HTTP({
+    url: ENDPOINT.CHANGE_PASSWORD,
+    method: "POST",
+    data: payload,
+  });
+}
+
+
+export function callApiResetPass(payload) {
+  return HTTP({
+    url: ENDPOINT.RESET_PASSWORD,
+    method: "GET",
+    params: payload,
+  });
+}
+
+export function callApiUpdateProfile(payload) {
+  return HTTP({
+    url: ENDPOINT.UPDATE_PROFILE,
+    method: "POST",
+    data: payload,
+  });
+}
+
+export function callApiRegister(payload) {
+  return HTTP({
+    url: ENDPOINT.REGISTER,
+    method: "POST",
+    data: payload,
+  });
+}

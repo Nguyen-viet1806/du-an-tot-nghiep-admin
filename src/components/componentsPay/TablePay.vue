@@ -2,19 +2,6 @@
   <div class="table-tpf">
     <div class="row">
       <div class="col-md-4">
-        <div class="input-group">
-          <input
-            type="search"
-            class="form-control rounded"
-            placeholder="Tìm kiếm"
-            aria-label="Search"
-            aria-describedby="search-addon"
-            v-model="keyWordSearch"
-          />
-          <button type="button" @click="search" class="btn btn-outline-primary">
-            Tìm kiếm
-          </button>
-        </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">

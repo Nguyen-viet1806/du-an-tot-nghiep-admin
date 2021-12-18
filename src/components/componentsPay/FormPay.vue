@@ -778,6 +778,8 @@ export default {
       };
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {
+          this.resetForm()
+          this.$emit("getListBill");
           this.isShowNotify = true;
           this.infoNotify = "Lưu bill thành công";
           if (this.isShowNotify) {

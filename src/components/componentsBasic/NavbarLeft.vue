@@ -2,7 +2,7 @@
   <nav class="navbar-left">
     <div class="menu">
       <p class="menu-unit" :class="{ activeMenu: checkText('Trang Chủ') }">
-        <router-link to="/admin" @click="clickMenu"
+        <router-link to="/" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'home']"
           /></span>
@@ -10,7 +10,7 @@
         >
       </p>
       <p class="menu-unit" :class="{ activeMenu: checkText('Tin Nhắn') }">
-        <router-link to="/admin/size" @click="clickMenu"
+        <router-link to="/admin/chat" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'envelope-open-text']"
           /></span>
@@ -89,8 +89,8 @@
           Quản lí hóa đơn</router-link
         >
       </p>
-      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Quyền') }">
-        <router-link to="/admin/pay" @click="clickMenu"
+      <p class="menu-unit" :class="{ activeMenu: checkText('Quản Lí Account') }">
+        <router-link to="/admin/account" @click="clickMenu"
           ><span class="logoMenu"
             ><fa class="icon" :icon="['fas', 'user-lock']"
           /></span>

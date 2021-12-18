@@ -58,6 +58,7 @@
                   class="form-select"
                   id="validationCustom04"
                   required
+                  :disabled="idStatusOfBill == GIA_TRI_TRANG_THAI.PAID"
                 >
                   <option selected value="">Chọn trạng thái đơn hàng</option>
                   <option :value="GIA_TRI_TRANG_THAI.PROCESSING">
@@ -239,8 +240,9 @@
                   v-model="bill.descriptionBill"
                 ></textarea>
               </div>
+              <p v-if="idStatusOfBill == GIA_TRI_TRANG_THAI.PAID && idStatusOfBill == GIA_TRI_TRANG_THAI.CANCE" class="text-red">Không thể sửa hóa đơn khi ở trạng thái này!</p>
               <div class="control">
-                <button type="submit" class="btn btn-save">Lưu</button>
+                <button v-if="bill.idBill && idStatusOfBill != GIA_TRI_TRANG_THAI.PAID && idStatusOfBill != GIA_TRI_TRANG_THAI.CANCE" type="submit" class="btn btn-save">Lưu</button>
                 <button
                   v-on:click="resetForm"
                   type="button"
@@ -438,6 +440,7 @@ export default {
       listCommune: [],
       listProductInBill: [],
       listComboInBill: [],
+      idStatusOfBill: null,
       bill: {
         idBill: null,
         idUser: null,
@@ -665,6 +668,7 @@ export default {
       return index + 1;
     },
     resetForm() {
+      this.idStatusOfBill = null;
       this.listProductInBill = [];
       this.listComboInBill = [];
       this.bill = {
@@ -740,6 +744,8 @@ export default {
       };
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {
+          this.resetForm();
+          this.$emit("getListBill");
           this.isShowNotify = true;
           this.infoNotify = "Lưu bill thành công";
           if (this.isShowNotify) {
@@ -799,5 +805,9 @@ export default {
 }
 .mota {
   min-height: 80px;
+}
+.text-red{
+  font-size: 14px;
+  color: red;
 }
 </style>

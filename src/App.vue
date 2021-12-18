@@ -9,7 +9,7 @@
           @click="closeNotify"
         ></div>
         <transition name="bounce">
-          <div id="popup1" v-if="isShowNotify && !checkLoginDN" class="popup">
+          <div id="popup1" v-if="isShowNotify" class="popup">
             <h2>Thông báo:</h2>
             <a class="close" @click="closeNotify">&times;</a>
             <div class="content">

@@ -9,9 +9,11 @@ import PageCombo from "@/views/PageCombo.vue";
 import PageBill from "@/views/PageBill.vue";
 import PagePay from "@/views/PagePay.vue";
 import PageHome from "@/views/PageHome.vue";
+import PageAccount from "@/views/PageAccount.vue";
+import PageChat from "@/views/PageChat.vue";
 const routes = [
   {
-    path: "/admin",
+    path: "/",
     name: "PageHome",
     component: PageHome,
   },
@@ -59,6 +61,16 @@ const routes = [
     path: "/admin/pay",
     name: "PagePay",
     component: PagePay,
+  },
+  {
+    path: "/admin/account",
+    name: "PageAccount",
+    component: PageAccount,
+  },
+  {
+    path: "/admin/chat",
+    name: "PageChat",
+    component: PageChat,
   },
   
 ];

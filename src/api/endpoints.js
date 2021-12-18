@@ -90,6 +90,12 @@ export default {
   SEARCH_COMBO: "api/webtpf/admin/combos/search",
   GET_COMBO_DETAIL_BY_IDCOMBO: "/api/webtpf/admin/combo-details/find-by-id-combo/",
 
+  HOME: "/api/webtpf/admin/statistical/getall",
+  
+  REGISTER: "/api/webtpf/signup",
   LOGIN: "/api/webtpf/login",
   LOGOUT: "/api/webtpf/logout",
+  CHANGE_PASSWORD: "/api/webtpf/profile/changepassword",
+  RESET_PASSWORD: "/api/webtpf/profile/getnewpassword",
+  UPDATE_PROFILE: "/api/webtpf/updateprofile",
 };

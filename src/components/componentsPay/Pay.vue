@@ -1,7 +1,7 @@
 <template>
   <div class="combo">
     <h3>Bán hàng</h3>
-    <form-bill ref="FormBill" />
+    <form-bill @getListBill="getListBill" ref="FormBill" />
     <table-bill
       @showBill="showBill"
       @getListBill="getListBill"
@@ -67,11 +67,13 @@ export default {
         limit: 1000000,
         idBill: bill.idBill,
       };
-      this.$store.dispatch("billModule/getDanhSachProductInBill", payload).then(res => {
-        if(res){
-           this.$refs["FormBill"].listProductInBill = res.data.data;
-        }
-      });
+      this.$store
+        .dispatch("billModule/getDanhSachProductInBill", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["FormBill"].listProductInBill = res.data.data;
+          }
+        });
     },
     getListBill() {
       let payload = {

@@ -1,7 +1,7 @@
 <template>
   <div class="combo">
     <h3>Hóa đơn</h3>
-    <form-bill ref="FormBill" />
+    <form-bill @getListBill="getListBill" ref="FormBill" />
     <table-bill
       @showBill="showBill"
       @getListBill="getListBill"
@@ -52,6 +52,7 @@ export default {
           detailAddress: bill.address.detailAddress,
         },
       };
+      this.$refs["FormBill"].idStatusOfBill = bill.idStatus;
       this.$refs["FormBill"].bill = billTemp;
       this.getListProductInBill(bill);
       this.getListComboInBill(bill);

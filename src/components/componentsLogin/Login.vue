@@ -249,6 +249,7 @@ button {
   border-bottom: 1px solid #03e9f4;
   color: #03e9f4 !important;
   outline: none;
+  text-transform: none !important;
 }
 input:hover {
   background: #03e9f4;
