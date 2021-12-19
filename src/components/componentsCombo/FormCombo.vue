@@ -234,9 +234,9 @@ export default {
         price: null,
         idStatus: null,
         descriptionCombo: "",
-        coverPhoto: "",
-        frontPhoto: "",
-        backPhoto: "",
+        coverPhoto: null,
+        frontPhoto: null,
+        backPhoto: null,
         createAt: "",
         quantity: "",
         comboDetail: [
@@ -277,9 +277,9 @@ export default {
         price: null,
         idStatus: null,
         descriptionCombo: "",
-        coverPhoto: "",
-        frontPhoto: "",
-        backPhoto: "",
+        coverPhoto: null,
+        frontPhoto: null,
+        backPhoto: null,
         createAt: "",
         quantity: "",
         comboDetail: [
@@ -381,6 +381,14 @@ export default {
       this.isShowNotify = false;
     },
     async saveCombo() {
+      if (this.combo.frontPhoto == null || this.combo.frontPhoto == null || this.combo.coverPhoto == null) {
+        this.isShowNotify = true;
+        this.infoNotify = "Bạn chưa chọn đủ ảnh";
+        if (this.isShowNotify) {
+          setTimeout(this.closeNotify, 1000);
+        }
+        return;
+      }
       if (this.listProductInCombo && this.listProductInCombo.length == 0) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn chưa chọn sản phẩm";

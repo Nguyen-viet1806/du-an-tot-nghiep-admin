@@ -172,6 +172,8 @@ export default {
   mounted() {},
   methods: {
     resetFormCategoryParent() {
+      this.resetFormCategoryChild();
+      this.$store.state.categoryModule.categoryParent.idCategory = null;
       this.$store.commit("categoryModule/SET_LIST_CATEGORYS_CHILD", [])
       this.categoryParent = {
         idCategory: null,

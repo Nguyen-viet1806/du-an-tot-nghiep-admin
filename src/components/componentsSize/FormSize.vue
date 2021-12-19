@@ -168,30 +168,41 @@ export default {
       if (!this.size.idSize) {
         this.size.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }
-      this.$store.dispatch("sizeModule/saveSize", this.size).then((res) => {
-        if (res) {
-          this.isShowNotify = true;
-          this.infoNotify = "Lưu size thành công";
-          if (this.isShowNotify) {
-            setTimeout(this.closeNotify, 1000);
-          }
-          if (!this.size.idSize) {
-            let listSizeTemp = [...this.listSizes];
-            listSizeTemp.push(res.data.data);
-            this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
-          } else {
-            let listSizeTemp = [...this.listSizes];
-            let len = listSizeTemp.length;
-            for (let i = 0; i < len; i++) {
-              if (listSizeTemp[i].idSize === res.data.data.idSize) {
-                listSizeTemp[i] = res.data.data;
-              }
+      this.$store
+        .dispatch("sizeModule/saveSize", this.size)
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu size thành công";
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
             }
-            this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
+            if (!this.size.idSize) {
+              let listSizeTemp = [...this.listSizes];
+              listSizeTemp.push(res.data.data);
+              this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
+            } else {
+              let listSizeTemp = [...this.listSizes];
+              let len = listSizeTemp.length;
+              for (let i = 0; i < len; i++) {
+                if (listSizeTemp[i].idSize === res.data.data.idSize) {
+                  listSizeTemp[i] = res.data.data;
+                }
+              }
+              this.$store.commit("sizeModule/SET_LIST_SIZES", listSizeTemp);
+            }
+            this.resetForm();
           }
-          this.resetForm();
-        }
-      });
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu size thất bại";
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
+            }
+          }
+        });
     },
   },
 };

@@ -21,7 +21,7 @@
       <login @clickLogin="login" />
     </template>
     <template v-if="islogin">
-      <navbar-top @testLogin="testLogin"/>
+      <navbar-top @testLogin="testLogin" />
       <navbar-left />
       <div class="body-page">
         <router-view />
@@ -52,14 +52,12 @@ export default {
     checkLoginDN() {
       if (this.$route.query.erro) {
         return false;
-      }
-      else{
+      } else {
         return true;
       }
     },
   },
-  created() {
-  },
+  created() {},
   watch: {},
   mounted() {
     this.testLogin();
@@ -69,7 +67,7 @@ export default {
       if (localStorage.getItem("token") !== null) {
         this.checkLogin = false;
         this.islogin = true;
-      }else{
+      } else {
         this.checkLogin = true;
         this.islogin = false;
       }
@@ -82,20 +80,25 @@ export default {
         })
         .then((res) => {
           if (res) {
-            this.isShowNotify = true;
-            this.infoNotify = "Đăng nhập thành công";
-            localStorage.setItem("token", res.data.access_token);
-            localStorage.setItem("refresh_token", res.data.refresh_token);
-            localStorage.setItem("UserInfo", JSON.stringify(res.data));
-            HTTP.defaults.headers["Token"] = localStorage.getItem("token");
-            HTTP.defaults.headers["refresh_token"] =
-              localStorage.getItem("refresh_token");
-            if (this.isShowNotify) {
-              setTimeout(this.closeNotify, 1000);
+            if (res.data.idRole == 3) {
+              this.isShowNotify = true;
+              this.infoNotify = "Bạn không có quyền";
+            } else {
+              this.isShowNotify = true;
+              this.infoNotify = "Đăng nhập thành công";
+              localStorage.setItem("token", res.data.access_token);
+              localStorage.setItem("refresh_token", res.data.refresh_token);
+              localStorage.setItem("UserInfo", JSON.stringify(res.data));
+              HTTP.defaults.headers["Token"] = localStorage.getItem("token");
+              HTTP.defaults.headers["refresh_token"] =
+                localStorage.getItem("refresh_token");
+              if (this.isShowNotify) {
+                setTimeout(this.closeNotify, 1000);
+              }
+              setTimeout(() => {
+                (this.checkLogin = false), (this.islogin = true);
+              }, 1500);
             }
-            setTimeout(() => {
-              (this.checkLogin = false), (this.islogin = true);
-            }, 1500);
           }
         })
         .catch((err) => {
@@ -426,7 +429,7 @@ html {
   height: 70vh;
   overflow: auto;
   overflow-x: hidden;
-   &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 8px;
   }
   &::-webkit-scrollbar-thumb {

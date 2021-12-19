@@ -89,6 +89,8 @@
                     class="form-control"
                     placeholder="Số điện thoại"
                     v-model="user.phoneNumber"
+                    minlength="10"
+                    maxlength="11"
                     required
                   />
                 </div>
@@ -110,6 +112,7 @@
                     class="form-control"
                     placeholder="Mật khẩu"
                     v-model="passWordTao"
+                    minlength="6"
                     required
                   />
                 </div>
@@ -500,7 +503,7 @@ export default {
       this.user = {
         idUser: users.idUser,
         firstName: users.firstName,
-        lastName: users.firstName,
+        lastName: users.lastName,
         dateOfBirth: users.dateOfBirth,
         email: users.email,
         phoneNumber: users.phoneNumber,
@@ -581,7 +584,7 @@ export default {
       let payload = {
         ...this.user,
         email: this.user.email.trim(),
-        phoneNumber: this.user.phoneNumber.trim(),
+        phoneNumber: this.user.phoneNumber,
         passwordUser: this.passWordTao,
         idRole: this.isAdmin ? 1 : 2,
       };

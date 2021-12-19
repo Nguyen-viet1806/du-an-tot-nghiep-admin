@@ -15,9 +15,6 @@
             Tìm kiếm
           </button>
         </div>
-      </div>
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
         <div class="row">
           <div class="col-md-8 mt-2">
             <select
@@ -41,6 +38,8 @@
           </div>
         </div>
       </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4"></div>
     </div>
     <div class="row mt-4">
       <div class="col">
@@ -130,13 +129,7 @@
               <th scope="col">STT</th>
               <th scope="col">Tên Category</th>
               <th scope="col">Xóa/Khôi phục</th>
-              <th scope="col">
-                <button class="btn-arrow-up" @click="getListSort(0)">
-                  <fa class="icon" :icon="['fas', 'arrow-up']" /></button
-                ><button class="btn-arrow-down" @click="getListSort(1)">
-                  <fa class="icon" :icon="['fas', 'arrow-down']" />
-                </button>
-              </th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody
@@ -239,7 +232,9 @@ export default {
   computed: {},
   watch: {
     pageableParent() {
-      this.$emit("getListFollowPageParent");
+      (this.keyWordSearch = ""),
+        (this.idTrangThai = -1),
+        this.$emit("getListFollowPageParent");
     },
 
     pageableChild() {
@@ -310,16 +305,10 @@ export default {
       let checked = event.target.checked;
       if (checked) {
         payload.idStatus = this.GIA_TRI_TRANG_THAI.EXISTS;
-        this.$store.dispatch(
-          "categoryModule/saveCategoryParent",
-          payload
-        );
+        this.$store.dispatch("categoryModule/saveCategoryParent", payload);
       } else {
         payload.idStatus = this.GIA_TRI_TRANG_THAI.DELETE;
-        this.$store.dispatch(
-          "categoryModule/saveCategoryParent",
-          payload
-        );
+        this.$store.dispatch("categoryModule/saveCategoryParent", payload);
       }
     },
     updateCategoryChildStatus(CategoryChild, event) {
