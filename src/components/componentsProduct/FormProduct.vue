@@ -369,14 +369,18 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].price
                       "
-                      @change="test(index, i)"
                       :class="{
                         active:
                           (product.detailInProduct.listDetailColorRequest[index]
                             .listSizeInColor[i].price == null ||
                             product.detailInProduct.listDetailColorRequest[
                               index
-                            ].listSizeInColor[i].price?.length == 0) &&
+                            ].listSizeInColor[i].price?.length == 0 ||
+                            product.detailInProduct.listDetailColorRequest[
+                              index
+                            ].listSizeInColor[i].price
+                              ?.toString()
+                              .indexOf('-') != -1) &&
                           isClickLuu,
                       }"
                     />
@@ -399,7 +403,12 @@
                             .listSizeInColor[i].quantity == null ||
                             product.detailInProduct.listDetailColorRequest[
                               index
-                            ].listSizeInColor[i].quantity?.length == 0) &&
+                            ].listSizeInColor[i].quantity?.length == 0 ||
+                            product.detailInProduct.listDetailColorRequest[
+                              index
+                            ].listSizeInColor[i].quantity
+                              ?.toString()
+                              .indexOf('-') != -1) &&
                           isClickLuu,
                       }"
                     />
@@ -672,13 +681,16 @@ export default {
     this.$router.push({ path: this.$route.path, query: { isShow: false } });
   },
   methods: {
-    test(index, i) {
-      this.product.detailInProduct.listDetailColorRequest[index]
-        .listSizeInColor[i].price.indexOf("-") > 0
-        
-        
-    },
     resetForm() {
+      this.isErrNameProduct = false;
+      this.isErrGenderProduct = false;
+      this.isErrCategoryParent = false;
+      this.isErrCategoryChild = false;
+      this.isErrFrontPhoto = false;
+      this.isErrBackPhoto = false;
+      this.isErrCoverPhoto = false;
+      this.isErrCategoryParent = false;
+      this.isErrCategoryChild = false;
       this.isClickLuu = false;
       this.$router.push({ path: this.$route.path, query: { isShow: false } });
       // this.getColorExists();
@@ -793,33 +805,50 @@ export default {
           this.infoNotify = "Không để trống các trường màu đỏ !";
           this.checkFormValidate = false;
           checkThuocTinh = true;
-          break;
-        } else {
-          for (
-            let j = 0;
-            j <
+        }
+        for (
+          let j = 0;
+          j <
+          this.product.detailInProduct.listDetailColorRequest[i].listSizeInColor
+            .length;
+          j++
+        ) {
+          if (
             this.product.detailInProduct.listDetailColorRequest[i]
-              .listSizeInColor.length;
-            j++
+              .listSizeInColor[j].idSize == -1 ||
+            this.product.detailInProduct.listDetailColorRequest[i]
+              .listSizeInColor[j].price == null ||
+            this.product.detailInProduct.listDetailColorRequest[
+              i
+            ].listSizeInColor[j].price
+              ?.toString()
+              .indexOf("-") != -1 ||
+            isNaN(
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].price
+            ) ||
+            this.product.detailInProduct.listDetailColorRequest[i]
+              .listSizeInColor[j].price?.length == 0 ||
+            this.product.detailInProduct.listDetailColorRequest[i]
+              .listSizeInColor[j].quantity == null ||
+            this.product.detailInProduct.listDetailColorRequest[i]
+              .listSizeInColor[j].quantity?.length == 0 ||
+            this.product.detailInProduct.listDetailColorRequest[
+              i
+            ].listSizeInColor[j].quantity
+              ?.toString()
+              .indexOf("-") != -1 ||
+            isNaN(
+              this.product.detailInProduct.listDetailColorRequest[i]
+                .listSizeInColor[j].quantity
+            )
           ) {
-            if (
-              this.product.detailInProduct.listDetailColorRequest[i]
-                .listSizeInColor[j].idSize == -1 ||
-              this.product.detailInProduct.listDetailColorRequest[i]
-                .listSizeInColor[j].price == null ||
-              this.product.detailInProduct.listDetailColorRequest[i]
-                .listSizeInColor[j].price?.length == 0 ||
-              this.product.detailInProduct.listDetailColorRequest[i]
-                .listSizeInColor[j].quantity == null ||
-              this.product.detailInProduct.listDetailColorRequest[i]
-                .listSizeInColor[j].quantity?.length == 0
-            ) {
-              this.isShowNotify = true;
-              this.infoNotify = "Không để trống các trường màu đỏ !";
-              this.checkFormValidate = false;
-              checkThuocTinh = true;
-              break;
-            }
+            this.isShowNotify = true;
+            this.infoNotify =
+              "Không để trống hoặc nhập sai định dạng các trường màu đỏ !";
+            this.checkFormValidate = false;
+            checkThuocTinh = true;
+            break;
           }
         }
       }
@@ -916,7 +945,6 @@ export default {
     },
 
     onFileSelected(index, event) {
-      console.log(index, event);
       // this.isPreviewImg = true;
       // this.isImg = false;
       this.product.detailInProduct.listDetailColorRequest[index].detailPhoto =

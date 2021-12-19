@@ -1,28 +1,22 @@
 <template>
   <div class="table-tpf">
     <div class="row">
-      <div class="col-md-4"></div>
       <div class="col-md-4">
         <div class="form-group">
-          <input
-            type="date"
-            class="form-control"
-            id="validationCustom01"
-            required
-          />
+          <label for="validationTextarea" class="form-label">Từ ngày:</label>
+          <input type="date" class="form-control" id="validationCustom01" />
         </div>
+      </div>
+      <div class="col-md-4">
         <div class="form-group">
-          <input
-            type="date"
-            class="form-control"
-            id="validationCustom01"
-            required
-          />
+          <label for="validationTextarea" class="form-label">Đến ngày:</label>
+          <input type="date" class="form-control" id="validationCustom01" />
         </div>
       </div>
       <div class="col-md-4">
         <div class="row">
           <div class="col-md-8 mt-2">
+             <label for="validationTextarea" class="form-label">Trạng thái:</label>
             <select
               class="form-select form-select-sm"
               aria-label="Default select example"
@@ -37,7 +31,7 @@
             <button
               v-on:click="resetForm"
               type="button"
-              class="btn btn-filter w-100"
+              class="btn btn-filter w-100 mr-t"
               @click="getListSort(-1)"
             >
               Lọc
@@ -152,21 +146,23 @@ export default {
         this.pageable--;
       }
     },
-    filterHoaDon(){
+    filterHoaDon() {
       let payload = {
         page: this.pageable,
         limit: 5,
         sort: -1,
         idStatus: this.idTrangThai,
         startDate: null,
-        endDate= null,
-      },
-       this.$store.dispatch("billModule/getDanhSachBillFilter", payload)
+        endDate: null,
+      };
+      this.$store.dispatch("billModule/getDanhSachBillFilter", payload);
     },
-    
   },
 };
 </script>
 
 <style lnag="scss" scoped>
+.mr-t{
+  margin-top: 30px !important;
+}
 </style>
