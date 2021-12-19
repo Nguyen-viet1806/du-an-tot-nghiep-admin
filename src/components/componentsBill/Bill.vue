@@ -67,7 +67,7 @@ export default {
         .dispatch("billModule/getDanhSachProductInBill", payload)
         .then((res) => {
           if (res) {
-            this.$refs["FormBill"].listProductInBill = []
+            this.$refs["FormBill"].listProductInBill = [];
             res.data.data.forEach((item) => {
               this.$refs["FormBill"].listProductInBill.push({
                 idBill: item.idBill,
@@ -82,11 +82,11 @@ export default {
                 quantity: item.quantity,
               });
             });
-             this.$refs["FormBill"].listProductInBillTemp = res.data.data;
+            this.$refs["FormBill"].listProductInBillTemp = res.data.data;
           }
         });
     },
-        getListComboInBill(bill) {
+    getListComboInBill(bill) {
       let payload = {
         page: 0,
         limit: 1000000,
@@ -96,7 +96,7 @@ export default {
         .dispatch("billModule/getDanhSachComboInBill", payload)
         .then((res) => {
           if (res) {
-            this.$refs["FormBill"].listComboInBill = []
+            this.$refs["FormBill"].listComboInBill = [];
             res.data.data.forEach((item) => {
               this.$refs["FormBill"].listComboInBill.push({
                 idBill: item.idBill,
@@ -105,8 +105,7 @@ export default {
                 price: item.price,
                 comboResponseDTO: {
                   ...item.comboResponseDTO,
-                  quantity:
-                    item.quantity + item.comboResponseDTO.quantity,
+                  quantity: item.quantity + item.comboResponseDTO.quantity,
                 },
                 quantity: item.quantity,
               });

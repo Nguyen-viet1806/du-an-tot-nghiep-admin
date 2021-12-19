@@ -1,8 +1,7 @@
 <template>
   <div class="table-tpf">
     <div class="row">
-      <div class="col-md-4">
-      </div>
+      <div class="col-md-4"></div>
       <div class="col-md-4">
         <div class="form-group">
           <input
@@ -153,6 +152,18 @@ export default {
         this.pageable--;
       }
     },
+    filterHoaDon(){
+      let payload = {
+        page: this.pageable,
+        limit: 5,
+        sort: -1,
+        idStatus: this.idTrangThai,
+        startDate: null,
+        endDate= null,
+      },
+       this.$store.dispatch("billModule/getDanhSachBillFilter", payload)
+    },
+    
   },
 };
 </script>

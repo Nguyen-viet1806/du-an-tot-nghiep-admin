@@ -14,7 +14,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Tên color:</label>
+              <label>Tên màu:</label>
               <input
                 type="text"
                 class="form-control"
@@ -118,8 +118,7 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-      }
-      else {
+      } else {
         this.isErrNameColor = false;
         this.isShowNotify = false;
         this.infoNotify = "";
@@ -134,24 +133,40 @@ export default {
       if (!this.color.idColor) {
         this.color.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
       }
-      this.$store.dispatch("colorModule/saveColor", this.color).then((res) => {
-        if (res) {
-          let listColorTemp = [...this.listColors];
-          if (!this.color.idColor) {
-          listColorTemp.push(res.data.data);
-            this.$store.commit("colorModule/SET_LIST_COLORS", listColorTemp);
-          } else {
-            let len = listColorTemp.length;
-            for (let i = 0; i < len; i++) {
-              if (listColorTemp[i].idColor === res.data.data.idColor) {
-                listColorTemp[i] = res.data.data;
-              }
+      this.$store
+        .dispatch("colorModule/saveColor", this.color)
+        .then((res) => {
+          if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu màu thanh công !";
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
             }
-            this.$store.commit("colorModule/SET_LIST_COLORS", listColorTemp);
+            let listColorTemp = [...this.listColors];
+            if (!this.color.idColor) {
+              listColorTemp.push(res.data.data);
+              this.$store.commit("colorModule/SET_LIST_COLORS", listColorTemp);
+            } else {
+              let len = listColorTemp.length;
+              for (let i = 0; i < len; i++) {
+                if (listColorTemp[i].idColor === res.data.data.idColor) {
+                  listColorTemp[i] = res.data.data;
+                }
+              }
+              this.$store.commit("colorModule/SET_LIST_COLORS", listColorTemp);
+            }
+            this.resetForm();
           }
-          this.resetForm();
-        }
-      });
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Lưu màu thất bại !";
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 1000);
+            }
+          }
+        });
     },
   },
 };

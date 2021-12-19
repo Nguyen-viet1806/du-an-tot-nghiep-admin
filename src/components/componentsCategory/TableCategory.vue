@@ -127,7 +127,7 @@
           <thead>
             <tr>
               <th scope="col">STT</th>
-              <th scope="col">Tên Category</th>
+              <th scope="col">Tên thể loại</th>
               <th scope="col">Xóa/Khôi phục</th>
               <th scope="col"></th>
             </tr>

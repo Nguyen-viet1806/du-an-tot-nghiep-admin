@@ -1,6 +1,6 @@
 <template>
   <div class="color">
-    <h3>Color</h3>
+    <h3>Màu</h3>
     <form-color ref="FormColor" :listColors="listColors" />
 
     <table-color

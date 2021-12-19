@@ -134,6 +134,9 @@ export default {
 input {
   text-transform: none !important;
 }
+textarea {
+  text-transform: none !important;
+}
 p {
   margin: 0;
 }
