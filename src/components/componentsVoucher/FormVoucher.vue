@@ -63,7 +63,7 @@
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="exampleInputEmail1">Điều kiện áp dụng:</label>
+            <label for="exampleInputEmail1">Điều kiện áp dụng khi đơn hàng lớn hơn:</label>
             <input
               type="text"
               class="form-control"
@@ -130,8 +130,8 @@ export default {
       voucher: {
         idVoucher: null,
         nameVoucher: "",
-        discount: null,
-        condition: null,
+        discount: 0,
+        condition: 0,
         codeVoucher: null,
         descriptionVoucher: null,
         idStatus: null,
@@ -166,8 +166,8 @@ export default {
       this.voucher = {
         idVoucher: null,
         nameVoucher: "",
-        discount: null,
-        condition: null,
+        discount: 0,
+        condition: 0,
         codeVoucher: null,
         descriptionVoucher: null,
         idStatus: null,
@@ -208,10 +208,17 @@ export default {
         this.checkFormValidate = false;
         check= false
       }
-      if(this.voucher.discount < 0 && this.voucher.discount > 100){
+      if((this.voucher.discount <= 0 || this.voucher.discount > 100) && check){
         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Discount phải lớn hơn 0 và nhỏ hơn 100 !";
+        this.checkFormValidate = false;
+        check= false
+      }
+      if((this.voucher.condition <= 0) && check){
+        this.isErrCondition = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Điều kiện áp dụng phải lớn hơn 0 !";
         this.checkFormValidate = false;
         check= false
       }

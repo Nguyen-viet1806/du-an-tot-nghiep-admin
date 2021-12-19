@@ -224,14 +224,6 @@ export default {
         if (this.sale.dateEnd) {
           this.isErrDateEnd = false;
         }
-
-        if (
-          new Date(this.sale.dateEnd).valueOf() >=
-          new Date(this.sale.dateStart).valueOf()
-        ) {
-          this.isErrDateStart = false;
-          this.isErrDateEnd = false;
-        }
       },
       deep: true,
       immediate: true,
@@ -239,6 +231,12 @@ export default {
   },
   mounted() {},
   methods: {
+    getNowTime() {
+      let now = new Date();
+      return (
+        now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
+      );
+    },
     closeNotify() {
       this.isShowNotify = false;
     },
@@ -327,13 +325,33 @@ export default {
         check = false;
       }
       if (
-        new Date(this.sale.dateEnd).valueOf() <
-          new Date(this.sale.dateStart).valueOf() &&
+        new Date(this.sale.dateStart).valueOf() <
+        new Date(this.getNowTime()).valueOf() &&
         check
       ) {
         this.isErrDateStart = true;
         this.isShowNotify = true;
-        this.infoNotify = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc !";
+        this.infoNotify = "Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại !";
+        this.checkFormValidate = false;
+        check = false;
+      } else if (
+        new Date(this.sale.dateEnd).valueOf() <=
+        new Date(this.getNowTime()).valueOf() &&
+        check
+      ) {
+        this.isErrDateEnd = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Ngày kết thúc phải lớn ngày hiện tại !";
+        this.checkFormValidate = false;
+        check = false;
+      } else if (
+        new Date(this.sale.dateEnd).valueOf() <=
+          new Date(this.sale.dateStart).valueOf() &&
+        check
+      ) {
+        this.isErrDateEnd = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Ngày kết thúc phải lớn hơn ngày bắt đầu !";
         this.checkFormValidate = false;
         check = false;
       }
@@ -416,7 +434,7 @@ export default {
       this.$store.dispatch("saleModule/saveSale", payload).then((res) => {
         if (res) {
           this.isShowNotify = true;
-          this.infoNotify = "Thêm sản phẩm thành công!";
+          this.infoNotify = "Lưu sale thành công!";
           if (this.isShowNotify) {
             setTimeout(this.closeNotify, 1000);
           }

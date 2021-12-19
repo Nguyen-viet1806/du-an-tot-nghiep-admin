@@ -71,7 +71,7 @@
             <div class="form-switch">
               <input
                 class="form-check-input"
-                @change="updateStatus(Sale, $event)"
+                @change="showComfirm(Sale, $event)"
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
@@ -118,13 +118,20 @@
         </li>
       </ul>
     </nav>
+    <base-confirm
+      :isShowConfirm="isShowConfirm"
+      :infoConfirm="infoConfirm"
+      @closeConfirm="closeConfirm"
+      @oke="updateStatus"
+    />
   </div>
 </template>
 <script>
+import BaseConfirm from "@/components/common/BaseConfirm.vue";
 import { GIA_TRI_TRANG_THAI } from "@/constants/constants";
 export default {
   name: "TableSale",
-  components: {},
+  components: { BaseConfirm },
   props: {
     listSales: {
       type: Array,
@@ -133,6 +140,9 @@ export default {
   },
   data() {
     return {
+      saleTemp: null,
+      infoConfirm: "",
+      isShowConfirm: false,
       keyWordSearch: "",
       idTrangThai: -1,
       GIA_TRI_TRANG_THAI,
@@ -148,6 +158,23 @@ export default {
   },
   mounted() {},
   methods: {
+    closeConfirm() {
+      this.isShowConfirm = false;
+      this.infoConfirm = "";
+      this.saleTemp = null;
+      this.$emit("getListFollowPage");
+    },
+    showComfirm(Sale, event) {
+      if (Sale.isSale) {
+        this.infoConfirm =
+          "Đợt sale đang trong thời gian sale bạn có muốn xóa không ?";
+      } else {
+        this.infoConfirm = "Bạn có muốn xóa sale không ?";
+      }
+      this.isShowConfirm = true;
+      let checked = event.target.checked;
+      this.saleTemp = { ...Sale, isXoa: checked };
+    },
     getStt(index) {
       return this.pageable !== 0 ? index + this.pageable * 5 + 1 : index + 1;
     },
@@ -178,21 +205,37 @@ export default {
     showFormSale(Sale) {
       this.$emit("clickShowFormSale", Sale);
     },
-    updateStatus(Sale, event) {
-      let checked = event.target.checked;
+    updateStatus() {
+      let checked = this.saleTemp.isXoa;
       let payload = {};
       if (checked) {
         payload = {
-          idSale: Sale.idSale,
+          idSale: this.saleTemp.idSale,
           idStatus: this.GIA_TRI_TRANG_THAI.EXISTS,
         };
-        this.$store.dispatch("saleModule/deleteProductInSale", payload);
+        this.$store
+          .dispatch("saleModule/deleteProductInSale", payload)
+          .then((res) => {
+            if (res) {
+              this.isShowConfirm = false;
+              this.infoConfirm = "";
+              this.saleTemp = null;
+            }
+          });
       } else {
         payload = {
-          idSale: Sale.idSale,
+          idSale: this.saleTemp.idSale,
           idStatus: this.GIA_TRI_TRANG_THAI.DELETE,
         };
-        this.$store.dispatch("saleModule/deleteProductInSale", payload);
+        this.$store
+          .dispatch("saleModule/deleteProductInSale", payload)
+          .then((res) => {
+            if (res) {
+              this.isShowConfirm = false;
+              this.infoConfirm = "";
+              this.saleTemp = null;
+            }
+          });
       }
     },
   },

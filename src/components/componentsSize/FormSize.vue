@@ -22,7 +22,7 @@
                 aria-label="Default select example"
                 v-model="size.idCategory"
               >
-                <option value="-1">Chọn danh mục</option>
+                <option :value="-1">Chọn danh mục</option>
                 <option
                   v-for="CategoryParent in listCategoryParentExists"
                   :key="CategoryParent"
@@ -117,7 +117,7 @@ export default {
         if (this.size.nameSize !== "" || this.size.nameSize !== null) {
           this.isErrNameSize = false;
         }
-        if (this.size.idCategory !== -1) {
+        if (this.size.idCategory != -1) {
           this.isErrCategory = false;
         }
       },
@@ -141,7 +141,7 @@ export default {
       };
     },
     checkValidate() {
-      if (this.size.idCategory === -1) {
+      if (this.size.idCategory == -1) {
         this.isErrCategory = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";

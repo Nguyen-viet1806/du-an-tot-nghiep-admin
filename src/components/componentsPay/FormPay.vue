@@ -162,6 +162,7 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.dateSuccess"
+                  disabled
                 />
               </div>
               <div class="form-group">
@@ -169,6 +170,7 @@
                   >Voucher:</label
                 >
                 <input
+                  disabled
                   type="text"
                   class="form-control"
                   id="validationCustom01"
@@ -181,7 +183,6 @@
                 >
                 <input
                   type="number"
-                  min="1"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.transportFee"
@@ -194,22 +195,9 @@
                 >
                 <input
                   type="number"
-                  min="1"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.deposit"
-                />
-              </div>
-              <div class="form-group">
-                <label for="validationCustom01" class="form-label"
-                  >Số tiền còn lại:</label
-                >
-                <input
-                  type="number"
-                  min="1"
-                  class="form-control"
-                  id="validationCustom01"
-                  v-model="bill.payment"
                 />
               </div>
               <div class="form-group">
@@ -222,6 +210,19 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.total"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="validationCustom01" class="form-label"
+                  >Số tiền còn lại:</label
+                >
+                <input
+                  type="number"
+                  min="1"
+                  class="form-control"
+                  id="validationCustom01"
+                  v-model="bill.payment"
                   required
                 />
               </div>
@@ -292,7 +293,6 @@
                       class="input-quantity"
                       type="number"
                       min="1"
-                      :max="bill.productChildResponseDTO.quantity"
                       v-model="bill.quantity"
                       @change="checkQuantity(index, $event)"
                       required
@@ -331,9 +331,8 @@
                       class="input-quantity"
                       type="number"
                       min="1"
-                      :max="bill.comboResponseDTO.quantity"
                       v-model="bill.quantity"
-                      @change="checkQuantityCombo(index,$event)"
+                      @change="checkQuantityCombo(index, $event)"
                       required
                     />
                   </td>
@@ -437,7 +436,9 @@ export default {
       listDistrict: [],
       listCommune: [],
       listProductInBill: [],
+      listProductInBillTemp: [],
       listComboInBill: [],
+      listComboInBillTemp: [],
       bill: {
         idBill: null,
         idUser: null,
@@ -466,7 +467,11 @@ export default {
       },
     };
   },
-  computed: {},
+  computed: {
+    isShow() {
+      return this.$route.query.isShow;
+    },
+  },
   watch: {
     isSuDungDiaChiCuaHang() {
       if (this.isSuDungDiaChiCuaHang) {
@@ -608,32 +613,65 @@ export default {
       this.getListProduct();
     },
     addProductInBill(Product) {
+      let listCheckProduct = this.listProductInBillTemp.filter(
+        (item) =>
+          item.productChildResponseDTO.idProductDetail ==
+          Product.idProductDetail
+      );
       this.isShowNotifyV = false;
       if (Product.quantity < 1) {
-        this.isShowNotify = true;
-        this.infoNotify = `Sản phẩm đã hết`;
-        if (this.isShowNotify) {
-          setTimeout(this.closeNotify, 1000);
+        if (listCheckProduct.length == 0) {
+          this.isShowNotify = true;
+          this.infoNotify = `Sản phẩm đã hết`;
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
+          return;
         }
-        return;
       }
       for (let i = 0; i < this.listProductInBill.length; i++) {
         if (
           this.listProductInBill[i].productChildResponseDTO.idProductDetail ===
           Product.idProductDetail
         ) {
+          if (
+            this.listProductInBill[i].productChildResponseDTO.quantity ==
+            this.listProductInBill[i].quantity
+          ) {
+            this.isShowNotify = true;
+            this.infoNotify = `Sản phẩm không đủ số lượng để tăng số lượng mua !`;
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 2000);
+            }
+            return;
+          }
           this.listProductInBill[i].quantity += 1;
           return;
         }
       }
-      this.listProductInBill.push({
-        idBill: this.bill.idBill,
-        idBillProduct: null,
-        idStatus: 2,
-        price: Product.price,
-        productChildResponseDTO: { ...Product },
-        quantity: 1,
-      });
+
+      if (listCheckProduct.length == 0) {
+        this.listProductInBill.push({
+          idBill: this.bill.idBill,
+          idBillProduct: null,
+          idStatus: 2,
+          price: Product.price,
+          productChildResponseDTO: { ...Product },
+          quantity: 1,
+        });
+      } else {
+        this.listProductInBill.push({
+          idBill: listCheckProduct[0].idBill,
+          idBillProduct: null,
+          idStatus: 2,
+          price: Product.price,
+          productChildResponseDTO: {
+            ...Product,
+            quantity: Product.quantity + listCheckProduct[0].quantity,
+          },
+          quantity: listCheckProduct[0].quantity,
+        });
+      }
     },
     deleteProduct(index) {
       this.listProductInBill.splice(index, 1);
@@ -645,31 +683,58 @@ export default {
       this.isShowNotifyV1 = true;
     },
     addComboInBill(Combo) {
+      let listCheckCombo = this.listComboInBillTemp.filter(
+        (item) => item.comboResponseDTO.idCombo == Combo.idCombo
+      );
       this.isShowNotifyV1 = false;
       if (Combo.quantity < 1) {
-        this.isShowNotify = true;
-        this.infoNotify = `Combo đã hết`;
-        if (this.isShowNotify) {
-          setTimeout(this.closeNotify, 1000);
+        if (listCheckCombo.length == 0) {
+          this.isShowNotify = true;
+          this.infoNotify = `Combo đã hết`;
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
+          return;
         }
-        return;
       }
       for (let i = 0; i < this.listComboInBill.length; i++) {
         if (
           this.listComboInBill[i].comboResponseDTO.idCombo === Combo.idCombo
         ) {
+          if (
+            this.listComboInBill[i].comboResponseDTO.quantity ==
+            this.listComboInBill[i].quantity
+          ) {
+            this.isShowNotify = true;
+            this.infoNotify = `Combo không đủ số lượng để tăng số lượng mua !`;
+            if (this.isShowNotify) {
+              setTimeout(this.closeNotify, 2000);
+            }
+            return;
+          }
           this.listComboInBill[i].quantity += 1;
           return;
         }
       }
-      this.listComboInBill.push({
-        idBill: this.bill.idBill,
-        idBillProduct: null,
-        idStatus: 2,
-        price: Combo.price,
-        comboResponseDTO: { ...Combo },
-        quantity: 1,
-      });
+      if (listCheckCombo.length == 0) {
+        this.listComboInBill.push({
+          idBill: this.bill.idBill,
+          idBillProduct: null,
+          idStatus: 2,
+          price: Combo.price,
+          comboResponseDTO: { ...Combo },
+          quantity: 1,
+        });
+      } else {
+        this.listComboInBill.push({
+          idBill: listCheckCombo[0].idBill,
+          idBillProduct: null,
+          idStatus: 2,
+          price: Combo.price,
+          comboResponseDTO: { ...Combo,quantity: Combo.quantity + listCheckCombo[0].quantity, },
+          quantity: listCheckCombo[0].quantity,
+        });
+      }
     },
     getListProduct() {
       this.$nextTick(() => {
@@ -697,9 +762,12 @@ export default {
       return index + 1;
     },
     resetForm() {
+      this.$router.push({ path: this.$route.path, query: { isShow: false } });
       this.isSuDungDiaChiCuaHang = false;
       this.listProductInBill = [];
+      this.listProductInBillTemp = [];
       this.listComboInBill = [];
+      this.listComboInBillTemp = [];
       this.bill = {
         idBill: null,
         idUser: null,
@@ -782,7 +850,7 @@ export default {
       };
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {
-          this.resetForm()
+          this.resetForm();
           this.$emit("getListBill");
           this.isShowNotify = true;
           this.infoNotify = "Lưu bill thành công";

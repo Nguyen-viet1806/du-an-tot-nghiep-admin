@@ -27,6 +27,7 @@ export default {
       this.getListBill();
     },
     showBill(bill) {
+      this.$router.push({ path: this.$route.path, query: { isShow: true } });
       let billTemp = {
         idBill: bill.idBill,
         idUser: bill.userResponseDTO.idUser,
@@ -60,6 +61,7 @@ export default {
       };
       this.$refs["FormBill"].bill = billTemp;
       this.getListProductInBill(bill);
+      this.getListComboInBill(bill);
     },
     getListProductInBill(bill) {
       let payload = {
@@ -71,7 +73,51 @@ export default {
         .dispatch("billModule/getDanhSachProductInBill", payload)
         .then((res) => {
           if (res) {
-            this.$refs["FormBill"].listProductInBill = res.data.data;
+            this.$refs["FormBill"].listProductInBill = []
+            res.data.data.forEach((item) => {
+              this.$refs["FormBill"].listProductInBill.push({
+                idBill: item.idBill,
+                idBillProduct: item.idBillProduct,
+                idStatus: item.idStatus,
+                price: item.price,
+                productChildResponseDTO: {
+                  ...item.productChildResponseDTO,
+                  quantity:
+                    item.quantity + item.productChildResponseDTO.quantity,
+                },
+                quantity: item.quantity,
+              });
+            });
+             this.$refs["FormBill"].listProductInBillTemp = res.data.data;
+          }
+        });
+    },
+        getListComboInBill(bill) {
+      let payload = {
+        page: 0,
+        limit: 1000000,
+        idBill: bill.idBill,
+      };
+      this.$store
+        .dispatch("billModule/getDanhSachComboInBill", payload)
+        .then((res) => {
+          if (res) {
+            this.$refs["FormBill"].listComboInBill = []
+            res.data.data.forEach((item) => {
+              this.$refs["FormBill"].listComboInBill.push({
+                idBill: item.idBill,
+                idBillProduct: item.idBillProduct,
+                idStatus: item.idStatus,
+                price: item.price,
+                comboResponseDTO: {
+                  ...item.comboResponseDTO,
+                  quantity:
+                    item.quantity + item.comboResponseDTO.quantity,
+                },
+                quantity: item.quantity,
+              });
+            });
+            this.$refs["FormBill"].listComboInBillTemp = res.data.data;
           }
         });
     },
