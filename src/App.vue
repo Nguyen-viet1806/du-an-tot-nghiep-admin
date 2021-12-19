@@ -128,6 +128,9 @@ export default {
   font-family: "Nunito", sans-serif;
   font-family: "Space Mono", monospace;
 }
+input {
+  text-transform: none !important;
+}
 p {
   margin: 0;
 }

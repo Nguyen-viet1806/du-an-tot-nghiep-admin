@@ -85,7 +85,7 @@
                 <div class="col-md-12">
                   <label class="labels">Số điện thoại</label
                   ><input
-                    type="text"
+                    type="number"
                     class="form-control"
                     placeholder="Số điện thoại"
                     v-model="user.phoneNumber"
@@ -95,11 +95,12 @@
                 <div class="col-md-12">
                   <label class="labels">Email</label
                   ><input
-                    type="text"
+                    type="email"
                     class="form-control"
                     placeholder="Email"
                     v-model="user.email"
                     :disabled="!isCoTheTao"
+                    required
                   />
                 </div>
                 <div class="col-md-12" v-if="isCoTheTao">
@@ -260,6 +261,7 @@
                   class="form-control"
                   placeholder="Mật khẩu mới"
                   v-model="passMoi"
+                  minlength="6"
                   required
                 />
               </div>

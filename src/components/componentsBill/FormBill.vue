@@ -31,7 +31,7 @@
                 >
                 <input
                   v-model="bill.phoneUser"
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="validationCustom01"
                   required
@@ -43,7 +43,7 @@
                 >
                 <input
                   v-model="bill.emailUser"
-                  type="text"
+                  type="email"
                   class="form-control"
                   id="validationCustom01"
                   required
@@ -187,7 +187,7 @@
                   >Phí ship:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.transportFee"
@@ -200,7 +200,7 @@
                   >Đặt cọc:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.deposit"
@@ -211,7 +211,7 @@
                   >Số tiền còn lại:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.payment"
@@ -223,7 +223,7 @@
                   >Tổng tiền:</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.total"

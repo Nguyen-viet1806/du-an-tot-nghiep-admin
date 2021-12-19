@@ -26,6 +26,7 @@
             <input
               v-model="combo.price"
               type="number"
+              min="1"
               class="form-control"
               required
             />
@@ -36,6 +37,7 @@
               v-model="combo.quantity"
               type="number"
               class="form-control"
+              min="1"
               required
             />
           </div>

@@ -28,11 +28,17 @@
                 type="date"
                 class="form-control"
                 v-model="sale.dateStart"
+                :class="{ active: isErrDateStart }"
               />
             </div>
             <div class="form-group">
               <label>Ngày kết thúc:</label>
-              <input type="date" class="form-control" v-model="sale.dateEnd" />
+              <input
+                type="date"
+                class="form-control"
+                v-model="sale.dateEnd"
+                :class="{ active: isErrDateEnd }"
+              />
             </div>
 
             <div class="form-group">
@@ -177,6 +183,8 @@ export default {
       isShowNotifyV: false,
       isErrNameSale: false,
       isErrDiscount: false,
+      isErrDateStart: false,
+      isErrDateEnd: false,
       checkFormValidate: false,
       infoNotify: "",
       listProductDetailTemp: {
@@ -209,6 +217,20 @@ export default {
         }
         if (this.sale.discount > 0 && this.sale.discount < 100) {
           this.isErrDiscount = false;
+        }
+        if (this.sale.dateStart) {
+          this.isErrDateStart = false;
+        }
+        if (this.sale.dateEnd) {
+          this.isErrDateEnd = false;
+        }
+
+        if (
+          new Date(this.sale.dateEnd).valueOf() >=
+          new Date(this.sale.dateStart).valueOf()
+        ) {
+          this.isErrDateStart = false;
+          this.isErrDateEnd = false;
         }
       },
       deep: true,
@@ -290,7 +312,34 @@ export default {
         this.checkFormValidate = false;
         check = false;
       }
+      if (this.sale.dateStart == null) {
+        this.isErrDateStart = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+        check = false;
+      }
+      if (this.sale.dateEnd == null) {
+        this.isErrDateEnd = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.checkFormValidate = false;
+        check = false;
+      }
+      if (
+        new Date(this.sale.dateEnd).valueOf() <
+          new Date(this.sale.dateStart).valueOf() &&
+        check
+      ) {
+        this.isErrDateStart = true;
+        this.isShowNotify = true;
+        this.infoNotify = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc !";
+        this.checkFormValidate = false;
+        check = false;
+      }
       if (check) {
+        this.isErrDateStart = false;
+        this.isErrDateEnd = false;
         this.isErrNameSale = false;
         this.isErrDiscount = false;
         this.isShowNotify = false;
@@ -310,10 +359,10 @@ export default {
             .idProductDetail === Product.idProductDetail
         ) {
           this.isShowNotify = true;
-        this.infoNotify = "Sản phẩm này đã tồn tại!";
-        if (this.isShowNotify) {
-          setTimeout(this.closeNotify, 1000);
-        }
+          this.infoNotify = "Sản phẩm này đã tồn tại!";
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
           return;
         }
       }
@@ -366,11 +415,11 @@ export default {
       };
       this.$store.dispatch("saleModule/saveSale", payload).then((res) => {
         if (res) {
-        this.isShowNotify = true;
-        this.infoNotify = "Thêm sản phẩm thành công!";
-        if (this.isShowNotify) {
-          setTimeout(this.closeNotify, 1000);
-        }
+          this.isShowNotify = true;
+          this.infoNotify = "Thêm sản phẩm thành công!";
+          if (this.isShowNotify) {
+            setTimeout(this.closeNotify, 1000);
+          }
           this.$emit("getListSale");
           this.resetForm();
         }

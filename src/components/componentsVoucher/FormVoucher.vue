@@ -27,7 +27,7 @@
             <div class="form-group">
               <label for="exampleInputEmail1">Discount:</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 :class="{ active: isErrDiscount}"
                 id="exampleInputEmail1"
@@ -77,9 +77,9 @@
             <input
               type="text"
               class="form-control"
-              :class="{ active: isErrCodeVoucher}"
               id="exampleInputEmail1"
               v-model="voucher.codeVoucher"
+              disabled
             />
           </div>
         </div>
@@ -151,9 +151,6 @@ export default {
         if (this.voucher.condition !== "" && this.voucher.condition != null) {
           this.isErrCondition = false;
         }
-        if (this.voucher.codeVoucher !== "" && this.voucher.codeVoucher != null) {
-          this.isErrCodeVoucher = false;
-        }
       },
       deep: true,
       immediate: true,
@@ -165,7 +162,6 @@ export default {
       this.isErrNameVoucher = false;
       this.isErrDiscount = false;
       this.isErrCondition = false;
-      this.isErrCodeVoucher = false;
       this.isShowNotify = false;
       this.voucher = {
         idVoucher: null,
@@ -194,7 +190,7 @@ export default {
       }
       if (
         this.voucher.discount === "" ||
-        this.voucher.discount === null
+        this.voucher.discount === null 
       ) {
         this.isErrDiscount = true;
         this.isShowNotify = true;
@@ -212,13 +208,10 @@ export default {
         this.checkFormValidate = false;
         check= false
       }
-       if (
-        this.voucher.codeVoucher === "" ||
-        this.voucher.codeVoucher === null
-      ) {
-        this.isErrCodeVoucher = true;
+      if(this.voucher.discount < 0 && this.voucher.discount > 100){
+        this.isErrDiscount = true;
         this.isShowNotify = true;
-        this.infoNotify = "Không để trống các trường màu đỏ !";
+        this.infoNotify = "Discount phải lớn hơn 0 và nhỏ hơn 100 !";
         this.checkFormValidate = false;
         check= false
       }

@@ -369,6 +369,7 @@
                         product.detailInProduct.listDetailColorRequest[index]
                           .listSizeInColor[i].price
                       "
+                      @change="test(index, i)"
                       :class="{
                         active:
                           (product.detailInProduct.listDetailColorRequest[index]
@@ -595,8 +596,8 @@ export default {
     },
     product: {
       handler() {
-        if(this.product.nameProduct == " "){
-          this.product.nameProduct = ""
+        if (this.product.nameProduct == " ") {
+          this.product.nameProduct = "";
         }
         if (this.product.nameProduct !== "") {
           this.isErrNameProduct = false;
@@ -671,6 +672,12 @@ export default {
     this.$router.push({ path: this.$route.path, query: { isShow: false } });
   },
   methods: {
+    test(index, i) {
+      this.product.detailInProduct.listDetailColorRequest[index]
+        .listSizeInColor[i].price.indexOf("-") > 0
+        
+        
+    },
     resetForm() {
       this.isClickLuu = false;
       this.$router.push({ path: this.$route.path, query: { isShow: false } });
@@ -1070,7 +1077,7 @@ export default {
         .then((res) => {
           if (res) {
             this.isShowNotify = true;
-            this.infoNotify = "Tạo sản phẩm thành công !! !";
+            this.infoNotify = "Lưu sản phẩm thành công !! !";
             setTimeout(() => {
               this.isShowNotify = false;
               this.infoNotify = "";
