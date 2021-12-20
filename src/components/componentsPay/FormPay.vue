@@ -300,7 +300,9 @@
                     {{ bill.productChildResponseDTO.quantity }}
                   </td>
 
-                  <td>{{ new Intl.NumberFormat("de-DE").format(bill.price)  }}đ</td>
+                  <td>
+                    {{ new Intl.NumberFormat("de-DE").format(bill.price) }}đ
+                  </td>
                   <td>
                     <div class="btn btn-danger" @click="deleteProduct(index)">
                       Xóa
@@ -337,7 +339,9 @@
                   <td>
                     {{ bill.comboResponseDTO.quantity }}
                   </td>
-                  <td>{{ new Intl.NumberFormat("de-DE").format(bill.price)  }}đ</td>
+                  <td>
+                    {{ new Intl.NumberFormat("de-DE").format(bill.price) }}đ
+                  </td>
                   <td>
                     <div class="btn btn-danger" @click="deleteCombo(index)">
                       Xóa
@@ -406,19 +410,28 @@
         </div>
       </div>
     </form>
+    <base-confirm
+      :isShowConfirm="isShowConfirm"
+      :infoConfirm="infoConfirm"
+      @closeConfirm="closeConfirm"
+      @oke="saveBill"
+    />
   </div>
 </template>
 
 <script>
+import BaseConfirm from "@/components/common/BaseConfirm.vue";
 import TableProductPay from "@/components/componentsPay/TableProductPay.vue";
 import TableComboPay from "@/components/componentsPay/TableComboPay.vue";
 import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 export default {
   name: "Formpay",
-  components: { TableProductPay, TableComboPay },
+  components: { TableProductPay, TableComboPay, BaseConfirm },
   props: {},
   data() {
     return {
+      infoConfirm: "",
+      isShowConfirm: false,
       isSuDungDiaChiCuaHang: false,
       isNhanVienTaoHoaDon: true,
       pageable: 0,
@@ -614,6 +627,23 @@ export default {
     this.initData();
   },
   methods: {
+    closeConfirm() {
+      this.isShowConfirm = false;
+      this.infoConfirm = "";
+    },
+    showConfirmSave() {
+      if (this.bill.idStatus == 10) {
+        this.isShowConfirm = true;
+        this.infoConfirm =
+          "Khi bạn đổi trạng thái đơn hàng là hủy bạn sẽ không thể sửa nữa bạn có muốn lưu không ?";
+      } else if (this.bill.idStatus == 9) {
+        this.isShowConfirm = true;
+        this.infoConfirm =
+          "Khi bạn đổi trạng thái đơn hàng là đã thanh toán bạn sẽ không thể sửa nữa bạn có muốn lưu không ?";
+      } else {
+        this.saveBill();
+      }
+    },
     checkQuantity(index, e) {
       if (Number(e.target.value) < 1) {
         this.isShowNotify = true;
@@ -905,6 +935,7 @@ export default {
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {
           this.resetForm();
+          this.closeConfirm();
           this.$emit("getListBill");
           this.isShowNotify = true;
           this.infoNotify = "Lưu bill thành công";

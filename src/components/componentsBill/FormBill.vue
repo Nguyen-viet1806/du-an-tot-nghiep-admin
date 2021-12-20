@@ -1,6 +1,6 @@
 <template>
   <div class="form-tpf">
-    <form @submit.prevent="saveBill">
+    <form @submit.prevent="showConfirmSave">
       <div class="row">
         <div class="col mt-4">
           <div class="row">
@@ -335,7 +335,7 @@
                   </td>
 
                   <td>
-                    {{new Intl.NumberFormat("de-DE").format(bill.price)  }}đ
+                    {{ new Intl.NumberFormat("de-DE").format(bill.price) }}đ
                     <p v-if="bill.productChildResponseDTO.listTag?.includes(1)">
                       <span class="badge bg-warning text-dark">Đang sale</span>
                     </p>
@@ -376,7 +376,9 @@
                   <td>
                     {{ bill.comboResponseDTO.quantity }}
                   </td>
-                  <td>{{ new Intl.NumberFormat("de-DE").format(bill.price)  }}đ</td>
+                  <td>
+                    {{ new Intl.NumberFormat("de-DE").format(bill.price) }}đ
+                  </td>
                   <td>
                     <div class="btn btn-danger" @click="deleteCombo(index)">
                       Xóa
@@ -445,19 +447,28 @@
         </div>
       </div>
     </form>
+    <base-confirm
+      :isShowConfirm="isShowConfirm"
+      :infoConfirm="infoConfirm"
+      @closeConfirm="closeConfirm"
+      @oke="saveBill"
+    />
   </div>
 </template>
 
 <script>
+import BaseConfirm from "@/components/common/BaseConfirm.vue";
 import TableProduct from "@/components/componentsBill/TableProduct.vue";
 import TableCombo from "@/components/componentsBill/TableCombo.vue";
 import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 export default {
   name: "FormBill",
-  components: { TableProduct, TableCombo },
+  components: { TableProduct, TableCombo, BaseConfirm },
   props: {},
   data() {
     return {
+      infoConfirm: "",
+      isShowConfirm: false,
       pageable: 0,
       DO_MAIN,
       GIA_TRI_TRANG_THAI,
@@ -616,6 +627,10 @@ export default {
     this.initData();
   },
   methods: {
+    closeConfirm() {
+      this.isShowConfirm = false;
+      this.infoConfirm = "";
+    },
     checkQuantity(index, e) {
       if (Number(e.target.value) < 1) {
         this.isShowNotify = true;
@@ -856,6 +871,19 @@ export default {
         }
       });
     },
+    showConfirmSave() {
+      if (this.bill.idStatus == 10) {
+        this.isShowConfirm = true;
+        this.infoConfirm =
+          "Khi bạn đổi trạng thái đơn hàng là hủy bạn sẽ không thể sửa nữa bạn có muốn lưu không ?";
+      } else if (this.bill.idStatus == 9) {
+        this.isShowConfirm = true;
+        this.infoConfirm =
+          "Khi bạn đổi trạng thái đơn hàng là đã thanh toán bạn sẽ không thể sửa nữa bạn có muốn lưu không ?";
+      } else {
+        this.saveBill();
+      }
+    },
     saveBill() {
       if (
         this.listProductInBill.length == 0 &&
@@ -900,6 +928,7 @@ export default {
       this.$store.dispatch("billModule/saveBill", payload).then((res) => {
         if (res) {
           this.resetForm();
+          this.closeConfirm();
           this.$emit("getListBill");
           this.isShowNotify = true;
           this.infoNotify = "Lưu bill thành công";
