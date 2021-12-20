@@ -49,6 +49,9 @@
               class="form-control"
             />
           </div>
+          <p class="lable-img"><label>Ảnh chính:</label>
+          <label>Ảnh phụ 1:</label>
+          <label>Ảnh phụ 2:</label></p>
           <div class="img-combo">
             <div class="img-combo-unit mt-2">
               <div>
@@ -72,6 +75,7 @@
                 />
               </div>
             </div>
+
             <div class="img-combo-unit mt-2">
               <div>
                 <img
@@ -94,6 +98,7 @@
                 />
               </div>
             </div>
+
             <div class="img-combo-unit mt-2">
               <div>
                 <img
@@ -381,7 +386,11 @@ export default {
       this.isShowNotify = false;
     },
     async saveCombo() {
-      if (this.combo.frontPhoto == null || this.combo.frontPhoto == null || this.combo.coverPhoto == null) {
+      if (
+        this.combo.frontPhoto == null ||
+        this.combo.frontPhoto == null ||
+        this.combo.coverPhoto == null
+      ) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn chưa chọn đủ ảnh";
         if (this.isShowNotify) {
@@ -521,5 +530,12 @@ export default {
 }
 .table-wrapper-scroll-y {
   display: block;
+}
+.lable-img{
+  display: flex;
+  margin-top: 10px;
+  label {
+    width: 28%;
+  }
 }
 </style>
