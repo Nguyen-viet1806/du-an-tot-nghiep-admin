@@ -264,7 +264,7 @@
                   <th scope="col">Tên</th>
                   <th scope="col">Size,Màu</th>
                   <th scope="col">Số lượng</th>
-                  <th scope="col">Hàng còn</th>
+                  <th scope="col">Có thể mua</th>
                   <th scope="col">Giá</th>
                   <th scope="col">Thao tác</th>
                 </tr>
@@ -300,7 +300,7 @@
                     {{ bill.productChildResponseDTO.quantity }}
                   </td>
 
-                  <td>{{ bill.price }}</td>
+                  <td>{{ new Intl.NumberFormat("de-DE").format(bill.price)  }}đ</td>
                   <td>
                     <div class="btn btn-danger" @click="deleteProduct(index)">
                       Xóa
@@ -337,7 +337,7 @@
                   <td>
                     {{ bill.comboResponseDTO.quantity }}
                   </td>
-                  <td>{{ bill.price }}</td>
+                  <td>{{ new Intl.NumberFormat("de-DE").format(bill.price)  }}đ</td>
                   <td>
                     <div class="btn btn-danger" @click="deleteCombo(index)">
                       Xóa

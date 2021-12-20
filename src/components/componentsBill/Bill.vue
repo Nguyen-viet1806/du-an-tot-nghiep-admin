@@ -68,20 +68,25 @@ export default {
         .then((res) => {
           if (res) {
             this.$refs["FormBill"].listProductInBill = [];
-            res.data.data.forEach((item) => {
-              this.$refs["FormBill"].listProductInBill.push({
-                idBill: item.idBill,
-                idBillProduct: item.idBillProduct,
-                idStatus: item.idStatus,
-                price: item.price,
-                productChildResponseDTO: {
-                  ...item.productChildResponseDTO,
-                  quantity:
-                    item.quantity + item.productChildResponseDTO.quantity,
-                },
-                quantity: item.quantity,
+            if (bill.idStatus == 9 || bill.idStatus == 10) {
+              this.$refs["FormBill"].listProductInBill = res.data.data;
+            } else {
+              res.data.data.forEach((item) => {
+                this.$refs["FormBill"].listProductInBill.push({
+                  idBill: item.idBill,
+                  idBillProduct: item.idBillProduct,
+                  idStatus: item.idStatus,
+                  price: item.price,
+                  productChildResponseDTO: {
+                    ...item.productChildResponseDTO,
+                    quantity:
+                      item.quantity + item.productChildResponseDTO.quantity,
+                  },
+                  quantity: item.quantity,
+                });
               });
-            });
+            }
+
             this.$refs["FormBill"].listProductInBillTemp = res.data.data;
           }
         });
@@ -97,19 +102,23 @@ export default {
         .then((res) => {
           if (res) {
             this.$refs["FormBill"].listComboInBill = [];
-            res.data.data.forEach((item) => {
-              this.$refs["FormBill"].listComboInBill.push({
-                idBill: item.idBill,
-                idBillProduct: item.idBillProduct,
-                idStatus: item.idStatus,
-                price: item.price,
-                comboResponseDTO: {
-                  ...item.comboResponseDTO,
-                  quantity: item.quantity + item.comboResponseDTO.quantity,
-                },
-                quantity: item.quantity,
+            if (bill.idStatus == 9 || bill.idStatus == 10) {
+              this.$refs["FormBill"].listComboInBill = res.data.data;
+            } else {
+              res.data.data.forEach((item) => {
+                this.$refs["FormBill"].listComboInBill.push({
+                  idBill: item.idBill,
+                  idBillProduct: item.idBillProduct,
+                  idStatus: item.idStatus,
+                  price: item.price,
+                  comboResponseDTO: {
+                    ...item.comboResponseDTO,
+                    quantity: item.quantity + item.comboResponseDTO.quantity,
+                  },
+                  quantity: item.quantity,
+                });
               });
-            });
+            }
             this.$refs["FormBill"].listComboInBillTemp = res.data.data;
           }
         });
