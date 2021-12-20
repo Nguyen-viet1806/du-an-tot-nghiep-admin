@@ -9,6 +9,7 @@
         <div class="login">
           <div class="form-group">
             <input
+            type="email"
               placeholder="Email"
               class="form-control textLogin"
               id="exampleInputEmail1"
@@ -19,7 +20,7 @@
             />
           </div>
         </div>
-        <div class="form-group mt-4">
+        <div class="form-group mt-4" v-if="!isReset">
           <input
             type="password"
             placeholder="Pass"
@@ -31,13 +32,15 @@
             required
           />
         </div>
+        <p @click="onClickResetPass" class="text-reset-pass"> {{ !isReset ? "Quên mật khẩu ?" : "Đăng nhập" }}</p>
         <button type="submit">
           <span></span>
           <span></span>
           <span></span>
           <span></span>
-          Đăng nhập
+          {{ isReset ? "Gửi mật khẩu về email" : "Đăng nhập" }}
         </button>
+        
       </form>
     </div>
   </div>
@@ -51,7 +54,7 @@ export default {
   props: {},
   data() {
     return {
-      
+      isReset: false,
       isLogin: true,
       email: "",
       pass: "",
@@ -61,6 +64,9 @@ export default {
   watch: {},
   mounted() {},
   methods: {
+    onClickResetPass() {
+      this.isReset = !this.isReset;
+    },
     login() {
       this.$emit("clickLogin", this.email, this.pass);
     },
@@ -263,5 +269,10 @@ input:focus {
 }
 input::placeholder {
   color: #fff;
+}
+.text-reset-pass{
+  margin-top: 10px;
+  color: red;
+  cursor: pointer;
 }
 </style>

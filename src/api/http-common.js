@@ -1,5 +1,6 @@
 import axios from "axios";
 var DOMAIN = "http://localhost:8080";
+var DOMAINMess = "http://192.168.31.102:8898";
 // import { CAC_LOAI_LOI,MESS } from "@/constants/constants";
 import router from "@/router/index.js";
 function callApiLayLaiToken() {
@@ -14,6 +15,10 @@ const HTTP = axios.create({
     refresh_token: `${localStorage.getItem("refresh_token")}`,
     "Access-Control-Allow-Origin": "*",
   }
+});
+
+const HTTPMess = axios.create({
+  baseURL: `${DOMAINMess}`,
 });
 
 HTTP.interceptors.response.use(
@@ -60,4 +65,4 @@ HTTP.interceptors.response.use(
     });
   }
 );
-export { HTTP };
+export { HTTP, HTTPMess };

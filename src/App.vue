@@ -18,7 +18,7 @@
           </div>
         </transition>
       </div>
-      <login @clickLogin="login" />
+      <login ref="Login" @clickLogin="login" />
     </template>
     <template v-if="islogin">
       <navbar-top @testLogin="testLogin" />
@@ -73,43 +73,63 @@ export default {
       }
     },
     login(emailg, passg) {
-      this.$store
-        .dispatch("loginRegisterModule/Login", {
-          username: emailg,
-          password: passg,
-        })
-        .then((res) => {
-          if (res) {
-            if (res.data.idRole == 3) {
+      if (this.$refs["Login"].isReset) {
+        let payload = {
+          email: emailg,
+        };
+        this.$store
+          .dispatch("loginRegisterModule/resetPass", payload)
+          .then((res) => {
+            if (res) {
               this.isShowNotify = true;
-              this.infoNotify = "Bạn không có quyền";
-            } else {
+              this.infoNotify = "Gửi thành công!";
+            }
+          })
+          .catch((err) => {
+            if (err) {
               this.isShowNotify = true;
-              this.infoNotify = "Đăng nhập thành công";
-              localStorage.setItem("token", res.data.access_token);
-              localStorage.setItem("refresh_token", res.data.refresh_token);
-              localStorage.setItem("UserInfo", JSON.stringify(res.data));
-              HTTP.defaults.headers["Token"] = localStorage.getItem("token");
-              HTTP.defaults.headers["refresh_token"] =
-                localStorage.getItem("refresh_token");
+              this.infoNotify = "Tài khoản không tồn tại!";
+            }
+          });
+      } else {
+        this.$store
+          .dispatch("loginRegisterModule/Login", {
+            username: emailg,
+            password: passg,
+          })
+          .then((res) => {
+            if (res) {
+              if (res.data.idRole == 3) {
+                this.isShowNotify = true;
+                this.infoNotify = "Bạn không có quyền";
+              } else {
+                this.isShowNotify = true;
+                this.infoNotify = "Đăng nhập thành công";
+                localStorage.setItem("token", res.data.access_token);
+                localStorage.setItem("refresh_token", res.data.refresh_token);
+                localStorage.setItem("UserInfo", JSON.stringify(res.data));
+                HTTP.defaults.headers["Token"] = localStorage.getItem("token");
+                HTTP.defaults.headers["refresh_token"] =
+                  localStorage.getItem("refresh_token");
+                if (this.isShowNotify) {
+                  setTimeout(this.closeNotify, 1000);
+                }
+                setTimeout(() => {
+                  (this.checkLogin = false), (this.islogin = true);
+                }, 1500);
+              }
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              this.isShowNotify = true;
+              this.infoNotify = "Sai tài khoản hoặc mật khẩu!!!";
               if (this.isShowNotify) {
                 setTimeout(this.closeNotify, 1000);
               }
-              setTimeout(() => {
-                (this.checkLogin = false), (this.islogin = true);
-              }, 1500);
             }
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            this.isShowNotify = true;
-            this.infoNotify = "Sai tài khoản hoặc mật khẩu!!!";
-            if (this.isShowNotify) {
-              setTimeout(this.closeNotify, 1000);
-            }
-          }
-        });
+          });
+      }
     },
     closeNotify() {
       this.isShowNotify = false;

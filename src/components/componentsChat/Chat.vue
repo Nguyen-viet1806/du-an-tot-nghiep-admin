@@ -1,6 +1,6 @@
 <template>
   <div class="form-tpf">
-    <!-- <div class="bchat"><embed src="http://localhost:3000/" /></div> -->
+    <div class="bchat"><embed src="http://localhost:8998/home" /></div>
   </div>
 </template>
 

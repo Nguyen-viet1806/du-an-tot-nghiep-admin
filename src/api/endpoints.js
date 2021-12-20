@@ -98,4 +98,8 @@ export default {
   CHANGE_PASSWORD: "/api/webtpf/profile/changepassword",
   RESET_PASSWORD: "/api/webtpf/profile/getnewpassword",
   UPDATE_PROFILE: "/api/webtpf/updateprofile",
+
+  UPLOAD_IMG_MESS: "/api/upload",
+  SIGN_ACC_MESS: "/api/user/newUser",
+  UPDATE_PROFILE_MESS: "/api/user/updateUser/",
 };

@@ -116,7 +116,7 @@
                     required
                   />
                 </div>
-                 <p class="laAdmin" v-if="isCoTheTao">
+                <p class="laAdmin" v-if="isCoTheTao">
                   <input type="checkbox" v-model="isAdmin" /> Admin
                 </p>
                 <h6 class="mt-5">Địa chỉ</h6>
@@ -196,7 +196,6 @@
                     />
                   </div>
                 </div>
-               
               </div>
 
               <div class="mt-5 text-center">
@@ -338,6 +337,7 @@ export default {
         idGender: "",
         idAddress: null,
         imageUser: "",
+        idStatus: 2,
         addressRequestDTO: {
           idAddress: null,
           idProvince: "",
@@ -419,6 +419,9 @@ export default {
       this.getListTinh();
       this.getInfoUser();
     },
+    closeNotify(){
+        this.isShowNotify = false
+    },
     changePassword() {
       if (this.passMoi != this.passMoiXacNhan) {
         this.isShowNotify = true;
@@ -462,6 +465,8 @@ export default {
     },
     resetForm() {
       this.isCoTheTao = true;
+      this.passWordTao = "";
+      this.isAdmin = false;
       this.user = {
         idUser: null,
         firstName: "",
@@ -473,6 +478,7 @@ export default {
         idGender: "",
         idAddress: null,
         imageUser: "",
+        idStatus: 2,
         addressRequestDTO: {
           idAddress: null,
           idProvince: "",
@@ -569,7 +575,7 @@ export default {
                 JSON.stringify({
                   ...JSON.parse(localStorage.getItem("UserInfo")),
                   ...res.data.data,
-                  idRole: JSON.parse(localStorage.getItem("UserInfo")).idRole
+                  idRole: JSON.parse(localStorage.getItem("UserInfo")).idRole,
                 })
               );
             }
@@ -587,6 +593,7 @@ export default {
         phoneNumber: this.user.phoneNumber,
         passwordUser: this.passWordTao,
         idRole: this.isAdmin ? 1 : 2,
+        idChat: this.user.email.trim(),
       };
       this.$store
         .dispatch("loginRegisterModule/register", payload)
@@ -599,6 +606,16 @@ export default {
               this.infoNotify = "";
             }, 1000);
             this.resetForm();
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            this.isShowNotify = true;
+            this.infoNotify = "Đăng kí tài khoản thất bại!!!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
           }
         });
     },
@@ -658,7 +675,7 @@ body {
   margin-left: 5px;
   cursor: pointer;
 }
-.laAdmin{
+.laAdmin {
   margin-top: 5px;
 }
 </style>

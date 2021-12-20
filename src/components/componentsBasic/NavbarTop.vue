@@ -5,6 +5,7 @@
       <h2 class="logo-name">TPF</h2>
     </div>
     <div class="navbar-top-right">
+       <div class="chatBox"><embed src="http://localhost:8998/" width="50px" height="40px" /></div>
       <div class="user">{{tenAcc}}</div>
       <div class="sign-in" @click="logout">
         <fa class="icon" :icon="['fas', 'sign-in-alt']" />
