@@ -19,7 +19,7 @@
               <input
                 type="text"
                 class="form-control"
-                :class="{ active: isErrNameVoucher}"
+                :class="{ active: isErrNameVoucher }"
                 id="exampleInputEmail1"
                 v-model="voucher.nameVoucher"
               />
@@ -29,7 +29,7 @@
               <input
                 type="number"
                 class="form-control"
-                :class="{ active: isErrDiscount}"
+                :class="{ active: isErrDiscount }"
                 id="exampleInputEmail1"
                 v-model="voucher.discount"
               />
@@ -63,11 +63,13 @@
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="exampleInputEmail1">Điều kiện áp dụng khi đơn hàng lớn hơn:</label>
+            <label for="exampleInputEmail1"
+              >Điều kiện áp dụng khi đơn hàng lớn hơn:</label
+            >
             <input
               type="text"
               class="form-control"
-              :class="{ active: isErrCondition}"
+              :class="{ active: isErrCondition }"
               id="exampleInputEmail1"
               v-model="voucher.condition"
             />
@@ -142,7 +144,10 @@ export default {
   watch: {
     voucher: {
       handler() {
-        if (this.voucher.nameVoucher !== "" && this.voucher.nameVoucher != null) {
+        if (
+          this.voucher.nameVoucher !== "" &&
+          this.voucher.nameVoucher != null
+        ) {
           this.isErrNameVoucher = false;
         }
         if (this.voucher.discount > 0 && this.voucher.discount < 100) {
@@ -162,7 +167,6 @@ export default {
       this.isErrNameVoucher = false;
       this.isErrDiscount = false;
       this.isErrCondition = false;
-      this.isShowNotify = false;
       this.voucher = {
         idVoucher: null,
         nameVoucher: "",
@@ -177,7 +181,7 @@ export default {
       this.isShowNotify = false;
     },
     checkValidate() {
-      let check = true
+      let check = true;
       if (
         this.voucher.nameVoucher.trim() === "" ||
         this.voucher.nameVoucher.trim() === null
@@ -186,43 +190,40 @@ export default {
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if (
-        this.voucher.discount === "" ||
-        this.voucher.discount === null 
-      ) {
+      if (this.voucher.discount === "" || this.voucher.discount === null) {
         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-       if (
-        this.voucher.condition === "" ||
-        this.voucher.condition === null
-      ) {
+      if (this.voucher.condition === "" || this.voucher.condition === null) {
         this.isErrCondition = true;
         this.isShowNotify = true;
         this.infoNotify = "Không để trống các trường màu đỏ !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if((this.voucher.discount <= 0 || this.voucher.discount > 100) && check){
+      if (
+        (this.voucher.discount <= 0 || this.voucher.discount > 100) &&
+        check
+      ) {
         this.isErrDiscount = true;
         this.isShowNotify = true;
         this.infoNotify = "Discount phải lớn hơn 0 và nhỏ hơn 100 !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if((this.voucher.condition <= 0) && check){
+      if (this.voucher.condition <= 0 && check) {
         this.isErrCondition = true;
         this.isShowNotify = true;
         this.infoNotify = "Điều kiện áp dụng phải lớn hơn 0 !";
         this.checkFormValidate = false;
-        check= false
+        check = false;
       }
-      if(check) {
+      if (check) {
         this.isErrNameVoucher = false;
         this.isErrDiscount = false;
         this.isErrDateStart = false;
@@ -244,6 +245,12 @@ export default {
         .dispatch("voucherModule/saveVoucher", this.voucher)
         .then((res) => {
           if (res) {
+            this.isShowNotify = true;
+            this.infoNotify = "Tạo voucher thành công!";
+            setTimeout(() => {
+              this.isShowNotify = false;
+              this.infoNotify = "";
+            }, 1000);
             if (!this.voucher.idVoucher) {
               this.voucher.idStatus = GIA_TRI_TRANG_THAI.EXISTS;
               let listVoucherTemp = [...this.listVouchers];

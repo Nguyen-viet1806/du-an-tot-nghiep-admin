@@ -104,6 +104,7 @@
               ></textarea>
             </div>
             <label class="mt-2">Chọn ảnh:</label>
+            <p><label class="mt-3">Ảnh chính:</label></p>
             <div
               :class="{ active: isErrFrontPhoto }"
               class="card mb-3 mt-3"
@@ -133,6 +134,7 @@
                 </div>
               </div>
             </div>
+            <p><label class="mt-3">Ảnh phụ 1:</label></p>
             <div
               :class="{ active: isErrBackPhoto }"
               class="card mb-3 mt-3"
@@ -162,6 +164,7 @@
                 </div>
               </div>
             </div>
+            <p><label class="mt-3">Ảnh phụ 2:</label></p>
             <div
               :class="{ active: isErrCoverPhoto }"
               class="card mb-3 mt-3"
@@ -262,6 +265,7 @@
                     </div>
                     <div class="col-4">
                       <div class="form-group img-file">
+                        <label>Ảnh theo màu:</label>
                         <input
                           class="form-control input-filev"
                           :id="['uploadImage' + index]"
@@ -1234,9 +1238,6 @@ export default {
       padding-left: 10px;
       padding-right: 10px;
       color: #990033;
-      & .img-file {
-        margin-top: 22px;
-      }
     }
     & .size {
       position: relative;

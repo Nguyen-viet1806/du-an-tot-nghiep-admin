@@ -1,5 +1,5 @@
 import axios from "axios";
-var DOMAIN = "http://localhost:8080";
+var DOMAIN = "http://192.168.31.102:8888";
 var DOMAINMess = "http://192.168.31.102:8898";
 // import { CAC_LOAI_LOI,MESS } from "@/constants/constants";
 import router from "@/router/index.js";

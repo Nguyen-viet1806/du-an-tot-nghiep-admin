@@ -267,6 +267,8 @@ export default {
       this.isErrNameSale = false;
       this.isErrDiscount = false;
       this.checkFormValidate = false;
+      this.isErrDateStart = false;
+      this.isErrDateEnd = false;
       this.listProductDetailTemp = {
         saleDTO: {
           idSale: null,
