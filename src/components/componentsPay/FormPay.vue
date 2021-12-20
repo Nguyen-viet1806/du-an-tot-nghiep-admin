@@ -731,7 +731,10 @@ export default {
           idBillProduct: null,
           idStatus: 2,
           price: Combo.price,
-          comboResponseDTO: { ...Combo,quantity: Combo.quantity + listCheckCombo[0].quantity, },
+          comboResponseDTO: {
+            ...Combo,
+            quantity: Combo.quantity + listCheckCombo[0].quantity,
+          },
           quantity: listCheckCombo[0].quantity,
         });
       }
@@ -860,6 +863,7 @@ export default {
         }
       });
     },
+    
   },
 };
 </script>

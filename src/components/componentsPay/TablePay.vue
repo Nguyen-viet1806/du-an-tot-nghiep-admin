@@ -1,45 +1,52 @@
 <template>
   <div class="table-tpf">
     <div class="row">
-      <div class="col-md-4">
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
+      <div class="col-md-4"><div class="form-group">
+          <label for="validationTextarea" class="form-label">Từ ngày:</label>
           <input
             type="date"
             class="form-control"
             id="validationCustom01"
-            required
+            v-model="startDate"
           />
-        </div>
+        </div></div>
+      <div class="col-md-4">
+        
         <div class="form-group">
+          <label for="validationTextarea" class="form-label">Đến ngày:</label>
           <input
             type="date"
             class="form-control"
             id="validationCustom01"
-            required
+            v-model="endDate"
           />
         </div>
       </div>
       <div class="col-md-4">
         <div class="row">
           <div class="col-md-8 mt-2">
+            <label for="validationTextarea" class="form-label"
+              >Trạng thái:</label
+            >
             <select
               class="form-select form-select-sm"
               aria-label="Default select example"
               v-model="idTrangThai"
             >
               <option value="-1">Chọn theo trạng thái</option>
-              <option :value="GIA_TRI_TRANG_THAI.DELETE">Đã xóa</option>
-              <option :value="GIA_TRI_TRANG_THAI.EXISTS">Tồn tại</option>
+              <option :value="GIA_TRI_TRANG_THAI.PROCESSING">Đang xử lý</option>
+              <option :value="GIA_TRI_TRANG_THAI.CONFIRMED">Đã xác nhận</option>
+              <option :value="GIA_TRI_TRANG_THAI.DELIVERY">Đang giao</option>
+              <option :value="GIA_TRI_TRANG_THAI.PAID">Đã thanh toán</option>
+              <option :value="GIA_TRI_TRANG_THAI.CANCE">Hủy</option>
             </select>
           </div>
           <div class="col-md-4 mt-2">
             <button
               v-on:click="resetForm"
               type="button"
-              class="btn btn-filter w-100"
-              @click="getListSort(-1)"
+              class="btn btn-filter w-100 mr-t"
+              @click="filterHoaDon"
             >
               Lọc
             </button>
@@ -124,6 +131,8 @@ export default {
       idTrangThai: -1,
       pageable: 0,
       GIA_TRI_TRANG_THAI,
+      startDate: null,
+      endDate: null,
     };
   },
   computed: {
@@ -152,9 +161,24 @@ export default {
         this.pageable--;
       }
     },
+    filterHoaDon() {
+      let payload = {
+        page: this.pageable,
+        limit: 5,
+        sort: -1,
+        idStatus: this.idTrangThai,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        billType: 1,
+      };
+      this.$store.dispatch("billModule/getDanhSachBillFilter", payload);
+    },
   },
 };
 </script>
 
 <style lnag="scss" scoped>
+.mr-t {
+  margin-top: 30px !important;
+}
 </style>

@@ -962,7 +962,7 @@ export default {
     },
 
     addColor() {
-      let danhSachColorTemp = this.danhSachColor;
+      let danhSachColorTemp = this.danhSachColor.filter(item => item.idStatus == 2);
       if (
         this.product.detailInProduct.listDetailColorRequest?.length ==
         danhSachColorTemp.length
@@ -992,7 +992,7 @@ export default {
     },
 
     addSize(index) {
-      let danhSachSizeTemp = this.danhSachSize;
+      let danhSachSizeTemp = this.danhSachSize.filter(item => item.idStatus == 2);
       if (this.danhSachSize?.length == 0) {
         this.isShowNotify = true;
         this.infoNotify = "Bạn chưa chọn danh mục !! !";

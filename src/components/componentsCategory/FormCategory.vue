@@ -256,12 +256,7 @@ export default {
         .then((res) => {
           if (res) {
             this.$emit("getListFollowPageParent");
-            this.$store.commit("categoryModule/SET_LIST_CATEGORYS_CHILD", [])
-            if (this.categoryParent.idCategory) {
-              this.$emit("clickShowFormCategoryParen", this.categoryParent);
-            }
             this.resetFormCategoryParent();
-            this.resetFormCategoryChild();
           }
         });
     },
