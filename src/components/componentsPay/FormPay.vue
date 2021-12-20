@@ -210,7 +210,6 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.total"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -223,7 +222,6 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.payment"
-                  required
                 />
               </div>
               <div class="form-group mt-1">
@@ -473,6 +471,59 @@ export default {
     },
   },
   watch: {
+    "bill.deposit": {
+      handler() {
+        this.bill.payment = this.bill.total - this.bill.deposit;
+      },
+      deep: true,
+      immediate: true,
+    },
+    listProductInBill: {
+      handler() {
+        if (this.bill.idBill == null) {
+          let totalBill = 0;
+          this.listProductInBill.forEach((item) => {
+            totalBill +=
+              (item.productChildResponseDTO.price *
+                item.quantity *
+                (item.productChildResponseDTO.saleDTO == null
+                  ? 1
+                  : 100 - item.productChildResponseDTO.saleDTO.discount)) /
+              100;
+          });
+          this.listComboInBill.forEach((item) => {
+            totalBill += item.comboResponseDTO.price * item.quantity;
+          });
+          this.bill.total = totalBill;
+          this.bill.payment = this.bill.total - this.bill.deposit;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+    listComboInBill: {
+      handler() {
+        if (this.bill.idBill == null) {
+          let totalBill = 0;
+          this.listProductInBill.forEach((item) => {
+            totalBill +=
+              (item.productChildResponseDTO.price *
+                item.quantity *
+                (item.productChildResponseDTO.saleDTO == null
+                  ? 1
+                  : 100 - item.productChildResponseDTO.saleDTO.discount)) /
+              100;
+          });
+          this.listComboInBill.forEach((item) => {
+            totalBill += item.comboResponseDTO.price * item.quantity;
+          });
+          this.bill.total = totalBill;
+          this.bill.payment = this.bill.total - this.bill.deposit;
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
     isSuDungDiaChiCuaHang() {
       if (this.isSuDungDiaChiCuaHang) {
         this.bill.addressRequestDTO = {
@@ -863,7 +914,6 @@ export default {
         }
       });
     },
-    
   },
 };
 </script>

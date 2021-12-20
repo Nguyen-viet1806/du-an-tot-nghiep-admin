@@ -334,11 +334,11 @@
                     {{ bill.productChildResponseDTO.quantity }}
                   </td>
 
-                  <td>{{ bill.price }}
+                  <td>
+                    {{ bill.price }}
                     <p v-if="bill.productChildResponseDTO.listTag?.includes(1)">
                       <span class="badge bg-warning text-dark">Đang sale</span>
                     </p>
-                    
                   </td>
                   <td>
                     <div class="btn btn-danger" @click="deleteProduct(index)">
@@ -505,16 +505,55 @@ export default {
   },
   computed: {},
   watch: {
+    "bill.deposit": {
+      handler() {
+        this.bill.payment = this.bill.total - this.bill.deposit;
+      },
+      deep: true,
+      immediate: true,
+    },
     listProductInBill: {
       handler() {
-
+        if (this.bill.idBill == null) {
+          let totalBill = 0;
+          this.listProductInBill.forEach((item) => {
+            totalBill +=
+              (item.productChildResponseDTO.price *
+                item.quantity *
+                (item.productChildResponseDTO.saleDTO == null
+                  ? 1
+                  : 100 - item.productChildResponseDTO.saleDTO.discount)) /
+              100;
+          });
+          this.listComboInBill.forEach((item) => {
+            totalBill += item.comboResponseDTO.price * item.quantity;
+          });
+          this.bill.total = totalBill;
+          this.bill.payment = this.bill.total - this.bill.deposit;
+        }
       },
       deep: true,
       immediate: true,
     },
     listComboInBill: {
       handler() {
-        
+        if (this.bill.idBill == null) {
+          let totalBill = 0;
+          this.listProductInBill.forEach((item) => {
+            totalBill +=
+              (item.productChildResponseDTO.price *
+                item.quantity *
+                (item.productChildResponseDTO.saleDTO == null
+                  ? 1
+                  : 100 - item.productChildResponseDTO.saleDTO.discount)) /
+              100;
+          });
+          this.listComboInBill.forEach((item) => {
+            totalBill += item.comboResponseDTO.price * item.quantity;
+          });
+          this.bill.total = totalBill;
+          this.bill.payment = this.bill.total - this.bill.deposit;
+        }
       },
       deep: true,
       immediate: true,
