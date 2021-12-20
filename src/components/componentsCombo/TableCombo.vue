@@ -83,7 +83,7 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                @change="deleteCombo(combo)"
+                @change="showComfirm(combo,$event)"
                 role="switch"
                 id="flexSwitchCheckDefault"
                 :checked="
@@ -127,18 +127,28 @@
         </li>
       </ul>
     </nav>
+    <base-confirm
+      :isShowConfirm="isShowConfirm"
+      :infoConfirm="infoConfirm"
+      @closeConfirm="closeConfirm"
+      @oke="deleteCombo"
+    />
   </div>
 </template>
 
 <script>
+import BaseConfirm from "@/components/common/BaseConfirm.vue";
 import { GIA_TRI_TRANG_THAI, DO_MAIN } from "@/constants/constants";
 import { mapGetters } from "vuex";
 export default {
   name: "TableCombo",
-  components: {},
+  components: {BaseConfirm},
   props: {},
   data() {
     return {
+      infoConfirm: "",
+      isShowConfirm: false,
+      comboTemp: null,
       DO_MAIN,
       keyWordSearch: "",
       idTrangThai: -1,
@@ -160,6 +170,22 @@ export default {
     this.initData();
   },
   methods: {
+    closeConfirm() {
+      this.isShowConfirm = false;
+      this.infoConfirm = "";
+      this.comboTemp = null;
+      this.$emit("getListCombo");
+    },
+    showComfirm(combo, event) {
+      if (event.target.checked) {
+        this.infoConfirm = "Bạn có muốn khôi phục combo không ?";
+      } else {
+        this.infoConfirm =
+          "Bạn có muốn xóa combo không, nếu bạn xóa số lượng combo sẽ về 0 ?";
+      }
+      this.isShowConfirm = true;
+      this.comboTemp = { ...combo};
+    },
     initData() {
       this.$emit("getListCombo");
     },
@@ -192,13 +218,15 @@ export default {
       };
       this.$store.dispatch("comboModule/search", payload);
     },
-    deleteCombo(combo) {
+    deleteCombo() {
       let payload = {
-        idCombo: combo.idCombo,
+        idCombo: this.comboTemp.idCombo,
       };
       this.$store.dispatch("comboModule/deleteCombo", payload).then((res) => {
         if (res) {
+          this.$emit("reserForm");
           this.$emit("getListCombo");
+          this.closeConfirm()
         }
       });
     },

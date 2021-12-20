@@ -165,11 +165,15 @@ export default {
       this.$emit("getListFollowPage");
     },
     showComfirm(Sale, event) {
-      if (Sale.isSale) {
-        this.infoConfirm =
-          "Đợt sale đang trong thời gian sale bạn có muốn xóa không ?";
+      if (event.target.checked) {
+        this.infoConfirm = "Bạn có muốn khôi phục sale không, sau khi khôi phục bạn hãy kiểm tra lại thông tin sale ?";
       } else {
-        this.infoConfirm = "Bạn có muốn xóa sale không ?";
+        if (Sale.isSale) {
+          this.infoConfirm =
+            "Đợt sale đang trong thời gian sale bạn có muốn xóa không ?";
+        } else {
+          this.infoConfirm = "Bạn có muốn xóa sale không ?";
+        }
       }
       this.isShowConfirm = true;
       let checked = event.target.checked;

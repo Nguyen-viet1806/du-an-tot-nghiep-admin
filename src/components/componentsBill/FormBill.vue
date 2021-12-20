@@ -193,7 +193,6 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.transportFee"
-                  disabled
                   required
                 />
               </div>
@@ -210,18 +209,6 @@
               </div>
               <div class="form-group">
                 <label for="validationCustom01" class="form-label"
-                  >Số tiền còn lại:</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="validationCustom01"
-                  v-model="bill.payment"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="validationCustom01" class="form-label"
                   >Tổng tiền:</label
                 >
                 <input
@@ -229,6 +216,20 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.total"
+                  disabled
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="validationCustom01" class="form-label"
+                  >Số tiền còn lại:</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="validationCustom01"
+                  v-model="bill.payment"
+                  disabled
                   required
                 />
               </div>
@@ -333,7 +334,12 @@
                     {{ bill.productChildResponseDTO.quantity }}
                   </td>
 
-                  <td>{{ bill.price }}</td>
+                  <td>{{ bill.price }}
+                    <p v-if="bill.productChildResponseDTO.listTag?.includes(1)">
+                      <span class="badge bg-warning text-dark">Đang sale</span>
+                    </p>
+                    
+                  </td>
                   <td>
                     <div class="btn btn-danger" @click="deleteProduct(index)">
                       Xóa
@@ -499,6 +505,20 @@ export default {
   },
   computed: {},
   watch: {
+    listProductInBill: {
+      handler() {
+
+      },
+      deep: true,
+      immediate: true,
+    },
+    listComboInBill: {
+      handler() {
+        
+      },
+      deep: true,
+      immediate: true,
+    },
     "bill.addressRequestDTO.idProvince": {
       handler() {
         if (
@@ -725,7 +745,10 @@ export default {
           idBillProduct: null,
           idStatus: 2,
           price: Combo.price,
-          comboResponseDTO: { ...Combo,quantity: Combo.quantity + listCheckCombo[0].quantity, },
+          comboResponseDTO: {
+            ...Combo,
+            quantity: Combo.quantity + listCheckCombo[0].quantity,
+          },
           quantity: listCheckCombo[0].quantity,
         });
       }
@@ -758,7 +781,7 @@ export default {
     resetForm() {
       this.idStatusOfBill = null;
       this.listProductInBill = [];
-       this.listProductInBillTemp = [];
+      this.listProductInBillTemp = [];
       this.listComboInBill = [];
       this.listComboInBillTemp = [];
       this.bill = {

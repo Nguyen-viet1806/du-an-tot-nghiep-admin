@@ -7,6 +7,7 @@
       ref="TableCombo"
       @showCombo="showCombo"
       @getListCombo="getListCombo"
+      @reserForm="reserForm"
     />
   </div>
 </template>
@@ -30,6 +31,9 @@ export default {
       };
       this.$refs["FormCombo"].combo = comboTemp;
       this.getComboDetail(combo);
+    },
+    reserForm(){
+      this.$refs["FormCombo"].resetForm();
     },
     getComboDetail(combo) {
       let payload = {
