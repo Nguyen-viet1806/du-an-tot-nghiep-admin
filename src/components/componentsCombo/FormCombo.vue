@@ -49,9 +49,11 @@
               class="form-control"
             />
           </div>
-          <p class="lable-img"><label>Ảnh chính:</label>
-          <label>Ảnh phụ 1:</label>
-          <label>Ảnh phụ 2:</label></p>
+          <p class="lable-img">
+            <label>Ảnh chính:</label>
+            <label>Ảnh phụ 1:</label>
+            <label>Ảnh phụ 2:</label>
+          </p>
           <div class="img-combo">
             <div class="img-combo-unit mt-2">
               <div>
@@ -447,11 +449,12 @@ export default {
         .then((res) => {
           if (res) {
             if (res.data.message == "Lưu combo thành công!") {
-              this.isShowNotify = true;
-              this.infoNotify = res.data.message;
-              if (this.isShowNotify) {
-                setTimeout(this.closeNotify, 1000);
+              if (this.combo.idStatus == 1) {
+                this.infoNotify = "Lưu combo thành công, Trạng thái combo đang không tồn tại bạn vui lòng cập nhật trạng thái để combo được kích hoạt"
+              } else {
+                this.infoNotify = res.data.message;
               }
+              this.isShowNotify = true;
               this.resetForm();
               this.$emit("getListCombo");
             } else {
@@ -531,7 +534,7 @@ export default {
 .table-wrapper-scroll-y {
   display: block;
 }
-.lable-img{
+.lable-img {
   display: flex;
   margin-top: 10px;
   label {

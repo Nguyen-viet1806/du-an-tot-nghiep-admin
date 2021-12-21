@@ -53,7 +53,7 @@
           <th scope="col">Số lượng</th>
           <th scope="col">Ngày tạo</th>
           <th scope="col">Mô tả combo</th>
-          <th scope="col">Trạng thái</th>
+          <th scope="col">Xóa/Khôi phục</th>
           <th scope="col">
             <button class="btn-arrow-up" @click="getListSort(0)">
               <fa class="icon" :icon="['fas', 'arrow-up']" /></button
