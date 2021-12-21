@@ -32,7 +32,7 @@ export default {
       this.$refs["FormCombo"].combo = comboTemp;
       this.getComboDetail(combo);
     },
-    reserForm(){
+    reserForm() {
       this.$refs["FormCombo"].resetForm();
     },
     getComboDetail(combo) {
@@ -44,11 +44,18 @@ export default {
         .dispatch("comboModule/getComboDetailByIdCombo", payload)
         .then((res) => {
           if (res) {
-            this.$refs["FormCombo"].listProductInCombo = res.data.data;
+            res.data.data.forEach((item) => {
+              this.$refs["FormCombo"].listProductInCombo.push({
+                idCombo: item.idCombo,
+                idComboDetail: item.idComboDetail,
+                productDetail: {...item.productDetail,quantity: combo.quantity + item.productDetail.quantity},
+              });
+            });
+            // this.$refs["FormCombo"].listProductInCombo = res.data.data;
           }
         });
     },
-    getListCombo(sort = -1,idStatus = -1, isLoc = false) {
+    getListCombo(sort = -1, idStatus = -1, isLoc = false) {
       if (isLoc) {
         this.$refs["TableCombo"].pageable = 0;
       }

@@ -143,7 +143,7 @@
                 <th scope="col"></th>
                 <th scope="col">Tên</th>
                 <th scope="col">Size,Màu</th>
-                <th scope="col">Hàng còn</th>
+                <th scope="col">Có thể tạo</th>
                 <th scope="col">Giá</th>
                 <th scope="col">Thao tác</th>
               </tr>
