@@ -210,6 +210,7 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.total"
+                  disabled
                 />
               </div>
               <div class="form-group">
@@ -222,6 +223,7 @@
                   class="form-control"
                   id="validationCustom01"
                   v-model="bill.payment"
+                  disabled
                 />
               </div>
               <div class="form-group mt-1">
