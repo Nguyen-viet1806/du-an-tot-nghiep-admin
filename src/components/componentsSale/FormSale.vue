@@ -327,23 +327,17 @@ export default {
         check = false;
       }
       if (
-        new Date(this.sale.dateStart).valueOf() <
-        new Date(this.getNowTime()).valueOf() &&
-        check
-      ) {
-        this.isErrDateStart = true;
-        this.isShowNotify = true;
-        this.infoNotify = "Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại !";
-        this.checkFormValidate = false;
-        check = false;
-      } else if (
         new Date(this.sale.dateEnd).valueOf() <=
         new Date(this.getNowTime()).valueOf() &&
         check
       ) {
         this.isErrDateEnd = true;
         this.isShowNotify = true;
-        this.infoNotify = "Ngày kết thúc phải lớn ngày hiện tại !";
+        if(this.sale == null){
+          this.infoNotify = "Ngày kết thúc phải lớn ngày hiện tại !";
+        }else {
+        this.infoNotify = "Đợt sale này đã hết nếu bạn muốn sửa hãy sửa ngày kết thúc lớn hơn ngày hiện tại!";
+        }
         this.checkFormValidate = false;
         check = false;
       } else if (
